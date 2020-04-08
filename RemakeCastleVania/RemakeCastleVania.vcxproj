@@ -84,6 +84,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3dx9.lib;d3d9.lib;dxguid.lib;dxerr.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -105,6 +108,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d3dx9.lib;d3d9.lib;dxguid.lib;dxerr.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,7 +126,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="define.h" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Simon.cpp" />
+    <ClCompile Include="Torch.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="PlayScence.cpp" />
+    <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Scence.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Whip.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animations.h" />
+    <ClInclude Include="Brick.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Simon.h" />
+    <ClInclude Include="Torch.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="KeyEventHandler.h" />
+    <ClInclude Include="PlayScence.h" />
+    <ClInclude Include="Portal.h" />
+    <ClInclude Include="Scence.h" />
+    <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Textures.h" />
+    <ClInclude Include="Whip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

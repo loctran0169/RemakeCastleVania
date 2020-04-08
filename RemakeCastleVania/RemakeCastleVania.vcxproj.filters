@@ -13,10 +13,138 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="FrameWork">
+      <UniqueIdentifier>{c281c5c0-354d-413c-abab-e209eea1c9e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Game">
+      <UniqueIdentifier>{a0f9674b-64c2-4a71-aadf-2d708a152bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Utils">
+      <UniqueIdentifier>{2d43a510-ca05-4243-a2e4-0de7b06c4538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Map">
+      <UniqueIdentifier>{9052d4cd-19fa-4c33-a169-63e0d61fcb52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Scence">
+      <UniqueIdentifier>{e3c91106-94ab-4270-8bf6-d3ad7cf81262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Texture">
+      <UniqueIdentifier>{54f87fea-a550-4587-aba8-b783ff61d007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Animations">
+      <UniqueIdentifier>{b599caee-0939-43be-b7bc-e4906f3cae3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\Simon">
+      <UniqueIdentifier>{b85eae41-3253-4eab-a716-f31ee91e1f3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\GameObjects">
+      <UniqueIdentifier>{a3d38906-6977-494f-86c4-d096a7ed92a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\GameObjects\weapon">
+      <UniqueIdentifier>{1f8abb8a-7a55-4520-9291-bf069c7c1e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\GameObjects\standObjects">
+      <UniqueIdentifier>{119f6b6f-ace8-495c-9b56-cae34bc2fce7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\events">
+      <UniqueIdentifier>{e1b88ef0-2249-4694-b200-221c187b5526}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>FrameWork\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>FrameWork\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="define.h">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScence.cpp">
+      <Filter>FrameWork\Scence</Filter>
+    </ClCompile>
+    <ClCompile Include="Scence.cpp">
+      <Filter>FrameWork\Scence</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>FrameWork\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>FrameWork\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>FrameWork\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>FrameWork\Simon</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>FrameWork\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Torch.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>FrameWork\Map</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>FrameWork\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>FrameWork\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScence.h">
+      <Filter>FrameWork\Scence</Filter>
+    </ClInclude>
+    <ClInclude Include="Scence.h">
+      <Filter>FrameWork\Scence</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>FrameWork\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>FrameWork\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>FrameWork\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>FrameWork\Simon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>FrameWork\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Torch.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>FrameWork\events</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>FrameWork\Map</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
