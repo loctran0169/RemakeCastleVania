@@ -1,6 +1,7 @@
 #include "Torch.h"
 
 void CTorch::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
+
 	if (isTouch &&GetTickCount() - timeHitted >= TIME_EFFECT)
 		isFinish = true;
 }

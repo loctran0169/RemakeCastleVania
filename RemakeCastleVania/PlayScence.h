@@ -16,7 +16,7 @@ protected:
 	Simon *player;					// A play scene has to have player, right? 
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
-	
+
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_MAPTXT(string line);
 	void _ParseSection_SPRITES(string line);
@@ -28,7 +28,7 @@ public:
 	static CPlayScene* GetInstance();
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
-	//void setMap(int idMap) { map->scene = idMap; }
+
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

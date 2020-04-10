@@ -19,6 +19,8 @@ class CMap
 public:
 	static CMap* GetInstance();
 	int scene;
+	int boundingMapLeft;
+	int boundingMapRight;
 	void readMapTxt(LPCWSTR filePath);
 	void setTexture(LPDIRECT3DTEXTURE9 i) { texturesMap = i; }
 	CMap();

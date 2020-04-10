@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 
 #include "PlayScence.h"
@@ -38,7 +38,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_MAPTXT 7
 
-#define OBJECT_TYPE_MARIO	0
+#define OBJECT_TYPE_SIMON	0
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
@@ -93,7 +93,6 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
 		return;
 	}
-
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
@@ -143,56 +142,67 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
-	//vector<string> tokens = split(line);
+	vector<string> tokens = split(line);
 
-	////DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
-	//if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
-	//int object_type = atoi(tokens[0].c_str());
-	//float x = atof(tokens[1].c_str());
-	//float y = atof(tokens[2].c_str());
+	int object_type = atoi(tokens[0].c_str());
+	float x = atof(tokens[1].c_str());
+	float y = atof(tokens[2].c_str());
 
-	//int ani_set_id = atoi(tokens[3].c_str());
+	int ani_set_id = atoi(tokens[3].c_str());
 
-	//CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 
-	//CGameObject *obj = NULL;
+	CGameObject *obj = NULL;
 
-	//switch (object_type)
-	//{
-	//case OBJECT_TYPE_MARIO:
-	//	if (player != NULL)
-	//	{
-	//		DebugOut(L"[ERROR] MARIO object was created before! ");
-	//		return;
-	//	}
-	//	obj = new CMario();
-	//	player = (CMario*)obj;
-	//	break;
+	switch (object_type)
+	{
+	case OBJECT_TYPE_SIMON:
+		if (player != NULL)
+		{
+			DebugOut(L"[ERROR] Simon object was created before! ");
+			return;
+		}
+		DebugOut(L"[ERROR] Đã tạo simon ");
+		obj = new Simon();
+		player = (Simon*)obj;
+		break;
 	//case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
-	//case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_BRICK: { 
+		int numberObj = atoi(tokens[4].c_str());
+		for (int i = 0; i < numberObj; i++) {
+			obj = new CBrick();
+			obj->SetPosition(x + BRICK_BBOX_WIDTH*i, y);
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			obj->SetAnimationSet(ani_set);
+			objects.push_back(obj);
+		}
+		break;
+	}
 	//case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
-	//case OBJECT_TYPE_PORTAL:
-	//{
-	//	float r = atof(tokens[4].c_str());
-	//	float b = atof(tokens[5].c_str());
-	//	int scene_id = atoi(tokens[6].c_str());
-	//	obj = new CPortal(x, y, r, b, scene_id);
-	//}
-	//break;
-	//default:
-	//	DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
-	//	return;
-	//}
+	case OBJECT_TYPE_PORTAL:
+	{
+		float r = atof(tokens[4].c_str());
+		float b = atof(tokens[5].c_str());
+		int scene_id = atoi(tokens[6].c_str());
+		obj = new CPortal(x, y, r, b, scene_id);
+	}
+	break;
+	default:
+		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+		return;
+	}
 
-	//// General object setup
-	//obj->SetPosition(x, y);
-
-	//LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
-	//obj->SetAnimationSet(ani_set);
-	//objects.push_back(obj);
+	// General object setup
+	if (object_type != OBJECT_TYPE_BRICK) {
+		obj->SetPosition(x, y);
+		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+		obj->SetAnimationSet(ani_set);
+		objects.push_back(obj);
+	}
 }
 
 void CPlayScene::Load()
@@ -206,6 +216,7 @@ void CPlayScene::Load()
 	int section = SCENE_SECTION_UNKNOWN;
 
 	char str[MAX_SCENE_LINE];
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 	while (f.getline(str, MAX_SCENE_LINE))
 	{
 		string line(str);
@@ -216,7 +227,7 @@ void CPlayScene::Load()
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
-		/*if (line == "[ANIMATIONS]") {
+		if (line == "[ANIMATIONS]") {
 			section = SCENE_SECTION_ANIMATIONS; continue;
 		}
 		if (line == "[ANIMATION_SETS]") {
@@ -224,12 +235,9 @@ void CPlayScene::Load()
 		}
 		if (line == "[OBJECTS]") {
 			section = SCENE_SECTION_OBJECTS; continue;
-		}*/
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
-		//
-		// data section
-		//
 		switch (section)
 		{
 		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
@@ -242,10 +250,6 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-	player = new Simon();
-	player->SetPosition(0, 0);
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -264,12 +268,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
-
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
 	//Camera follow Simon
 	if (cx > SCREEN_WIDTH / 2 && cx < MAX_WIDTH_LV1 - SCREEN_WIDTH / 2)
 	{
@@ -278,7 +279,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 	else if (cx > MAX_WIDTH_LV1 - SCREEN_WIDTH / 2)
 	{
-		game->setCamY(MAX_WIDTH_LV1 - SCREEN_WIDTH);
+		game->setCamX(MAX_WIDTH_LV1 - SCREEN_WIDTH);
 
 	}
 	else
@@ -292,17 +293,13 @@ void CPlayScene::Render()
 	map->drawMap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	player->Render();
 }
 
-/*
-	Unload current scene
-*/
 void CPlayScene::Unload()
 {
-	
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
-
 	objects.clear();
 	player = NULL;
 }
@@ -317,7 +314,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_SPACE:
 		simon->SetState(SIMON_STATE_JUMP);
 		break;
-	case DIK_A: // reset
+	case DIK_A:
+		simon->SetState(SIMON_STATE_ATTACK);
+		break;
+	case DIK_R: // reset
 		simon->SetState(SIMON_STATE_IDLE);
 		simon->SetPosition(50.0f, 0.0f);
 		simon->SetSpeed(0, 0);
@@ -326,7 +326,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 }
 
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
-{}
+{
+}
 
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
@@ -335,10 +336,16 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		simon->SetState(SIMON_STATE_WALKING_LEFT);
+	if (game->IsKeyDown(DIK_RIGHT)) {
+		if (!simon->isAttact && !simon->isSit)
+			simon->SetState(SIMON_STATE_WALKING_RIGHT);
+	}
+	else if (game->IsKeyDown(DIK_DOWN))
+		simon->SetState(SIMON_STATE_SIT);
+	else if (game->IsKeyDown(DIK_LEFT)) {
+		if (!simon->isAttact && !simon->isSit)
+			simon->SetState(SIMON_STATE_WALKING_LEFT);
+	}
 	else
 		simon->SetState(SIMON_STATE_IDLE);
 }

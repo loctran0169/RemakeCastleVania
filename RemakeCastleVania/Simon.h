@@ -7,7 +7,7 @@
 #include "Utils.h"
 #include "Game.h"
 #include"Torch.h"
-
+#include"Map.h"
 class Simon : public CGameObject
 {
 	int level;
@@ -20,6 +20,7 @@ class Simon : public CGameObject
 	//hành cộng
 	
 	DWORD attactTime = 0;
+	DWORD jumpTime = 0;
 	
 public:
 	bool nextScreen;
@@ -27,15 +28,12 @@ public:
 	bool isSit = false;
 	bool isJump = false;
 	bool isAttact = false;
-	Simon() : CGameObject()
-	{
-		untouchable = 0;
-	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
+	Simon();
+	//virtual void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 };

@@ -64,14 +64,45 @@ void CGame::Init(HWND hWnd)
 	Utility function to wrap LPD3DXSPRITE::Draw
 */
 void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
-{
+{	
 	D3DXVECTOR3 p(x - cam_x, y - cam_y, 0);
 	RECT r;
 	r.left = left;
 	r.top = top;
 	r.right = right;
 	r.bottom = bottom;
+
 	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+}
+
+void CGame::DrawFlip(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
+{
+	LPD3DXSPRITE spriteHandler = CGame::GetInstance()->GetSpriteHandler();
+
+	D3DXMATRIX oldMt;
+	spriteHandler->GetTransform(&oldMt);
+
+	D3DXMATRIX newMt;
+
+	D3DXVECTOR2 top_left = D3DXVECTOR2(x, y);
+
+	D3DXVECTOR2 rotate = D3DXVECTOR2(-1, 1);
+
+	D3DXMatrixTransformation2D(&newMt, &top_left, 0.0f, &rotate, NULL, 0.0f, NULL);
+	D3DXMATRIX finalMt = newMt * oldMt;
+
+	spriteHandler->SetTransform(&finalMt);
+
+	x -= (right - left);
+
+	D3DXVECTOR3 p(x + cam_x, y - cam_y, 0);
+	RECT r;
+	r.left = left;
+	r.top = top;
+	r.right = right;
+	r.bottom = bottom;
+	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+	spriteHandler->SetTransform(&oldMt);
 }
 
 int CGame::IsKeyDown(int KeyCode)

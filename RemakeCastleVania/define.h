@@ -1,18 +1,4 @@
 ﻿#pragma once
-//id textures
-#define ID_TEX_SIMON_RIGHT		 0
-#define ID_TEX_SIMON_LEFT		 1
-#define ID_TEX_ENEMY			 2
-#define ID_TEX_BRICK			 3
-#define ID_TEX_TILESET_MAP_1	 4
-#define ID_TEX_WHIP				 5
-#define ID_TEX_WHIP_2			 6
-#define ID_TEX_BIGFIRE			 7
-#define ID_TEX_WHIPVIP			 8
-#define ID_TEX_EFFECT_DEAD		 9
-#define ID_TEX_HEART			 10
-#define ID_TEX_MONEY			 11
-#define ID_TEX_KNIFE			 12
 
 //Screen
 #define SCREEN_WIDTH 512
@@ -46,21 +32,19 @@
 #define SIMON_STATE_WALK				16
 
 //animation của simon
-#define ANI_IDLE_RIGHT				0
-#define ANI_IDLE_LEFT				1
-#define ANI_WALKING_RIGHT			2
-#define ANI_WALKING_LEFT			3
-#define ANI_HIT_RIGHT				4
-#define ANI_HIT_LEFT				5
-#define ANI_JUMP_RIGHT				6
-#define ANI_JUMP_LEFT				7
-#define ANI_SIT_RIGHT				8
-#define ANI_SIT_LEFT				9
-#define ANI_SIT_HIT_RIGHT			10
-#define ANI_SIT_HIT_LEFT			11
-#define ANI_DIE						12
-#define ANI_EAT_ITEM_RIGHT			13
-#define ANI_EAT_ITEM_LEFT			14
+#define SIMON_ANI_IDLE						0
+#define SIMON_ANI_WALKING					1
+#define SIMON_ANI_JUMPING					2
+#define SIMON_ANI_SITTING					3
+#define SIMON_ANI_STANDING_ATTACKING 		4
+#define SIMON_ANI_SITTING_ATTACKING			5
+#define SIMON_ANI_EATTING					6
+#define SIMON_ANI_GO_UP 					7
+#define SIMON_ANI_GO_DOWN					8
+#define SIMON_ANI_HURT						9
+#define SIMON_ANI_IDLE_UP					10
+#define SIMON_ANI_IDLE_DOWN					11
+#define SIMON_ANI_DIE						12
 
 
 //Kích cờ simon
@@ -70,17 +54,18 @@
 
 #define SIMON_SIT_BBOX_WIDTH		32
 #define SIMON_SIT_BBOX_HEIGHT		48
-
+#define SIMON_PADDING_ANI			15
 //tốc độ simon
-#define SIMON_WALKING_SPEED			0.1f 
-#define SIMON_JUMP_SPEED_Y			0.5f
+#define SIMON_WALKING_SPEED			0.12f 
+#define SIMON_JUMP_SPEED_Y			0.34f
+#define SIMON_JUMP_GRAVITY			0.001f
 #define SIMON_JUMP_DEFLECT_SPEED	0.02f
-#define SIMON_GRAVITY				0.002f
+#define SIMON_GRAVITY				0.005f
 #define SIMON_DIE_DEFLECT_SPEED		0.5f
 
-//Thời gian chớp khi va chạm
+//Thời gian simon
 #define SIMON_UNTOUCHABLE_TIME		3000
-
+#define SIMON_TIME_JUMPPING_SIT		400
 //Whip
 #define WHIP_BBOX_WIDGHT			80
 #define WHIP_BBOX_HEIGHT			15

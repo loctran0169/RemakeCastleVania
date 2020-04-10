@@ -13,6 +13,7 @@ void CMap::readMapTxt(LPCWSTR filePath) {
 
 	ifstream inp(filePath, ios::in);
 	inp >> rowsMap >> colsMap;
+	boundingMapRight = colsMap * TILE_MAP_SIZE;
 	for (int i = 0; i < rowsMap; i++)
 		for (int j = 0; j < colsMap; j++) {
 			inp >> tileMap[i][j];
@@ -44,6 +45,7 @@ void CMap::drawMap() {
 
 CMap::CMap()
 {
+	boundingMapLeft = boundingMapRight = 0;
 	scene = 1;
 	colsMap = 1;
 	rowsMap = 1;
