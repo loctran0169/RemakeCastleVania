@@ -5,6 +5,25 @@ Simon::Simon() : CGameObject()
 {
 	untouchable = 0;
 	SetState(SIMON_STATE_IDLE);
+	whip = new Whip();
+}
+
+void Simon::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
+{
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		if (!dynamic_cast<CTorch *>(coObjects->at(i)))
+		{
+			LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
+
+			if (e->t > 0 && e->t <= 1.0f)
+				coEvents.push_back(e);
+			else
+				delete e;
+		}
+	}
+
+	std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -40,11 +59,30 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		x = CMap::GetInstance()->boundingMapLeft;
 	if (x + SIMON_BBOX_WIDTH > CMap::GetInstance()->boundingMapRight)
 		x = CMap::GetInstance()->boundingMapRight - SIMON_BBOX_WIDTH;
+
 	//thời gian attack
 	if (isAttact&&GetTickCount() - attactTime >= SIMON_ATTACT_TIME) {
 		isAttact = false;
-		//x += SIMON_PADDING_ATTACT/2;
-		//whip->Update(dt, coObjects);
+		whip->Update(dt, coObjects);
+		if (CGame::GetInstance()->IsKeyDown(DIK_DOWN) == false && isSit) {
+			y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
+			isSit = false;
+		}
+	}
+	if (isAttact == true)
+	{
+		if (nx > 0)
+		{
+			//roi bên phải
+			whip->SetPosition(x, y + (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT));
+		}
+		else
+		{
+			//roi bên trái
+			float wl, wr, wt, wb;
+			whip->GetBoundingBox(wl, wt, wr, wb);
+			whip->SetPosition(x + SIMON_BBOX_WIDTH - (wr - wl), y + (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT));
+		}
 	}
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -64,10 +102,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		//	x += nx*abs(rdx); 
 		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
-		//y += min_ty * dy + ny * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
-		//if (ny != 0) vy = 0;
+		if (ny != 0) vy = 0;
 
 		//
 		// Collision logic with other objects
@@ -86,6 +124,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				else if (e->ny > 0) {
 					y += dy;
 				}
+			}
+			else if (dynamic_cast<CPortal *>(e->obj))
+			{
+				CPortal *p = dynamic_cast<CPortal *>(e->obj);
+				DebugOut(L"[INFO] Switching to scene %d", p->GetSceneId());
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
 		}
 	}
@@ -136,6 +180,9 @@ void Simon::Render()
 		animation_set->at(ani)->Render(x-SIMON_PADDING_ANI, y, alpha);
 	else
 		animation_set->at(ani)->Render(x- SIMON_PADDING_ANI, y,-1, alpha);
+	if (isAttact) {
+		whip->Render();
+	}
 	RenderBoundingBox();
 }
 
@@ -146,53 +193,32 @@ void Simon::SetState(int state)
 	switch (state)
 	{
 	case SIMON_STATE_WALKING_RIGHT:
-		if (isAttact && !isJump)
-			vx = 0;
-		else
-			vx = SIMON_WALKING_SPEED;
+		vx = SIMON_WALKING_SPEED;
 		nx = 1;
 		isSit = false;
 		break;
 	case SIMON_STATE_WALKING_LEFT:
-		if (isAttact && !isJump)
-			vx = 0;
-		else
-			vx = -SIMON_WALKING_SPEED;
+		vx = -SIMON_WALKING_SPEED;
 		nx = -1;
 		isSit = false;
 		break;
 	case SIMON_STATE_JUMP:
-		if (isJump||isSit)return;
 		vy = -SIMON_JUMP_SPEED_Y;
 		jumpTime = GetTickCount();
 		isJump = true;
 		isSit = false;
 		break;
 	case SIMON_STATE_ATTACK:
-		if (isAttact) return;
 		if (!isJump) vx = 0;
 		isAttact = true;
 		attactTime = GetTickCount();
 		break;
 	case SIMON_STATE_SIT:
-		if (isJump||isSit)return;
-		if (!isSit) {
-			if (isAttact)
-				return;
-			else {
-				y += (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
-				isSit = true;
-				vx = 0;
-				vy = 0;
-			}
-		}
+		vx = 0;
+		isSit = true;
 		break;
 	case SIMON_STATE_IDLE:
 		vx = 0;
-		if (isSit&&!isAttact) {
-			isSit = false;
-			y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
-		}
 		break;
 	case SIMON_STATE_DIE:
 		vy = -SIMON_DIE_DEFLECT_SPEED;
@@ -207,8 +233,9 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 	top = y;
 	right = x + SIMON_BBOX_WIDTH;
 	bottom = y + SIMON_BBOX_HEIGHT;
-	if (isSit || !isAttact&&jumpTime > 0 && isJump)
+	if (isSit || !isAttact&&jumpTime > 0 && isJump) {
 		bottom = y + SIMON_SIT_BBOX_HEIGHT;
+	}
 }
 
 

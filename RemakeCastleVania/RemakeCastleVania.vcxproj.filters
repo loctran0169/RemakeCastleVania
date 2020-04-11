@@ -49,6 +49,9 @@
     <Filter Include="FrameWork\events">
       <UniqueIdentifier>{e1b88ef0-2249-4694-b200-221c187b5526}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FrameWork\GameObjects\items">
+      <UniqueIdentifier>{1e2dcbd3-2ed9-477d-bfb9-da1c89eb3166}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -99,6 +102,9 @@
     <ClCompile Include="Map.cpp">
       <Filter>FrameWork\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>FrameWork\GameObjects\items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -145,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>FrameWork\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>FrameWork\GameObjects\items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

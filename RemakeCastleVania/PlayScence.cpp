@@ -10,7 +10,7 @@
 using namespace std;
 
 CPlayScene* CPlayScene::__instance = NULL;
-
+vector<LPGAMEOBJECT> CPlayScene::objects = vector<LPGAMEOBJECT>();
 CPlayScene* CPlayScene::GetInstance()
 {
 	if (__instance == NULL) __instance = new CPlayScene();
@@ -20,6 +20,7 @@ CPlayScene* CPlayScene::GetInstance()
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
+	currentScence = 0;
 	map=CMap::GetInstance();
 	game = CGame::GetInstance();
 	key_handler = new CPlayScenceKeyHandler(this);
@@ -40,7 +41,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define OBJECT_TYPE_SIMON	0
 #define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_GOOMBA	2
+#define OBJECT_TYPE_TORCH	2
 #define OBJECT_TYPE_KOOPAS	3
 
 #define OBJECT_TYPE_PORTAL	50
@@ -182,12 +183,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+	//case object torch
+	case OBJECT_TYPE_TORCH: {
+		obj = new CTorch();
+		break;
+	}
 	//case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
+		currentScence = scene_id;
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
 	break;
@@ -200,6 +207,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (object_type != OBJECT_TYPE_BRICK) {
 		obj->SetPosition(x, y);
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+		if (object_type == OBJECT_TYPE_SIMON) {
+			int ani_set_whip_id = atoi(tokens[4].c_str());
+			LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
+			((Simon*)obj)->whip->SetAnimationSet(ani_set_whip);
+		}
 		obj->SetAnimationSet(ani_set);
 		objects.push_back(obj);
 	}
@@ -311,22 +323,37 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	Simon *simon = ((CPlayScene*)scence)->player;
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
-		simon->SetState(SIMON_STATE_JUMP);
+	case DIK_SPACE: {
+		if (simon->isJump == 0 && simon->isSit == false)
+			if (simon->isAttact == false)
+				simon->SetState(SIMON_STATE_JUMP);
 		break;
+	}
 	case DIK_A:
-		simon->SetState(SIMON_STATE_ATTACK);
+		if (simon->isAttact == false)
+			simon->SetState(SIMON_STATE_ATTACK);
 		break;
 	case DIK_R: // reset
-		simon->SetState(SIMON_STATE_IDLE);
-		simon->SetPosition(50.0f, 0.0f);
-		simon->SetSpeed(0, 0);
+		CGame::GetInstance()->SwitchScene(CPlayScene::GetInstance()->currentScence);
 		break;
 	}
 }
 
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
+	Simon *simon = ((CPlayScene*)scence)->player;
+	if (KeyCode == DIK_DOWN) {
+		if (simon->isSit) {
+			if (!simon->isAttact) {
+				simon->isSit = false;
+				simon->y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
+			}
+		}
+	}
+	else if (KeyCode == DIK_RIGHT || KeyCode == DIK_LEFT)
+	{
+		simon->vx = 0;
+	}
 }
 
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
@@ -336,16 +363,29 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
+
+	if (game->IsKeyDown(DIK_DOWN))
+		if (!simon->isAttact && !simon->isSit) {
+			if (!simon->isJump) {
+				if (!simon->isSit)
+					simon->y += (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
+				simon->SetState(SIMON_STATE_SIT);
+			}
+		}
+
 	if (game->IsKeyDown(DIK_RIGHT)) {
 		if (!simon->isAttact && !simon->isSit)
 			simon->SetState(SIMON_STATE_WALKING_RIGHT);
+		else
+			simon->nx = 1.0f;
 	}
-	else if (game->IsKeyDown(DIK_DOWN))
-		simon->SetState(SIMON_STATE_SIT);
-	else if (game->IsKeyDown(DIK_LEFT)) {
+
+	if (game->IsKeyDown(DIK_LEFT)) {
 		if (!simon->isAttact && !simon->isSit)
 			simon->SetState(SIMON_STATE_WALKING_LEFT);
+		else
+			simon->nx = -1.0f;
 	}
-	else
-		simon->SetState(SIMON_STATE_IDLE);
+	/*else
+		simon->SetState(SIMON_STATE_IDLE);*/
 }

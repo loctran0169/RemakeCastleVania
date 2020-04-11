@@ -3,11 +3,15 @@
 0	Map\\tileset_map1.png	255	255	255
 1	textures\\brick_2.png	255	0	255
 2	textures\\simon\\simon.png	255	255	255
+3	textures\\torch.png	255	0	255
+4	textures\\effect\\torch.png	255	0	255
+5	textures\\simon\\whip.png	255	255	255
 # map
 [MAPTXT]
 0	Map\\txt_map1.txt
 # id	left	top	right	bottom	texture_id
 [SPRITES]
+## Simon
 # walk
 10001	180	0	240	66	2
 10002	0	0	60	66	2
@@ -41,7 +45,27 @@
 10091	0	198	60	66	2
 10092	60	198	120	66	2
 #QUESTION BRICK
-40001	0	0	32	32	1
+20001	0	0	32	32	1
+#TORCH
+30001	0	0	32	64	3
+30002	32	0	64	64	3
+#EFFECT
+40001	8	0	40	44	4
+40002	50	0	82	44	4
+40003	120	0	152	44	4
+## Whip
+# lv1
+50001	0	7	16	55	5
+50002	41	1	73	39	5
+50003	95	5	151	21	5
+# lv2
+50004	0	67	16	115	5
+50005	41	61	73	125	5
+50006	95	71	151	83	5
+# lv3
+50007	0	127	16	175	5
+50008	41	121	73	159	5
+50009	95	131	173	143	5
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -73,8 +97,17 @@
 # SIMON_ANI_DIE
 412	10091	100	10092	100
 # ==== QUESTION BRICK =========
-602	40001	1000
-
+602	20001	1000
+# TORCH
+701	30001	100	30002	100
+# TORCH - Effect
+801	40001	100	40002	100	40003	100
+#whip lv1
+901	50001	150	50002	150	50003	150
+#whip lv2
+902	50004	150	50005	150	50006	150
+#whip lv3
+903	50007	150	50008	150	50009	150
 #
 # id	ani1	ani2	ani3
 #
@@ -82,17 +115,28 @@
 # MARIO
 1	400	401	402	403	404	405	406	407	408	409	410	411	412
 # QUESTION BRICK 
-22	602
-
+2	602
+# TORCH
+3	701	801
+# whip
+4	901	902	903
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Torch, 3 = Koopas
-# MARIO
-0	0	115	1
-
+# type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
+# Simon 
+#type	x	y	ani_set_id	ani_whip
+0	200	0	1	4
 # BRICK 
-1	0	338	22	45
+#type	x	y	ani_set_id	number_object
+1	0	338	2	45
+#Torch
+#type	x	y	ani_set_id
+2	180	274	3
+2	440	274	3
+2	690	274	3
+2	950	274	3
+2	1200	274	3
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	115	98	0	148	150	1
+#50	2000	2040	0	532	306	0

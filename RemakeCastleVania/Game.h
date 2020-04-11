@@ -66,6 +66,7 @@ public:
 
 	void setCamX(float xx) { cam_x = xx; }
 	void setCamY(float yy) { cam_y = yy; }
+	static bool isCollision(RECT r1, RECT r2);
 	static void SweptAABB(
 		float ml,			// move left 
 		float mt,			// move top

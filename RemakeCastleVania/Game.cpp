@@ -239,6 +239,10 @@ CGame::~CGame()
 	Standard sweptAABB implementation
 	Source: GameDev.net
 */
+bool CGame::isCollision(RECT r1, RECT r2)
+{
+	return !(r1.right < r2.left || r1.left > r2.right || r1.top > r2.bottom || r1.bottom < r2.top);	
+}
 void CGame::SweptAABB(
 	float ml, float mt, float mr, float mb,
 	float dx, float dy,
@@ -420,10 +424,11 @@ void CGame::Load(LPCWSTR gameFile)
 void CGame::SwitchScene(int scene_id)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
-
 	LPSCENE s = scenes[current_scene];
 	s->Unload();
 
+	DebugOut(L"scence id: %d", scene_id);
+	DebugOut(L"current screen: %d",current_scene);
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();

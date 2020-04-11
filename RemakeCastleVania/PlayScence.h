@@ -6,16 +6,15 @@
 #include "Brick.h"
 #include "Simon.h"
 #include "Map.h"
-//#include "Koopas.h"
 
-
+class Simon;
 class CPlayScene : public CScene
 {
 protected:
 	static CPlayScene* __instance;
 	Simon *player;					// A play scene has to have player, right? 
 	CGame *game;
-	vector<LPGAMEOBJECT> objects;
+	static vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_MAPTXT(string line);
@@ -25,10 +24,11 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 public:
 	CMap *map;
+	int currentScence;
 	static CPlayScene* GetInstance();
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
-
+	vector<LPGAMEOBJECT> getListObject() { return this->objects; }
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

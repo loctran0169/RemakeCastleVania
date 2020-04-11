@@ -70,9 +70,9 @@
 #define WHIP_BBOX_WIDGHT			80
 #define WHIP_BBOX_HEIGHT			15
 
-//BigFire	
-#define FIRE_BBOX_WIDGHT			 32
-#define FIRE_BBOX_HEIGHT			 64
+//Torch
+#define TORCH_BBOX_WIDGHT			 32
+#define TORCH_BBOX_HEIGHT			 64
 
 //items
 #define ITEM_GRAVITY				0.002f
