@@ -375,16 +375,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 	if (game->IsKeyDown(DIK_RIGHT)) {
 		if (!simon->isAttact && !simon->isSit)
-			simon->SetState(SIMON_STATE_WALKING_RIGHT);
-		else
-			simon->nx = 1.0f;
+			if (!simon->isJump)
+				simon->SetState(SIMON_STATE_WALKING_RIGHT);
 	}
 
 	if (game->IsKeyDown(DIK_LEFT)) {
 		if (!simon->isAttact && !simon->isSit)
-			simon->SetState(SIMON_STATE_WALKING_LEFT);
-		else
-			simon->nx = -1.0f;
+			if (!simon->isJump)
+				simon->SetState(SIMON_STATE_WALKING_LEFT);
 	}
 	/*else
 		simon->SetState(SIMON_STATE_IDLE);*/

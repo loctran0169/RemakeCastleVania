@@ -3,7 +3,6 @@
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"size: %d \n",(coObjects)->size());
 	float wl, wr, wt, wb;
 	GetBoundingBox(wl, wt, wr, wb);
 	RECT rectWhip, rectObject;
@@ -33,27 +32,29 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Whip::Render()
 {
-	animation_set->at(level - 1)->Render(x,y);
+	animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->Render(xr, yr, nx);
 	RenderBoundingBox();
 }
 
 void Whip::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
 	left = x;
+	if (nx > 0)
+		left = x + SIMON_PADDING_ANI;
 	top = y;
 	switch (level)
 	{
 	case 1:
-		right = x + WHIP_BBOX_WIDGHT;
+		right = left + WHIP_BBOX_WIDGHT_LV1;
 		bottom = y + WHIP_BBOX_HEIGHT;
 		break;
 	case 2:
-		right = x + WHIP_BBOX_WIDGHT + 20;
+		right = left + WHIP_BBOX_WIDGHT_LV2;
 		bottom = y + WHIP_BBOX_HEIGHT;
 		break;
 
 	case 3:
-		right = x + WHIP_BBOX_WIDGHT;
+		right = left + WHIP_BBOX_WIDGHT_LV3;
 		bottom = y + WHIP_BBOX_HEIGHT;
 		break;
 	}

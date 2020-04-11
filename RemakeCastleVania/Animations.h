@@ -30,8 +30,12 @@ class CAnimation
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
-
+	int getCurrentFrame() { return currentFrame; }
+	void setCurrentFrame(int id) { currentFrame = id; }
+	int getFrameSize() { return frames.size(); }
+	void resetFrame(){ lastFrameTime = -1; currentFrame = -1; }
 	void Render(float x, float y,int nx=1, int alpha = 255);
+	void Render(int frameId, float x, float y, int nx = 1, int alpha = 255){ frames[currentFrame]->GetSprite()->Draw(x, y, alpha); }
 };
 
 typedef CAnimation *LPANIMATION;

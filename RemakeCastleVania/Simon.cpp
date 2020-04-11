@@ -74,14 +74,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (nx > 0)
 		{
 			//roi bên phải
-			whip->SetPosition(x, y + (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT));
+			whip->SetPosition(x+SIMON_BBOX_WIDTH, y + WHIP_PADDING_TOP);
+			whip->setPosRender(x, y);
 		}
 		else
 		{
 			//roi bên trái
 			float wl, wr, wt, wb;
 			whip->GetBoundingBox(wl, wt, wr, wb);
-			whip->SetPosition(x + SIMON_BBOX_WIDTH - (wr - wl), y + (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT));
+			whip->SetPosition(x - (wr - wl) - SIMON_PADDING_ANI, y + WHIP_PADDING_TOP);
+			whip->setPosRender(x + SIMON_BBOX_WIDTH * 2-7, y);
 		}
 	}
 	// No collision occured, proceed normally
@@ -181,9 +183,10 @@ void Simon::Render()
 	else
 		animation_set->at(ani)->Render(x- SIMON_PADDING_ANI, y,-1, alpha);
 	if (isAttact) {
+		whip->nx = nx;
 		whip->Render();
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Simon::SetState(int state)
@@ -195,18 +198,15 @@ void Simon::SetState(int state)
 	case SIMON_STATE_WALKING_RIGHT:
 		vx = SIMON_WALKING_SPEED;
 		nx = 1;
-		isSit = false;
 		break;
 	case SIMON_STATE_WALKING_LEFT:
 		vx = -SIMON_WALKING_SPEED;
 		nx = -1;
-		isSit = false;
 		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED_Y;
 		jumpTime = GetTickCount();
 		isJump = true;
-		isSit = false;
 		break;
 	case SIMON_STATE_ATTACK:
 		if (!isJump) vx = 0;
@@ -222,7 +222,6 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_DIE:
 		vy = -SIMON_DIE_DEFLECT_SPEED;
-		isSit = false;
 		break;
 	}
 }

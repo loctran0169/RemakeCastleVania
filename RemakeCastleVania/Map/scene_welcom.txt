@@ -5,7 +5,7 @@
 2	textures\\simon\\simon.png	255	255	255
 3	textures\\torch.png	255	0	255
 4	textures\\effect\\torch.png	255	0	255
-5	textures\\simon\\whip.png	255	255	255
+5	textures\\simon\\whip.png	255	0	255
 # map
 [MAPTXT]
 0	Map\\txt_map1.txt
@@ -53,19 +53,22 @@
 40001	8	0	40	44	4
 40002	50	0	82	44	4
 40003	120	0	152	44	4
-## Whip
+## Whip right
 # lv1
-50001	0	7	16	55	5
-50002	41	1	73	39	5
-50003	95	5	151	21	5
+50001	585	0	555	64	5
+50002	345	0	314	50	5
+50003	102	0	189	32	5
+50013	189	0	75	32	5
 # lv2
-50004	0	67	16	115	5
-50005	41	61	73	125	5
-50006	95	71	151	83	5
+50004	582	68	555	128	5
+50005	345	64	314	117	5
+50006	102	64	189	100	5
+50026	189	64	75	100	5
 # lv3
-50007	0	127	16	175	5
-50008	41	121	73	159	5
-50009	95	131	173	143	5
+50007	582	68	555	128	5
+50008	345	64	314	117	5
+50009	102	330	219	368	5
+50039	219	330	75	368	5
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -102,12 +105,18 @@
 701	30001	100	30002	100
 # TORCH - Effect
 801	40001	100	40002	100	40003	100
-#whip lv1
+#whip lv1 right
 901	50001	150	50002	150	50003	150
-#whip lv2
+#whip lv2 right
 902	50004	150	50005	150	50006	150
-#whip lv3
+#whip lv3 right
 903	50007	150	50008	150	50009	150
+#whip lv1 left
+904	50001	150	50002	150	50013	150
+#whip lv2 left
+905	50004	150	50005	150	50026	150
+#whip lv3 left
+906	50007	150	50008	150	50039	150
 #
 # id	ani1	ani2	ani3
 #
@@ -119,13 +128,13 @@
 # TORCH
 3	701	801
 # whip
-4	901	902	903
+4	901	902	903	904	905	906
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 #type	x	y	ani_set_id	ani_whip
-0	200	0	1	4
+0	0	0	1	4
 # BRICK 
 #type	x	y	ani_set_id	number_object
 1	0	338	2	45
