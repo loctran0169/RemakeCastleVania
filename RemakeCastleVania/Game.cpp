@@ -239,9 +239,9 @@ CGame::~CGame()
 	Standard sweptAABB implementation
 	Source: GameDev.net
 */
-bool CGame::isCollision(RECT r1, RECT r2)
+bool CGame::checkAABB(float b1left, float b1top, float b1right, float b1bottom, float b2left, float b2top, float b2right, float b2bottom)
 {
-	return !(r1.right < r2.left || r1.left > r2.right || r1.top > r2.bottom || r1.bottom < r2.top);	
+	return !(b1right < b2left || b1left > b2right || b1top > b2bottom || b1bottom < b2top);
 }
 void CGame::SweptAABB(
 	float ml, float mt, float mr, float mb,

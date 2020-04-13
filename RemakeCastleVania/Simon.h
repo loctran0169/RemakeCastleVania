@@ -3,7 +3,6 @@
 #include "Brick.h"
 #include"define.h"
 #include"Whip.h"
-#include <algorithm>
 #include "Utils.h"
 #include "Game.h"
 #include"Torch.h"
@@ -13,8 +12,10 @@
 
 class Simon : public CGameObject
 {
+	CGame *game;
 	int level;
 	int untouchable;
+	int prevAni;
 	DWORD untouchable_start;
 	//trạng thái đứng ca
 	bool isStair = false;
@@ -22,13 +23,20 @@ class Simon : public CGameObject
 	DWORD attactTime = 0;
 	DWORD jumpTime = 0;
 	
+	DWORD timeFreeze = 0;
+	
 public:
-	Whip *whip;
 	bool nextScreen;
-	DWORD timeWait = 0;
 	bool isSit = false;
 	bool isJump = false;
 	bool isAttact = false;
+	bool isEatItem = false;
+	bool isJumpRight = false;
+	bool isJumpLeft = false;
+	bool isOnBase = false;
+
+	DWORD timeEatItem = 0;
+	unordered_map<int, CWeapon*>weapons;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
@@ -38,5 +46,4 @@ public:
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	Simon();
-	virtual void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 };

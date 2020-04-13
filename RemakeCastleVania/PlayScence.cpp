@@ -10,7 +10,7 @@
 using namespace std;
 
 CPlayScene* CPlayScene::__instance = NULL;
-vector<LPGAMEOBJECT> CPlayScene::objects = vector<LPGAMEOBJECT>();
+
 CPlayScene* CPlayScene::GetInstance()
 {
 	if (__instance == NULL) __instance = new CPlayScene();
@@ -24,6 +24,94 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	map=CMap::GetInstance();
 	game = CGame::GetInstance();
 	key_handler = new CPlayScenceKeyHandler(this);
+}
+
+void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
+{
+	for (auto& weapon : player->weapons) {
+		if (weapon.second->GetAttack()) {
+			for (UINT i = 0; i < coObjects->size(); i++)
+			{
+				if (weapon.second->GetLastTimeAttack() > coObjects->at(i)->timeBeAttacked) {
+					if (weapon.second->isCollitionObjectWithObject(coObjects->at(i))) {
+						CGameObject *gameObj = coObjects->at(i);
+						switch (gameObj->getType())
+						{
+						case gameType::TORCH: {
+							gameObj->isHitted = true;
+							break;
+						}
+						case gameType::BRICK: {
+							// mấy cục đá đánh rớt item
+							break;
+						}
+						default:
+							break;
+						}
+						gameObj->timeBeAttacked = GetTickCount();
+					}
+				}
+			}
+		}
+	}
+}
+
+void CPlayScene::checkCollisonWithItem()
+{
+	for (UINT i = 0; i < listItems.size(); i++) {
+		if (!listItems[i]->isPicked) {
+			if (player->isCollitionObjectWithObject(listItems[i])) {
+				switch (listItems[i]->getType())
+				{
+				case gameType::ITEM_WHIP: {
+					Whip* whip =dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
+					whip->whipUpgrade();
+					player->isEatItem = true;
+					player->timeBeAttacked = GetTickCount();
+					break;
+				}
+				case gameType::ITEM_HEART: {
+					// cộng tim cho simon(chưa làm)
+					break;
+				}
+				case gameType::ITEM_KNIFE: {
+					player->weapons[gameType::ITEM_KNIFE] = new CKnife();
+					break;
+				}
+				case gameType::ITEM_BOOMERANG: {
+					//add boomerang vào danh sách (chưa làm)
+					break;
+				}
+				default:
+					break;
+				}
+				listItems[i]->isHitted = true;
+			}
+		}
+	}
+}
+
+void CPlayScene::checkCollisonWithHideObj()
+{
+	for (UINT i = 0; i < objects.size(); i++) {
+		if (player->isCollitionObjectWithObject(objects[i])) {
+			switch (objects[i]->getType())
+			{
+			case gameType::PORTAL: {
+				CPortal *p = dynamic_cast<CPortal *>(objects[i]);
+				DebugOut(L"[INFO] Switching to scene %d", p->GetSceneId());
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				break;
+			}
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void CPlayScene::checkCollisonWithEnemy(vector<LPGAMEOBJECT>* coObjects)
+{
 }
 
 /*
@@ -210,7 +298,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (object_type == OBJECT_TYPE_SIMON) {
 			int ani_set_whip_id = atoi(tokens[4].c_str());
 			LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
-			((Simon*)obj)->whip->SetAnimationSet(ani_set_whip);
+			dynamic_cast<Whip*>(((Simon*)obj)->weapons[gameType::WHIP])->SetAnimationSet(ani_set_whip);
 		}
 		obj->SetAnimationSet(ani_set);
 		objects.push_back(obj);
@@ -270,33 +358,56 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
-	// Update camera to follow mario
+	// Update camera to follow simon
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	//Camera follow Simon
 	if (cx > SCREEN_WIDTH / 2 && cx < MAX_WIDTH_LV1 - SCREEN_WIDTH / 2)
-	{
 		game->setCamX(cx - SCREEN_WIDTH / 2);
-
-	}
 	else if (cx > MAX_WIDTH_LV1 - SCREEN_WIDTH / 2)
-	{
 		game->setCamX(MAX_WIDTH_LV1 - SCREEN_WIDTH);
-
-	}
 	else
-	{
 		game->setCamX(0);
+
+	//xóa objects ko sài trước khi update
+	for (int i = 0; i < objects.size(); i++) {
+		if (dynamic_cast<CTorch *>(objects.at(i))) {
+			auto *torch = dynamic_cast<CTorch*>(objects.at(i));
+				if(torch->isFinish){
+					objects.erase(objects.begin() + i);
+					delete torch;
+				}
+		}
+		else if (dynamic_cast<Item *>(objects.at(i))) {
+			auto *item = dynamic_cast<Item*>(objects.at(i));
+			if (item->isPicked) {
+				objects.erase(objects.begin() + i);
+				delete item;
+			}
+		}
+	}
+	//update objects tĩnh
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt, &objects);
+	}
+	//update items
+	for (size_t i = 0; i < listItems.size(); i++)
+	{
+		if (listItems[i]->isPicked) {
+			listItems.erase(listItems.begin() + i);
+			delete listItems[i];
+			continue;
+		}
+		listItems[i]->Update(dt, &objects);
+	}
+	// update enemy mà chưa làm
+	//*************************************************************************************************
+
+	//simon chết thì ko có va chạm
+	if (player->state != SIMON_STATE_DIE) {
+		checkCollisonWeapon(&objects);// với cái objects ko phải enemy
+		checkCollisonWithItem();
+		checkCollisonWithHideObj();
 	}
 }
 
@@ -318,19 +429,33 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
+	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
 	switch (KeyCode)
 	{
 	case DIK_SPACE: {
 		if (simon->isJump == 0 && simon->isSit == false)
-			if (simon->isAttact == false)
+			if (simon->isAttact == false) {				
+				if (game->IsKeyDown(DIK_RIGHT))
+				{
+					simon->isJumpRight = true;
+					simon->isJumpLeft = false;
+				}
+				else if (game->IsKeyDown(DIK_LEFT)) {
+					simon->isJumpRight = false;
+					simon->isJumpLeft = true;
+				}
+				else {
+					simon->isJumpRight = false;
+					simon->isJumpLeft = false;
+				}
 				simon->SetState(SIMON_STATE_JUMP);
+				DebugOut(L"%d %d \n", simon->isJumpRight, simon->isJumpLeft);
+			}
 		break;
 	}
 	case DIK_A:
-		if (simon->isAttact == false)
+		if (!simon->isAttact&&!simon->isEatItem)
 			simon->SetState(SIMON_STATE_ATTACK);
 		break;
 	case DIK_R: // reset
@@ -352,7 +477,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	}
 	else if (KeyCode == DIK_RIGHT || KeyCode == DIK_LEFT)
 	{
-		simon->vx = 0;
+		if (!simon->isJumpRight && !simon->isJumpLeft)
+			simon->vx = 0;
 	}
 }
 
@@ -374,15 +500,19 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 
 	if (game->IsKeyDown(DIK_RIGHT)) {
-		if (!simon->isAttact && !simon->isSit)
-			if (!simon->isJump)
+		if (!simon->isAttact && !simon->isJump)
+			if (!simon->isSit && !simon->isEatItem)
 				simon->SetState(SIMON_STATE_WALKING_RIGHT);
+			else
+				simon->nx = 1.0f;
 	}
 
 	if (game->IsKeyDown(DIK_LEFT)) {
-		if (!simon->isAttact && !simon->isSit)
-			if (!simon->isJump)
+		if (!simon->isAttact && !simon->isJump)
+			if (!simon->isSit && !simon->isEatItem)
 				simon->SetState(SIMON_STATE_WALKING_LEFT);
+			else
+				simon->nx = -1.0f;
 	}
 	/*else
 		simon->SetState(SIMON_STATE_IDLE);*/

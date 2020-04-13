@@ -3,28 +3,17 @@
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	float wl, wr, wt, wb;
-	GetBoundingBox(wl, wt, wr, wb);
-	RECT rectWhip, rectObject;
-	rectWhip.left = (int)wl;
-	rectWhip.top = (int)wt;
-	rectWhip.right = (int)wr;
-	rectWhip.bottom = (int)wb;
-	for (UINT i = 0; i < coObjects->size(); i++)
-	{
-		if (dynamic_cast<CTorch *>(coObjects->at(i)))
+	if (isAttack) {
+		for (UINT i = 0; i < coObjects->size(); i++)
 		{
-			CTorch *torch = dynamic_cast<CTorch *>(coObjects->at(i));
-			float zl, zr, zt, zb;
-			torch->GetBoundingBox(zl, zt, zr, zb);
-			rectObject.left = (int)zl;
-			rectObject.top = (int)zt;
-			rectObject.right = (int)zr;
-			rectObject.bottom = (int)zb;
-			if (CGame::GetInstance()->isCollision(rectWhip, rectObject))
+			if (dynamic_cast<CTorch *>(coObjects->at(i)))
 			{
-				torch->isTouch = true;
-				torch->timeHitted = GetTickCount();
+				CTorch *torch = dynamic_cast<CTorch *>(coObjects->at(i));
+				if (isCollitionObjectWithObject(coObjects->at(i)))
+				{
+					torch->isHitted = true;
+					torch->timeHitted = GetTickCount();
+				}
 			}
 		}
 	}
@@ -32,8 +21,9 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Whip::Render()
 {
-	animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->Render(xr, yr, nx);
-	RenderBoundingBox();
+	if (isAttack)
+		animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->Render(x,y, nx);
+	//RenderBoundingBox();
 }
 
 void Whip::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -58,6 +48,14 @@ void Whip::GetBoundingBox(float & left, float & top, float & right, float & bott
 		bottom = y + WHIP_BBOX_HEIGHT;
 		break;
 	}
+}
+
+void Whip::whipUpgrade()
+{
+	if (level == 1)
+		level = 2;
+	else if(level == 2)
+		level = 3;	
 }
 
 Whip::~Whip()

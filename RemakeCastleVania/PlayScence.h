@@ -4,9 +4,11 @@
 #include "Scence.h"
 #include "GameObject.h"
 #include "Brick.h"
+#include"Item.h"
 #include "Simon.h"
 #include "Map.h"
-
+#include"Whip.h"
+#include"Knife.h"
 class Simon;
 class CPlayScene : public CScene
 {
@@ -14,7 +16,8 @@ protected:
 	static CPlayScene* __instance;
 	Simon *player;					// A play scene has to have player, right? 
 	CGame *game;
-	static vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> objects;
+	vector<Item*> listItems;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_MAPTXT(string line);
@@ -29,6 +32,12 @@ public:
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
 	vector<LPGAMEOBJECT> getListObject() { return this->objects; }
+
+	//collision
+	void checkCollisonWeapon(vector<LPGAMEOBJECT> *coObjects);
+	void checkCollisonWithItem();
+	void checkCollisonWithHideObj();
+	void checkCollisonWithEnemy(vector<LPGAMEOBJECT> *coObjects);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

@@ -8,6 +8,7 @@ CPortal::CPortal(float l, float t, float r, float b, int scene_id)
 	y = t;
 	width = r - l + 1;
 	height = b - t + 1;
+	type = gameType::PORTAL;
 }
 
 void CPortal::Render()

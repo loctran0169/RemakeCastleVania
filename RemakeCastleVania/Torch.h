@@ -6,10 +6,10 @@ class CTorch :public CGameObject
 {
 public:
 	bool isFinish = false;
-	bool isTouch = false;
 	DWORD timeHitted = 0;
 	CTorch() :CGameObject() {
 		timeHitted = 0;
+		CGameObject::type = gameType::TORCH;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();

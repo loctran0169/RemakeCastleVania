@@ -10,8 +10,8 @@
 #define TILE_MAP_SIZE 32
 
 //Simon
-#define SIMON_ATTACT_TIME 450
-
+#define SIMON_ATTACT_TIME 420
+#define SIMON_EATTING_TIME 420
 //Trạng thái di chuyển cùa simon
 #define SIMON_STATE_IDLE				0
 #define SIMON_STATE_WALKING_RIGHT		1
@@ -46,7 +46,6 @@
 #define SIMON_ANI_IDLE_DOWN					11
 #define SIMON_ANI_DIE						12
 
-
 //Kích cờ simon
 #define SIMON_BBOX_WIDTH			32
 #define SIMON_BBOX_HEIGHT			64
@@ -78,10 +77,17 @@
 #define TORCH_BBOX_WIDGHT			 32
 #define TORCH_BBOX_HEIGHT			 64
 
+//animation_set_id
+#define	ANIMATION_SET_ID_SIMON		1
+#define	ANIMATION_SET_ID_BRICK		2
+#define	ANIMATION_SET_ID_TORCH		3
+#define	ANIMATION_SET_ID_WHIP		4
+#define	ANIMATION_SET_ID_ITEM		5
 //items
 #define ITEM_GRAVITY				0.002f
-#define HEART_BBOX_WIDTH			16
-#define HEART_BBOX_HEIGHT			16
+#define ITEM_TIME_EXIT				3000
+#define HEART_BBOX_WIDTH			24
+#define HEART_BBOX_HEIGHT			20
 
 #define WHIPITEM_BBOX_WIDTH			32
 #define WHIPITEM_BBOX_HEIGHT		32
@@ -92,13 +98,40 @@
 #define KNIFE_BBOX_WIDTH			32
 #define KNIFE_BBOX_HEIGHT			18
 
-enum ItemType
+#define HOLYWATER_BBOX_WIDTH		32
+#define HOLYWATER_BBOX_HEIGHT		32
+
+//ani item_type
+#define ANI_SET_ITEM_WHIP			0
+#define ANI_SET_ITEM_WHIP			1
+#define ANI_SET_ITEM_WHIP			2
+#define ANI_SET_ITEM_WHIP			3
+
+enum gameType
 {
-	HEART = 1,
-	WHIP = 2,
-	MONEY = 3,
-	KNIFE = 4
+	//item
+	ITEM_KNIFE = 0,
+	ITEM_HEART = 1,
+	ITEM_WHIP = 2,
+	ITEM_MONEY = 3,
+	ITEM_BOOMERANG = 4,
+
+	//weapon
+	WHIP = 10,
+	DAGGER = 11,
+	AXE = 12,
+	BOONMERANG = 13,
+	HOLLYWATER = 14,
+
+	//objects
+	BRICK = 50,
+	TORCH = 51,
+	PORTAL = 52
 };
 
+enum WeaponType
+{
+	
+};
 //effect
 #define TIME_EFFECT					450

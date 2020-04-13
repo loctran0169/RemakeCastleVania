@@ -2,11 +2,11 @@
 
 void CTorch::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 
-	if (isTouch &&GetTickCount() - timeHitted >= TIME_EFFECT)
+	if (isHitted &&GetTickCount() - timeHitted >= TIME_EFFECT)
 		isFinish = true;
 }
 void CTorch::Render() {
-	if (!isTouch)
+	if (!isHitted)
 		animation_set->at(0)->Render(x, y);
 	else
 		if (!isFinish)

@@ -105,6 +105,12 @@
     <ClCompile Include="Item.cpp">
       <Filter>FrameWork\GameObjects\items</Filter>
     </ClCompile>
+    <ClCompile Include="Knife.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -154,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>FrameWork\GameObjects\items</Filter>
+    </ClInclude>
+    <ClInclude Include="Knife.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx9.h>
 #include <vector>
-
+#include"define.h"
 #include "Sprites.h"
 #include "Animations.h"
 
@@ -58,6 +58,11 @@ public:
 
 	int state;
 
+	gameType type;//kiểu objects
+
+	bool isHitted = false; //bị đánh
+	DWORD timeBeAttacked;  // thời gian lúc bị đánh
+
 	DWORD dt;
 
 	LPANIMATION_SET animation_set;
@@ -75,6 +80,9 @@ public:
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
+	bool isCollitionObjectWithObject(CGameObject *obj); 	// kiểm tra bằng AABB và Sweept AABB
+	bool checkAABB(CGameObject *obj);
+
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 	void FilterCollision(
 		vector<LPCOLLISIONEVENT> &coEvents,
@@ -92,7 +100,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
-
+	gameType getType() { return type; }
 
 	~CGameObject();
 };

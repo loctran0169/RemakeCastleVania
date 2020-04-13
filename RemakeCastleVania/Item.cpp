@@ -1,19 +1,34 @@
 #include "Item.h"
 
+void Item::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
+{
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		if (dynamic_cast<CBrick *>(coObjects->at(i)))
+		{
+			LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
+
+			if (e->t > 0 && e->t <= 1.0f)
+				coEvents.push_back(e);
+			else
+				delete e;
+		}
+	}
+
+	std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
+}
 
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
+	if (GetTickCount() - timeExit > ITEM_TIME_EXIT) {
+		isPicked = true;
+	}
 	CGameObject::Update(dt);
 
 	vy += ITEM_GRAVITY * dt;
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	if (y + WHIPITEM_BBOX_HEIGHT >= 9 * TILE_MAP_SIZE + HEIGHTBOARD) {
-		if (vy > 0) {
-			vy = 0;
-			y = 8 * TILE_MAP_SIZE + HEIGHTBOARD;
-		}
-	}
 	coEvents.clear();
 	CalcPotentialCollisions(coObjects, coEvents);
 
@@ -35,29 +50,30 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 }
 void Item::Render() {
 	if (!isPicked)
-		animation_set->at(0)->Render(x, y);
+		animation_set->at(type)->Render(x, y);
 	//RenderBoundingBox();
 }
 void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 	l = x;
 	t = y;
-	if (typeItem == ItemType::HEART) {
+	if (type == gameType::ITEM_HEART) {
 		r = x + HEART_BBOX_WIDTH;
 		b = y + HEART_BBOX_HEIGHT;
 	}
-	else if (typeItem == ItemType::KNIFE) {
+	else if (type == gameType::ITEM_KNIFE) {
 		r = x + KNIFE_BBOX_WIDTH;
 		b = y + KNIFE_BBOX_HEIGHT;
 	}
-	else if (typeItem == ItemType::MONEY) {
+	else if (type == gameType::ITEM_MONEY) {
 		r = x + MONEY_BBOX_WIDTH;
 		b = y + MONEY_BBOX_HEIGHT;
 	}
-	else if (typeItem == ItemType::WHIP) {
+	else if (type == gameType::ITEM_WHIP) {
 		r = x + WHIPITEM_BBOX_WIDTH;
 		b = y + WHIPITEM_BBOX_HEIGHT;
 	}
 }
+
 Item::~Item()
 {
 

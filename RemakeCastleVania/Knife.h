@@ -6,17 +6,14 @@
 #include"Torch.h"
 #include"Utils.h"
 #include"Weapon.h"
-class Whip : public CWeapon
+class CKnife : public CWeapon
 {
 public:
-	int level;	//level whip
-	Whip() :CWeapon() {
-		level = 1;
+	CKnife() :CWeapon() {
+
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	void whipUpgrade();
-	~Whip();
+	~CKnife();
 };
-

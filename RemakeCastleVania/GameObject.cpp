@@ -57,6 +57,27 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	return e;
 }
 
+bool CGameObject::isCollitionObjectWithObject(CGameObject * obj)
+{
+	if (checkAABB(obj))
+		return true;
+
+	LPCOLLISIONEVENT e = SweptAABBEx(obj);
+	bool res = e->t > 0 && e->t <= 1.0f;
+	delete e;
+	return res;
+}
+
+bool CGameObject::checkAABB(CGameObject * obj)
+{
+	float l, t, r, b;
+	float l1, t1, r1, b1;
+	this->GetBoundingBox(l, t, r, b);
+	obj->GetBoundingBox(l1, t1, r1, b1);
+	if (CGame::GetInstance()->checkAABB(l, t, r, b, l1, t1, r1, b1))
+		return true;
+	return false;
+}
 /*
 	Calculate potential collisions with the list of colliable objects
 
