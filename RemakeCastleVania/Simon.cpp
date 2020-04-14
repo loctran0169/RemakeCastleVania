@@ -6,6 +6,7 @@ Simon::Simon() : CGameObject()
 	game = CGame::GetInstance();
 	untouchable = 0;
 	prevAni = 0;
+	heartWeapon = 0;
 	SetState(SIMON_STATE_IDLE);
 	weapons[gameType::WHIP] = new Whip();
 }
@@ -41,38 +42,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
 		if (coObjects->at(i)->getType() == gameType::BRICK)
 			listBricks.push_back(coObjects->at(i));
+
 	// kiểm ra va chạm với Brick
 	if (state != SIMON_STATE_DIE)
 		CalcPotentialCollisions(&listBricks, coEvents);
-
-	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
-	{
-		untouchable_start = 0;
-		untouchable = 0;
-	}
-	
-	if (isEatItem) {
-		if (GetTickCount() - timeEatItem > SIMON_EATTING_TIME) {
-			timeEatItem = 0;
-			isEatItem = false;
-			timeFreeze = 0;
-		}
-		else {
-			vx = 0;
-		}
-		//if (prevAni= SIMON_ANI_EATTING)
-		//	attactTime += SIMON_EATTING_TIME;
-	}
-	if (isAttact && GetTickCount() - attactTime >= SIMON_ATTACT_TIME) {
-		isAttact = false;
-		weapons[gameType::WHIP]->SetAttack(false);
-		if (CGame::GetInstance()->IsKeyDown(DIK_DOWN) == false && isSit) {
-			y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
-			isSit = false;
-		}
-	}
-	
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -103,9 +76,45 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (ny != 0) isOnBase = true;
 		else isOnBase = false;
 	}
-
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	// reset untouchable timer if untouchable time has passed
+	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		untouchable = 0;
+	}
+
+	if (isEatItem) {
+		if (GetTickCount() - timeEatItem > SIMON_EATTING_TIME) {
+			timeEatItem = 0;
+			isEatItem = false;
+			timeFreeze = 0;
+		}
+		else {
+			vx = 0;
+		}
+		//if (prevAni= SIMON_ANI_EATTING)
+		//	attactTime += SIMON_EATTING_TIME;
+	}
+	if (isAttact && GetTickCount() - attactTime >= SIMON_ATTACT_TIME) {
+		isAttact = false;
+		attactTime = -1;
+		weapons[gameType::WHIP]->SetAttack(false);
+		if (CGame::GetInstance()->IsKeyDown(DIK_DOWN) == false && isSit) {
+			y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
+			isSit = false;
+		}
+	}
+
+	for (auto&weapon : weapons) {
+		if (weapon.second->GetAttack()) {
+			if (weapon.second->getType() == gameType::WHIP)
+				weapons[gameType::WHIP]->setPosition(x, y, nx);
+			weapon.second->Update(dt, coObjects);
+		}
+	}
 }
 
 void Simon::Render()
@@ -177,12 +186,6 @@ void Simon::SetState(int state)
 		jumpTime = GetTickCount();
 		isJump = true;
 		break;
-	case SIMON_STATE_ATTACK:
-		if (!isJump) vx = 0;
-		isAttact = true;
-		attactTime = GetTickCount();
-		weapons[gameType::WHIP]->SetAttack(true);
-		break;
 	case SIMON_STATE_SIT:
 		vx = 0;
 		isSit = true;
@@ -204,6 +207,30 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 	bottom = y + SIMON_BBOX_HEIGHT;
 	if (isSit || (!isAttact&&jumpTime > 0 && isJump&&!isEatItem)) {
 		bottom = y + SIMON_SIT_BBOX_HEIGHT;
+	}
+}
+
+void Simon::attackWeapon(gameType weaponType)
+{
+	switch (weaponType)
+	{
+	case gameType::WHIP:
+		if (isAttact)return;// roi đánh đánh thì ko đánh nữa
+		break;
+	case gameType::DAGGER:
+		heartWeapon--;
+		break;
+	default:
+		break;
+	}
+
+	if (!weapons[weaponType]->GetAttack()) { // kho có xuất hiện trên màn hình thì cho đánh
+		isAttact = true;
+		attactTime = GetTickCount();
+		if (!isJump) vx = 0;
+		weapons[weaponType]->resetFrame();
+		weapons[weaponType]->SetAttack(true);
+		weapons[weaponType]->setPosition(x, y, nx);
 	}
 }
 

@@ -67,7 +67,7 @@
 #define SIMON_TIME_JUMPPING_SIT		400
 //Whip
 #define WHIP_BBOX_WIDGHT_LV1		42
-#define WHIP_BBOX_WIDGHT_LV2		80
+#define WHIP_BBOX_WIDGHT_LV2		42
 #define WHIP_BBOX_WIDGHT_LV3		72
 #define WHIP_BBOX_HEIGHT			15
 #define	WHIP_LEVEL_MAX				3
@@ -129,9 +129,5 @@ enum gameType
 	PORTAL = 52
 };
 
-enum WeaponType
-{
-	
-};
 //effect
 #define TIME_EFFECT					450

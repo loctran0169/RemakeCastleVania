@@ -19,6 +19,7 @@ void Item::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOL
 }
 
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
+
 	if (GetTickCount() - timeExit > ITEM_TIME_EXIT) {
 		isPicked = true;
 	}

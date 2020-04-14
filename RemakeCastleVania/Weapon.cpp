@@ -33,6 +33,11 @@ void CWeapon::setPositionRender(float _x, float _y)
 {
 }
 
+bool CWeapon::allowCollision()
+{
+	return true;
+}
+
 CWeapon::~CWeapon()
 {
 }

@@ -12,17 +12,17 @@
 
 class Simon : public CGameObject
 {
+public:
 	CGame *game;
 	int level;
 	int untouchable;
 	int prevAni;
-	DWORD untouchable_start;
-	//trạng thái đứng ca
-	bool isStair = false;
+	int heartWeapon;
+	
 	//thời gian hành động
+	DWORD untouchable_start;
 	DWORD attactTime = 0;
 	DWORD jumpTime = 0;
-	
 	DWORD timeFreeze = 0;
 	
 public:
@@ -41,6 +41,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	void attackWeapon(gameType weaponType);
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }

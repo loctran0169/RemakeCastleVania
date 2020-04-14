@@ -2,7 +2,7 @@
 
 void CTorch::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 
-	if (isHitted &&GetTickCount() - timeHitted >= TIME_EFFECT)
+	if (isHitted &&GetTickCount() - timeBeAttacked >= TIME_EFFECT)
 		isFinish = true;
 }
 void CTorch::Render() {

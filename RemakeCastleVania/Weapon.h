@@ -22,7 +22,8 @@ public:
 	virtual void CollisionWithListObjects(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void setPosition(float _x, float _y, int nx);
 	virtual void setPositionRender(float _x, float _y);
-
+	virtual bool allowCollision();
+	virtual void resetFrame() = 0;
 	bool GetAttack() { return isAttack; }
 	void SetAttack(bool _isAttack) { isAttack = _isAttack; };
 

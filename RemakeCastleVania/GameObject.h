@@ -44,6 +44,7 @@ struct CCollisionEvent
 class CGameObject
 {
 public:
+	int ID;
 
 	float x;
 	float y;
@@ -102,6 +103,8 @@ public:
 	virtual void SetState(int state) { this->state = state; }
 	gameType getType() { return type; }
 
+	void setID(int _id) { ID = _id; }
+	int getID() { return ID; }
 	~CGameObject();
 };
 

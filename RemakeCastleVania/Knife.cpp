@@ -18,6 +18,23 @@ void CKnife::GetBoundingBox(float & left, float & top, float & right, float & bo
 	bottom = y + KNIFE_BBOX_HEIGHT;
 }
 
+void CKnife::setPosition(float _x, float _y, int nx)
+{
+}
+
+void CKnife::setPositionRender(float _x, float _y)
+{
+}
+
+bool CKnife::allowCollision()
+{
+	return false;
+}
+
+void CKnife::resetFrame()
+{
+}
+
 CKnife::~CKnife()
 {
 

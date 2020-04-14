@@ -25,6 +25,7 @@ void CAnimation::Render(float x, float y, int nx, int alpha)
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
 	{
+		isFinish = false;
 		currentFrame = 0;
 		lastFrameTime = now;
 	}
@@ -35,7 +36,10 @@ void CAnimation::Render(float x, float y, int nx, int alpha)
 		{
 			currentFrame++;
 			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
+			if (currentFrame == frames.size()) {
+				currentFrame = 0;
+				isFinish = true;
+			}
 		}
 	}
 

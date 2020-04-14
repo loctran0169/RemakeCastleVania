@@ -38,6 +38,8 @@ public:
 	void checkCollisonWithItem();
 	void checkCollisonWithHideObj();
 	void checkCollisonWithEnemy(vector<LPGAMEOBJECT> *coObjects);
+
+	Item * getNewItem(int id, float x, float y);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

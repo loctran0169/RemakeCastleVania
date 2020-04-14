@@ -160,12 +160,12 @@
 #type	x	y	ani_set_id	number_object
 1	0	338	2	45
 #Torch
-#type	x	y	ani_set_id
-2	180	274	3
-2	440	274	3
-2	690	274	3
-2	950	274	3
-2	1200	274	3
+#type	x	y	ani_set_id	id_item
+2	180	274	3	1
+2	440	274	3	2
+2	690	274	3	2
+2	950	274	3	1
+2	1200	274	3	0
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
