@@ -16,6 +16,7 @@ public:
 	CGame *game;
 	int level;
 	int untouchable;
+	int currentAni;
 	int prevAni;
 	int heartWeapon;
 	
@@ -27,15 +28,16 @@ public:
 	
 public:
 	bool nextScreen;
-	bool isSit = false;
-	bool isJump = false;
-	bool isAttact = false;
-	bool isEatItem = false;
-	bool isJumpRight = false;
-	bool isJumpLeft = false;
-	bool isOnBase = false;
-
+	bool isSit = false;//trạng thái ngồi
+	bool isJump = false; // trạng thái nhảy
+	bool isAttact = false; // trạng thái đánh
+	bool isEatItem = false; //trạng thái khi ăn whip item
+	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
+	bool isJumpLeft = false;// nhảy trái thì ko đổi hướng
+	bool isOnBase = false; //đang đúng dưới sàn
+	bool isRenderLopping = false;
 	DWORD timeEatItem = 0;
+	gameType currentWeapon;
 	unordered_map<int, CWeapon*>weapons;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
@@ -43,6 +45,8 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void attackWeapon(gameType weaponType);
 
+	void setEatItem(bool b) { isEatItem = b; }
+	bool getEatItem() { return isEatItem; }
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }

@@ -39,6 +39,7 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 						switch (gameObj->getType())
 						{
 						case gameType::TORCH: {
+							DebugOut(L"vào \n");
 							gameObj->isHitted = true;
 							break;
 						}
@@ -66,9 +67,19 @@ void CPlayScene::checkCollisonWithItem()
 				{
 				case gameType::ITEM_WHIP: {
 					Whip* whip =dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
+					whip->setIDFreeze(whip->level);
 					whip->whipUpgrade();
+					whip->animation_set->at(whip->getIDFreeze())->setLopping(true);
+					whip->isLopping = true;
+
+					//trâng thái đừng khi ăn item
 					player->isEatItem = true;
-					player->timeBeAttacked = GetTickCount();
+					player->timeEatItem = GetTickCount();
+					player->animation_set->at(player->currentAni)->setLopping(true);					
+					player->prevAni = player->currentAni;
+					player->attactTime += SIMON_EATTING_TIME;
+					player->isRenderLopping = true;
+					
 					break;
 				}
 				case gameType::ITEM_HEART: {
@@ -402,7 +413,90 @@ void CPlayScene::Update(DWORD dt)
 	else
 		game->setCamX(0);
 
-	
+	//khi ăn item whip
+	if (player->isEatItem) {
+		if (GetTickCount() - player->timeEatItem < SIMON_EATTING_TIME) {
+			return;
+		}
+		else {
+			player->isEatItem = false;
+			Whip * whip = dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
+			whip->animation_set->at(whip->getAniID())->setLopping(false);
+			player->animation_set->at(player->prevAni)->setLopping(false);
+		}		
+	}
+	//process update sau hki ăn item (đóng băng thời gian)
+	if (player->isRenderLopping) {
+
+		if (player->isAttact) { //khi đang tấn công
+			if (GetTickCount() - player->attactTime >= SIMON_ATTACT_TIME) {
+				player->isAttact = false;
+				player->attactTime = -1;
+				player->isRenderLopping = false;
+				for (auto&weapon : player->weapons) {
+					if (weapon.second->GetAttack()) {
+						switch (weapon.second->getType())
+						{
+						case gameType::WHIP: {
+							Whip* whip = dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
+							whip->SetAttack(false);
+							whip->isLopping = false;
+							whip->animation_set->at(whip->getAniID())->resetFrame();
+							break;
+						}
+						case gameType::DAGGER:
+							break;
+						default:
+							break;
+						}
+					}
+				}				
+				try {
+					player->animation_set->at(player->prevAni)->resetFrame();				
+				}
+				catch (const std::exception&) {}
+
+				if (CGame::GetInstance()->IsKeyDown(DIK_DOWN) == false && player->isSit) {
+					player->y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
+					player->isSit = false;
+				}
+			}
+		}
+		else {
+			if (player->animation_set->at(player->prevAni)->getCurrentFrame()==0) {
+				player->isRenderLopping = false;
+			}
+		}
+	}
+	else {
+		if (player->isAttact) { //khi đang tấn công
+			if (GetTickCount() - player->attactTime >= SIMON_ATTACT_TIME) {
+				player->isAttact = false;
+				player->attactTime = -1;
+				for (auto&weapon : player->weapons) {
+					if (weapon.second->GetAttack()) {
+						switch (weapon.second->getType())
+						{
+						case gameType::WHIP: {
+							weapon.second->SetAttack(false);
+							weapon.second->isLopping = false;
+							break;
+						}
+						case gameType::DAGGER:
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				if (CGame::GetInstance()->IsKeyDown(DIK_DOWN) == false && player->isSit) {
+					player->y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
+					player->isSit = false;
+				}
+			}
+		}
+	}
+
 	//update objects tĩnh
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -470,6 +564,8 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
+	for (int i = 0; i < listItems.size(); i++)
+		delete listItems[i];
 	objects.clear();
 	player = NULL;
 }

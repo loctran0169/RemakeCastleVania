@@ -19,6 +19,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual bool allowCollision();
 	virtual void resetFrame();
+	int getAniID();
 	void whipUpgrade();
 	~Whip();
 };

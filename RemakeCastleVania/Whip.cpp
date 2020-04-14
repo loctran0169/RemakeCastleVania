@@ -3,23 +3,23 @@
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
+	//DebugOut(L"whip isAttack: %d %d \n", isAttack,GetTickCount());
 }
 
 void Whip::Render()
 {
 	if (isAttack)
 		if(nx>0)
-			animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->Render(x,y, nx);
+			animation_set->at(getAniID())->Render(x,y, nx);
 		else
-			animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->Render(x+SIMON_BBOX_WIDTH*2-7, y, nx);// -7 Do cắt sprites ko đều
+			animation_set->at(getAniID())->Render(x+SIMON_BBOX_WIDTH*2-7, y, nx);// -7 Do cắt sprites ko đều
 	RenderBoundingBox();
 }
 
 void Whip::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	if (animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->getCurrentFrame() < 2)//frame cuối mới xét ra chạm
-		return;
+	//if (animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->getCurrentFrame() < 2)//frame cuối mới xét ra chạm
+	//	return;
 
 	left = x - SIMON_PADDING_ATTACT * 0.75f;
 	if (nx > 0)
@@ -58,6 +58,14 @@ bool Whip::allowCollision()
 void Whip::resetFrame()
 {
 	animation_set->at(level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX))->resetFrame();
+}
+
+int Whip::getAniID()
+{
+	if (isLopping)
+		return getIDFreeze();
+	else
+		return (level - 1 + ((nx > 0) ? 0 : WHIP_LEVEL_MAX));
 }
 
 void Whip::whipUpgrade()

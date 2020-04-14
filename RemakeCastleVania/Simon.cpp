@@ -5,7 +5,7 @@ Simon::Simon() : CGameObject()
 {
 	game = CGame::GetInstance();
 	untouchable = 0;
-	prevAni = 0;
+	prevAni = -1;
 	heartWeapon = 0;
 	SetState(SIMON_STATE_IDLE);
 	weapons[gameType::WHIP] = new Whip();
@@ -16,6 +16,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
+
+	// reset untouchable timer if untouchable time has passed
+	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		untouchable = 0;
+	}
+
 	// vị trí khi chảy
 	if (isJump) {// xét đang nhãy thì ko đổi hướng
 		if (isJumpRight)
@@ -79,35 +87,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 
-	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
-	{
-		untouchable_start = 0;
-		untouchable = 0;
-	}
-
-	if (isEatItem) {
-		if (GetTickCount() - timeEatItem > SIMON_EATTING_TIME) {
-			timeEatItem = 0;
-			isEatItem = false;
-			timeFreeze = 0;
-		}
-		else {
-			vx = 0;
-		}
-		//if (prevAni= SIMON_ANI_EATTING)
-		//	attactTime += SIMON_EATTING_TIME;
-	}
-	if (isAttact && GetTickCount() - attactTime >= SIMON_ATTACT_TIME) {
-		isAttact = false;
-		attactTime = -1;
-		weapons[gameType::WHIP]->SetAttack(false);
-		if (CGame::GetInstance()->IsKeyDown(DIK_DOWN) == false && isSit) {
-			y -= (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
-			isSit = false;
-		}
-	}
-
 	for (auto&weapon : weapons) {
 		if (weapon.second->GetAttack()) {
 			if (weapon.second->getType() == gameType::WHIP)
@@ -119,21 +98,20 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void Simon::Render()
 {
+
 	int ani;
-	if (nextScreen) ani = SIMON_ANI_WALKING;
-	else if (state == SIMON_STATE_DIE)
+	if (state == SIMON_STATE_DIE)
 		ani = SIMON_ANI_DIE;
-	else if (isEatItem)
-	{
-		if (prevAni != SIMON_ANI_EATTING)
-			animation_set->at(prevAni)->resetFrame();
-		ani = SIMON_ANI_EATTING;
-	}
 	else if (isAttact) {
-		if (isSit)
-			ani = SIMON_ANI_SITTING_ATTACKING;
-		else
-			ani = SIMON_ANI_STANDING_ATTACKING;
+		if (!isEatItem) {
+			if (isSit)
+				ani = SIMON_ANI_SITTING_ATTACKING;
+			else
+				ani = SIMON_ANI_STANDING_ATTACKING;
+		}
+		else {
+			ani = SIMON_ANI_EATTING;
+		}
 	}
 	else if (isJump) {
 		ani = SIMON_ANI_JUMPING;
@@ -143,7 +121,6 @@ void Simon::Render()
 		}
 	}
 	else {
-
 		if (vx == 0) {
 			if (!isSit) {
 				ani = SIMON_ANI_IDLE;
@@ -157,13 +134,31 @@ void Simon::Render()
 	}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	animation_set->at(ani)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
 
-	for (auto&weapon : weapons) {
-		if (weapon.second->GetAttack())
-			weapon.second->Render();
+	currentAni = ani;
+	if (isEatItem) {
+		animation_set->at(prevAni)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
+		for (auto&weapon : weapons) {
+			if (weapon.second->GetAttack())
+				weapon.second->Render();
+		}
 	}
-	prevAni = ani;
+	else {
+		if (isRenderLopping) {
+			animation_set->at(prevAni)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
+			for (auto&weapon : weapons) {
+				if (weapon.second->GetAttack())
+					weapon.second->Render();
+			}
+		}
+		else {
+			animation_set->at(ani)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
+			for (auto&weapon : weapons) {
+				if (weapon.second->GetAttack())
+					weapon.second->Render();
+			}
+		}
+	}
 	//RenderBoundingBox();
 }
 
