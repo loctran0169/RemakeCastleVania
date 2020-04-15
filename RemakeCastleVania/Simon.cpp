@@ -137,14 +137,14 @@ void Simon::Render()
 
 	currentAni = ani;
 	if (isEatItem) {
-		animation_set->at(prevAni)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
+		animation_set->at(prevAni + 13)->Render(animation_set->at(prevAni)->getCurrentFrame(), x - SIMON_PADDING_ANI, y, nx, alpha);
 		for (auto&weapon : weapons) {
 			if (weapon.second->GetAttack())
 				weapon.second->Render();
 		}
 	}
 	else {
-		if (isRenderLopping) {
+		if (isRenderLopping&&isAttact) {
 			animation_set->at(prevAni)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
 			for (auto&weapon : weapons) {
 				if (weapon.second->GetAttack())
@@ -159,6 +159,7 @@ void Simon::Render()
 			}
 		}
 	}
+	//weapons[gameType::WHIP]->animation_set->at(0)->Render(2, x, y, nx);
 	//RenderBoundingBox();
 }
 

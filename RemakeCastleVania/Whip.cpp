@@ -13,7 +13,7 @@ void Whip::Render()
 			animation_set->at(getAniID())->Render(x,y, nx);
 		else
 			animation_set->at(getAniID())->Render(x+SIMON_BBOX_WIDTH*2-7, y, nx);// -7 Do cắt sprites ko đều
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Whip::GetBoundingBox(float & left, float & top, float & right, float & bottom)

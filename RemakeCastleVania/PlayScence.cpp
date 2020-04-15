@@ -67,7 +67,7 @@ void CPlayScene::checkCollisonWithItem()
 				{
 				case gameType::ITEM_WHIP: {
 					Whip* whip =dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
-					whip->setIDFreeze(whip->level);
+					whip->setIDFreeze(whip->getAniID());
 					whip->whipUpgrade();
 					whip->animation_set->at(whip->getIDFreeze())->setLopping(true);
 					whip->isLopping = true;
@@ -422,12 +422,12 @@ void CPlayScene::Update(DWORD dt)
 			player->isEatItem = false;
 			Whip * whip = dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
 			whip->animation_set->at(whip->getAniID())->setLopping(false);
+			whip->isLopping = true;
 			player->animation_set->at(player->prevAni)->setLopping(false);
 		}		
 	}
 	//process update sau hki ăn item (đóng băng thời gian)
 	if (player->isRenderLopping) {
-
 		if (player->isAttact) { //khi đang tấn công
 			if (GetTickCount() - player->attactTime >= SIMON_ATTACT_TIME) {
 				player->isAttact = false;
@@ -439,9 +439,9 @@ void CPlayScene::Update(DWORD dt)
 						{
 						case gameType::WHIP: {
 							Whip* whip = dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
-							whip->SetAttack(false);
-							whip->isLopping = false;
+							whip->SetAttack(false);							
 							whip->animation_set->at(whip->getAniID())->resetFrame();
+							whip->isLopping = false;
 							break;
 						}
 						case gameType::DAGGER:

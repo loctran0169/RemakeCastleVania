@@ -37,7 +37,7 @@ public:
 	void resetFrame(){ lastFrameTime = -1; currentFrame = -1; }
 	void setLopping(bool a) { isLopping = a; }
 	void Render(float x, float y,int nx=1, int alpha = 255);
-	void Render(int frameId, float x, float y, int nx = 1, int alpha = 255){ frames[currentFrame]->GetSprite()->Draw(x, y, alpha); }
+	void Render(int frameId, float x, float y, int nx = 1, int alpha = 255){ frames[frameId]->GetSprite()->Draw(x, y, alpha); }
 };
 
 typedef CAnimation *LPANIMATION;

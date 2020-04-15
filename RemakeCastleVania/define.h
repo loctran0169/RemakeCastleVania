@@ -11,7 +11,7 @@
 
 //Simon
 #define SIMON_ATTACT_TIME 420
-#define SIMON_EATTING_TIME 1000
+#define SIMON_EATTING_TIME 400
 //Trạng thái di chuyển cùa simon
 #define SIMON_STATE_IDLE				0
 #define SIMON_STATE_WALKING_RIGHT		1
