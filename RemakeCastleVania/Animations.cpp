@@ -45,11 +45,18 @@ void CAnimation::Render(float x, float y, int nx, int alpha)
 			}
 		}
 	}
-
 	if(nx>0)
 		frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
 	else
 		frames[currentFrame]->GetSprite()->DrawFlip(x, y, alpha);
+}
+
+void CAnimation::RenderIdFrame(int frameId, float x, float y, int nx, int alpha)
+{
+	if (nx > 0)
+		frames[frameId]->GetSprite()->Draw(x, y, alpha);
+	else
+		frames[frameId]->GetSprite()->DrawFlip(x, y, alpha);
 }
 
 CAnimations * CAnimations::__instance = NULL;

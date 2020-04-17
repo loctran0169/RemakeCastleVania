@@ -183,24 +183,27 @@
 4	901	902	903	904	905	906
 # items
 5	10001	10002	10003
-# ITEM
+# weapon
+6	10001
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 #type	x	y	ani_set_id	ani_whip
-0	0	0	1	4
+50	0	0	1	4
 # BRICK 
 #type	x	y	ani_set_id	number_object
-1	0	338	2	45
+51	0	338	2	47
 #Torch
 #type	x	y	ani_set_id	id_item
-2	180	274	3	1
-2	440	274	3	2
-2	690	274	3	2
-2	950	274	3	1
-2	1200	274	3	0
+52	180	274	3	1
+52	440	274	3	2
+52	690	274	3	2
+52	950	274	3	1
+52	1200	274	3	0
 
-# --- SCENE PORTAL ----
-# type	l	t	ani_set_id	r	b	scene_id
-#50	2000	2040	0	532	306	0
+# --- hiden obejects ----
+# 53 portal, 54 hiden
+# type	l	t	ani_set_id	r	b	scene_id/autoGo
+53	1407	100	0	1430	338	2
+54	1375	100	0	1406	338

@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Scence.h"
 #include "GameObject.h"
+#include"HidenObject.h"
 #include "Brick.h"
 #include"Item.h"
 #include "Simon.h"
@@ -13,7 +14,6 @@ class Simon;
 class CPlayScene : public CScene
 {
 protected:
-	static CPlayScene* __instance;
 	Simon *player;					// A play scene has to have player, right? 
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
@@ -28,10 +28,8 @@ protected:
 public:
 	CMap *map;
 	int currentScence;
-	static CPlayScene* GetInstance();
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
-	vector<LPGAMEOBJECT> getListObject() { return this->objects; }
 
 	//collision
 	void checkCollisonWeapon(vector<LPGAMEOBJECT> *coObjects);

@@ -14,78 +14,98 @@ Simon::Simon() : CGameObject()
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	// Calculate dx, dy 
-	CGameObject::Update(dt);
-
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
-	// vị trí khi chảy
-	if (isJump) {// xét đang nhãy thì ko đổi hướng
-		if (isJumpRight)
-			vx = SIMON_WALKING_SPEED * 1.0f;
-		else if (isJumpLeft)
-			vx = -SIMON_WALKING_SPEED * 1.0f;
-		vy += SIMON_JUMP_GRAVITY * dt;
-	} 
-	else {
-		vy += SIMON_GRAVITY * dt;
-	}
-	//simon ko bị rớt ra khỏi camera
-	if (x < CMap::GetInstance()->boundingMapLeft)
-		x = CMap::GetInstance()->boundingMapLeft;
-	if (x + SIMON_BBOX_WIDTH > CMap::GetInstance()->boundingMapRight)
-		x = CMap::GetInstance()->boundingMapRight - SIMON_BBOX_WIDTH;
-
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
-
-	vector<LPGAMEOBJECT> listBricks;
-	listBricks.clear();
-	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
-		if (coObjects->at(i)->getType() == gameType::BRICK)
-			listBricks.push_back(coObjects->at(i));
-
-	// kiểm ra va chạm với Brick
-	if (state != SIMON_STATE_DIE)
-		CalcPotentialCollisions(&listBricks, coEvents);
-	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-		isOnBase = false;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		x += min_tx * dx + nx * 0.4f;
-
-		if (ny < 0) {
-			y += min_ty * dy + ny * 0.4f;
-			vy = 0;
-			if (isJump) {
-				isJump = isJumpLeft = isJumpRight = false;
-				vx = 0;
+	if (isAutoGo&&!isJump) {
+		if (isAutoGoWithJump) {
+			if (autoGoX3 != 0 && x > autoGoX1) {
+				x += SIMON_AUTO_GO_SPEED * nx;
+				nx = -1.0f;
+			}
+			else{
+				isAutoGoWithJump = false;
+				autoGoX3 = 0;
+				nx = 1.0f;
 			}
 		}
-		else
-			y += dy;
-		if (ny != 0) isOnBase = true;
-		else isOnBase = false;
+		else {
+			x += SIMON_AUTO_GO_SPEED * nx;
+			if (x > autoGoX2)
+				isAutoGo = false;
+		}
 	}
-	// clean up collision events
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	else {
+		// Calculate dx, dy 
+		CGameObject::Update(dt);
+		if (isJump) {// xét đang nhãy thì ko đổi hướng
+			if (isJumpRight)
+				vx = SIMON_WALKING_SPEED * 1.0f;
+			else if (isJumpLeft)
+				vx = -SIMON_WALKING_SPEED * 1.0f;
+			vy += SIMON_JUMP_GRAVITY * dt;
+		}
+		else {
+			vy += SIMON_GRAVITY * dt;
+		}
+		//simon ko bị rớt ra khỏi camera
+		if (x < CMap::GetInstance()->boundingMapLeft)
+			x = CMap::GetInstance()->boundingMapLeft;
+		if (x + SIMON_BBOX_WIDTH > CMap::GetInstance()->boundingMapRight)
+			x = CMap::GetInstance()->boundingMapRight - SIMON_BBOX_WIDTH;
+
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
+		coEvents.clear();
+
+		vector<LPGAMEOBJECT> listBricks;
+		listBricks.clear();
+		for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
+			if (coObjects->at(i)->getType() == gameType::BRICK)
+				listBricks.push_back(coObjects->at(i));
+		// kiểm ra va chạm với Brick
+		if (state != SIMON_STATE_DIE)
+			CalcPotentialCollisions(&listBricks, coEvents);
+		if (coEvents.size() == 0)
+		{
+			x += dx;
+			y += dy;
+			isOnBase = false;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
+			// TODO: This is a very ugly designed function!!!!
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
+			x += min_tx * dx + nx * 0.4f;			
+			if (ny != 0) {
+				isOnBase = true;
+				vy = 0;
+			}
+			else isOnBase = false;
+
+			if (nx != 0) nx = 0;
+			if (ny == -1) {
+				y += min_ty * dy + ny * 0.4f;
+				if (isJump) {
+					isJump = isJumpLeft = isJumpRight = false;
+					vx = 0;
+					if (isAutoGoWithJump)
+						autoGoX3 = x;
+				}
+			}
+			else
+				y += dy;
+		}
+		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	}
+	// vị trí khi chảy
 
 	for (auto&weapon : weapons) {
 		if (weapon.second->GetAttack()) {
@@ -95,13 +115,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 }
-
 void Simon::Render()
 {
 
 	int ani;
 	if (state == SIMON_STATE_DIE)
 		ani = SIMON_ANI_DIE;
+	else if (isAutoGo&&!isJump)
+		ani = SIMON_ANI_WALKING;
 	else if (isAttact) {
 		if (!isEatItem) {
 			if (isSit)
@@ -137,29 +158,22 @@ void Simon::Render()
 
 	currentAni = ani;
 	if (isEatItem) {
-		animation_set->at(prevAni + 13)->Render(animation_set->at(prevAni)->getCurrentFrame(), x - SIMON_PADDING_ANI, y, nx, alpha);
-		for (auto&weapon : weapons) {
-			if (weapon.second->GetAttack())
-				weapon.second->Render();
-		}
+		animation_set->at(prevAni + 13)->RenderIdFrame(animation_set->at(prevAni)->getCurrentFrame(), x - SIMON_PADDING_ANI, y, nx, alpha);
 	}
 	else {
+
 		if (isRenderLopping&&isAttact) {
 			animation_set->at(prevAni)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
-			for (auto&weapon : weapons) {
-				if (weapon.second->GetAttack())
-					weapon.second->Render();
-			}
 		}
 		else {
 			animation_set->at(ani)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
-			for (auto&weapon : weapons) {
-				if (weapon.second->GetAttack())
-					weapon.second->Render();
-			}
 		}
 	}
-	//weapons[gameType::WHIP]->animation_set->at(0)->Render(2, x, y, nx);
+	for (auto&weapon : weapons) {
+		if (weapon.second->GetAttack())
+			weapon.second->Render();
+	}
+	//bugOut(L"current Weapon %d \n", currentWeapon);
 	//RenderBoundingBox();
 }
 
@@ -224,9 +238,9 @@ void Simon::attackWeapon(gameType weaponType)
 		isAttact = true;
 		attactTime = GetTickCount();
 		if (!isJump) vx = 0;
-		weapons[weaponType]->resetFrame();
-		weapons[weaponType]->SetAttack(true);
 		weapons[weaponType]->setPosition(x, y, nx);
+		//weapons[weaponType]->resetFrame();
+		weapons[weaponType]->SetAttack(true);
 	}
 }
 

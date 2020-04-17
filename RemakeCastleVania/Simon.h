@@ -27,7 +27,7 @@ public:
 	DWORD timeFreeze = 0;
 	
 public:
-	bool nextScreen;
+	
 	bool isSit = false;//trạng thái ngồi
 	bool isJump = false; // trạng thái nhảy
 	bool isAttact = false; // trạng thái đánh
@@ -35,7 +35,15 @@ public:
 	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
 	bool isJumpLeft = false;// nhảy trái thì ko đổi hướng
 	bool isOnBase = false; //đang đúng dưới sàn
-	bool isRenderLopping = false;
+	bool isRenderLopping = false; //render ani còn lại khi khi đóng băng
+
+	//autoGO
+	bool isAutoGo=false;
+	bool isAutoGoWithJump=false;
+	float autoGoX1=0;
+	float autoGoX2=0;
+	float autoGoX3=0;
+
 	DWORD timeEatItem = 0;
 	gameType currentWeapon;
 	unordered_map<int, CWeapon*>weapons;

@@ -12,7 +12,7 @@
 
 class CMap
 {
-	int colsMap, rowsMap;
+	int colsMap, rowsMap,colsTileMap;
 	int tileMap[300][300];
 	static CMap* __instance;
 	LPDIRECT3DTEXTURE9 texturesMap;

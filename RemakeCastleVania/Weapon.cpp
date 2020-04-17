@@ -29,15 +29,6 @@ void CWeapon::setPosition(float _x, float _y, int _nx)
 	timeAttact = GetTickCount();
 }
 
-void CWeapon::setPositionRender(float _x, float _y)
-{
-}
-
-bool CWeapon::allowCollision()
-{
-	return true;
-}
-
 CWeapon::~CWeapon()
 {
 }

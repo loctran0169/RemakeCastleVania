@@ -58,6 +58,8 @@ public:
 
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	int GetCurrentSceneId() { return current_scene; }
+	unordered_map<int, LPSCENE> getScenes() { return scenes; }
 
 	void SwitchScene(int scene_id);
 

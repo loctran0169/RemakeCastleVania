@@ -373,8 +373,7 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
-	LPSCENE scene = new CPlayScene(id, path);
-	scenes[id] = scene;
+	scenes[id] = new CPlayScene(id, path);
 }
 
 /*
@@ -424,16 +423,15 @@ void CGame::Load(LPCWSTR gameFile)
 void CGame::SwitchScene(int scene_id)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
+	current_scene = scene_id;
 	LPSCENE s = scenes[current_scene];
 	s->Unload();
 
-	DebugOut(L"scence id: %d", scene_id);
-	DebugOut(L"current screen: %d",current_scene);
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 
-	current_scene = scene_id;
+	
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }

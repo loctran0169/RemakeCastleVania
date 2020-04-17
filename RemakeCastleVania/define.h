@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 //Screen
-#define SCREEN_WIDTH 512
+#define SCREEN_WIDTH 500
 #define SCREEN_HEIGHT 480
 #define HEIGHTBOARD 50
 #define MAX_WIDTH_LV1 1536
@@ -10,8 +10,8 @@
 #define TILE_MAP_SIZE 32
 
 //Simon
-#define SIMON_ATTACT_TIME 420
-#define SIMON_EATTING_TIME 400
+#define SIMON_ATTACT_TIME 400
+#define SIMON_EATTING_TIME 500
 //Trạng thái di chuyển cùa simon
 #define SIMON_STATE_IDLE				0
 #define SIMON_STATE_WALKING_RIGHT		1
@@ -57,14 +57,16 @@
 //tốc độ simon
 #define SIMON_WALKING_SPEED			0.12f 
 #define SIMON_JUMP_SPEED_Y			0.34f
-#define SIMON_JUMP_GRAVITY			0.001f
+#define SIMON_JUMP_GRAVITY			0.0009f
 #define SIMON_JUMP_DEFLECT_SPEED	0.02f
 #define SIMON_GRAVITY				0.005f
 #define SIMON_DIE_DEFLECT_SPEED		0.5f
+#define SIMON_AUTO_GO_SPEED			0.4f
+#define DAGGER_SPEED				0.3f
 
 //Thời gian simon
 #define SIMON_UNTOUCHABLE_TIME		3000
-#define SIMON_TIME_JUMPPING_SIT		400
+#define SIMON_TIME_JUMPPING_SIT		300
 //Whip
 #define WHIP_BBOX_WIDGHT_LV1		42
 #define WHIP_BBOX_WIDGHT_LV2		42
@@ -124,9 +126,11 @@ enum gameType
 	HOLLYWATER = 14,
 
 	//objects
-	BRICK = 50,
-	TORCH = 51,
-	PORTAL = 52
+	SIMON = 50,
+	BRICK = 51,
+	TORCH = 52,
+	PORTAL = 53,
+	CHECK_AUTO_GO = 54
 };
 
 //effect

@@ -12,8 +12,9 @@ CMap* CMap::GetInstance()
 void CMap::readMapTxt(LPCWSTR filePath) {
 
 	ifstream inp(filePath, ios::in);
-	inp >> rowsMap >> colsMap;
+	inp >> rowsMap >> colsMap >> colsTileMap;
 	boundingMapRight = colsMap * TILE_MAP_SIZE;
+	DebugOut(L"mapRight: %d \n",boundingMapRight);
 	for (int i = 0; i < rowsMap; i++)
 		for (int j = 0; j < colsMap; j++) {
 			inp >> tileMap[i][j];
@@ -30,12 +31,12 @@ void CMap::drawMap() {
 	/*int rowStart = (int)yCam / TILE_MAP_SIZE;
 	int rowEnd = ((int)yCam + SCREEN_HEIGHT) / TILE_MAP_SIZE < rowsMap - 1 ? (yCam + SCREEN_HEIGHT) / TILE_MAP_SIZE : rowsMap - 1;*/
 
-	for (int i = 0; i <= rowsMap; i++)//nếu là game có chiều cao thay đổi
+	for (int i = 0; i < rowsMap; i++)//nếu là game có chiều cao thay đổi
 	{
 		for (int j = colStart; j <= colEnd; j++)
 		{
-			int left = (tileMap[i][j] % 16) * TILE_MAP_SIZE;
-			int top = (tileMap[i][j] / 16) * TILE_MAP_SIZE;
+			int left = (tileMap[i][j] % colsTileMap) * TILE_MAP_SIZE;
+			int top = (tileMap[i][j] / colsTileMap) * TILE_MAP_SIZE;
 			int right = left + TILE_MAP_SIZE;
 			int bottom = top + TILE_MAP_SIZE;
 			CGame::GetInstance()->Draw(TILE_MAP_SIZE*j, TILE_MAP_SIZE*i + HEIGHTBOARD, texturesMap, left, top, right, bottom);

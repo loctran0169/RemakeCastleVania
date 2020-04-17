@@ -129,6 +129,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="define.h" />
+    <ClCompile Include="HidenObject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Knife.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="HidenObject.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Knife.h" />
     <ClInclude Include="Map.h" />

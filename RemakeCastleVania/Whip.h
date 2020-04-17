@@ -17,8 +17,6 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual bool allowCollision();
-	virtual void resetFrame();
 	int getAniID();
 	void whipUpgrade();
 	~Whip();
