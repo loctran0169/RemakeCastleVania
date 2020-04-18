@@ -1,10 +1,9 @@
 ﻿#pragma once
 
 //Screen
-#define SCREEN_WIDTH 500
+#define SCREEN_WIDTH 512
 #define SCREEN_HEIGHT 480
 #define HEIGHTBOARD 50
-#define MAX_WIDTH_LV1 1536
 
 //map
 #define TILE_MAP_SIZE 32

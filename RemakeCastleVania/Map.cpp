@@ -14,7 +14,6 @@ void CMap::readMapTxt(LPCWSTR filePath) {
 	ifstream inp(filePath, ios::in);
 	inp >> rowsMap >> colsMap >> colsTileMap;
 	boundingMapRight = colsMap * TILE_MAP_SIZE;
-	DebugOut(L"mapRight: %d \n",boundingMapRight);
 	for (int i = 0; i < rowsMap; i++)
 		for (int j = 0; j < colsMap; j++) {
 			inp >> tileMap[i][j];
@@ -40,6 +39,8 @@ void CMap::drawMap() {
 			int right = left + TILE_MAP_SIZE;
 			int bottom = top + TILE_MAP_SIZE;
 			CGame::GetInstance()->Draw(TILE_MAP_SIZE*j, TILE_MAP_SIZE*i + HEIGHTBOARD, texturesMap, left, top, right, bottom);
+			if (right==boundingMapRight)
+				DebugOut(L"rightMap: %d \n", right);
 		}
 	}
 }

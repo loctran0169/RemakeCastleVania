@@ -93,6 +93,7 @@ public:
 	void GetCamPos(float &x, float &y) { x = cam_x; y = cam_y; }
 	static CGame * GetInstance();
 
+	HWND getHwnd() { return hWnd; }
 	~CGame();
 };
 

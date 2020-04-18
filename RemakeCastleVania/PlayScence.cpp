@@ -426,10 +426,9 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	// Update camera to follow simon
-	
 	float cx, cy;
 	player->GetPosition(cx, cy);
-	if (cx > SCREEN_WIDTH / 2 && cx <map->boundingMapRight - SCREEN_WIDTH / 2)
+	if (cx > SCREEN_WIDTH / 2 && cx < map->boundingMapRight - SCREEN_WIDTH / 2)
 		game->setCamX(cx - SCREEN_WIDTH / 2);
 	else if (cx > map->boundingMapRight - SCREEN_WIDTH / 2)
 		game->setCamX(map->boundingMapRight - SCREEN_WIDTH);
@@ -597,7 +596,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
 	switch (KeyCode)
 	{
 	case DIK_SPACE: {
@@ -634,8 +633,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_M:
 		try {
-			CGame::GetInstance()->SwitchScene(2);
+			CGame::GetInstance()->SwitchScene(6);
 		}catch(exception ex){}
+		break;
+	case DIK_ESCAPE:
+		DestroyWindow(game->getHwnd());
 		break;
 	}
 }
@@ -643,7 +645,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem)return;
+	if (simon->isAttact || simon->isEatItem ||simon->isAutoGo)return;
 	if (KeyCode == DIK_DOWN) {
 		if (simon->isSit) {
 			if (!simon->isAttact) {
@@ -663,7 +665,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact|| simon->isEatItem)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 

@@ -162,18 +162,15 @@ void Simon::Render()
 	}
 	else {
 
-		if (isRenderLopping&&isAttact) {
+		if (isRenderLopping&&isAttact)
 			animation_set->at(prevAni)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
-		}
-		else {
+		else
 			animation_set->at(ani)->Render(x - SIMON_PADDING_ANI, y, nx, alpha);
-		}
 	}
 	for (auto&weapon : weapons) {
 		if (weapon.second->GetAttack())
 			weapon.second->Render();
 	}
-	//bugOut(L"current Weapon %d \n", currentWeapon);
 	//RenderBoundingBox();
 }
 
