@@ -191,5 +191,5 @@
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id/autoGo
-#53	1407	100	0	1430	338	1
+53	1407	100	0	1430	338	3
 #54	0	100	0	500	338	1

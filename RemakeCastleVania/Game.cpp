@@ -426,7 +426,7 @@ void CGame::SwitchScene(int scene_id)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
 	current_scene = scene_id;
-	LPSCENE s = scenes[current_scene];
+	LPSCENE s = scenes[current_scene];	
 	s->Unload();
 
 	CTextures::GetInstance()->Clear();

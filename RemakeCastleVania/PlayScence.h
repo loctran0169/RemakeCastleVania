@@ -28,6 +28,7 @@ protected:
 public:
 	CMap *map;
 	int currentScence;
+	int nextScence;
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
 

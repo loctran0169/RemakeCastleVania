@@ -321,7 +321,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
-		//currentScence = scene_id;
+		nextScence = scene_id;
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
@@ -643,7 +643,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_M:
 		try {
-			CGame::GetInstance()->SwitchScene(5);
+			if (((CPlayScene*)scence)->nextScence == NULL) return;
+			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence);
 		}catch(exception ex){}
 		break;
 	case DIK_ESCAPE:
