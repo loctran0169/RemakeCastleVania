@@ -192,8 +192,8 @@
 #type	x	y	ani_set_id	ani_whip
 50	0	0	1	4
 # BRICK 
-#type	x	y	ani_set_id	number_object
-51	0	338	2	47
+#type	x	y	ani_set_id	number_object	ngang/thẳng(0/1)
+51	0	338	0	47	0
 #Torch
 #type	x	y	ani_set_id	id_item
 52	180	274	3	1

@@ -4,7 +4,7 @@ start	1
 [SCENES]
 1	Map\\scene_map1.txt
 2	Map\\scene_map2.txt
-3	Map\\scene_map3.txt
 4	Map\\scene_map4.txt
+3	Map\\scene_map3.txt
 5	Map\\scene_map5.txt
 6	Map\\scene_mapBoss.txt

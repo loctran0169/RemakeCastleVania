@@ -47,11 +47,11 @@
 
 //Kích cờ simon
 #define SIMON_BBOX_WIDTH			32
-#define SIMON_BBOX_HEIGHT			64
+#define SIMON_BBOX_HEIGHT			63
 #define SIMON_PADDING_ATTACT		16
 
 #define SIMON_SIT_BBOX_WIDTH		32
-#define SIMON_SIT_BBOX_HEIGHT		48
+#define SIMON_SIT_BBOX_HEIGHT		47
 #define SIMON_PADDING_ANI			15
 //tốc độ simon
 #define SIMON_WALKING_SPEED			0.12f 

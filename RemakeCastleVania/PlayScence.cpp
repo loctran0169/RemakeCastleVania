@@ -289,13 +289,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	//case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case gameType::BRICK: {
 		int numberObj = atoi(tokens[4].c_str());
-		for (int i = 0; i < numberObj; i++) {
-			obj = new CBrick();
-			obj->SetPosition(x + BRICK_BBOX_WIDTH*i, y);
-			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-			obj->SetAnimationSet(ani_set);
-			objects.push_back(obj);
-		}
+		int isCross = atoi(tokens[5].c_str());
+		if (isCross == 0)
+			for (int i = 0; i < numberObj; i++) {
+				obj = new CBrick();
+				obj->SetPosition(x + BRICK_BBOX_WIDTH * i, y);
+				LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+				obj->SetAnimationSet(ani_set);
+				objects.push_back(obj);
+			}
+		else
+			for (int i = 0; i < numberObj; i++) {
+				obj = new CBrick();
+				obj->SetPosition(x, y + BRICK_BBOX_WIDTH * i);
+				LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+				obj->SetAnimationSet(ani_set);
+				objects.push_back(obj);
+			}
 		break;
 	}
 	//case object torch
@@ -599,7 +609,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
 	switch (KeyCode)
 	{
-	case DIK_SPACE: {
+	case DIK_S: {
 		if (simon->isJump == 0 && simon->isSit == false)
 			if (simon->isAttact == false) {				
 				if (game->IsKeyDown(DIK_RIGHT))
@@ -633,7 +643,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_M:
 		try {
-			CGame::GetInstance()->SwitchScene(6);
+			CGame::GetInstance()->SwitchScene(5);
 		}catch(exception ex){}
 		break;
 	case DIK_ESCAPE:
