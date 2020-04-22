@@ -175,7 +175,7 @@
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 #type	x	y	ani_set_id	ani_whip
-50	1504	242	1	4
+50	1470	242	1	4
 # BRICK 
 #type	x	y	ani_set_id	number_object	ngang/thẳng(0/1)
 51	256	370	0	34	0
@@ -187,7 +187,11 @@
 51	64	274	0	2	0
 51	192	210	0	6	0
 51	32	50	0	11	1
+51	1504	242	0	3	1
+#Disable Jump
+55	608	306	0	640	402
+55	832	306	0	896	402
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id/autoGo
-53	1407	100	0	1430	338	5
+53	1407	0	0	1430	50	5
 #54	0	100	0	500	338	1

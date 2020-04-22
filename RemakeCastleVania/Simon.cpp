@@ -57,53 +57,56 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (x + SIMON_BBOX_WIDTH > CMap::GetInstance()->boundingMapRight)
 			x = CMap::GetInstance()->boundingMapRight - SIMON_BBOX_WIDTH;
 
-		vector<LPCOLLISIONEVENT> coEvents;
-		vector<LPCOLLISIONEVENT> coEventsResult;
-		coEvents.clear();
+		checkCollisonWithBricks(dt,coObjects);
 
-		vector<LPGAMEOBJECT> listBricks;
-		listBricks.clear();
-		for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
-			if (coObjects->at(i)->getType() == gameType::BRICK)
-				listBricks.push_back(coObjects->at(i));
-		// kiểm ra va chạm với Brick
-		if (state != SIMON_STATE_DIE)
-			CalcPotentialCollisions(&listBricks, coEvents);
-		if (coEvents.size() == 0)
-		{
-			x += dx;
-			y += dy;
-			isOnBase = false;
-		}
-		else
-		{
-			float min_tx, min_ty, nx = 0, ny;
-			float rdx = 0;
-			float rdy = 0;
-			// TODO: This is a very ugly designed function!!!!
-			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		//vector<LPCOLLISIONEVENT> coEvents;
+		//vector<LPCOLLISIONEVENT> coEventsResult;
+		//coEvents.clear();
 
-			x += min_tx * dx + nx * 0.4f;			
-			if (ny != 0) {
-				isOnBase = true;
-				vy = 0;
-			}
-			else isOnBase = false;
+		//vector<LPGAMEOBJECT> listBricks;
+		//listBricks.clear();
+		//for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
+		//	if (coObjects->at(i)->getType() == gameType::BRICK)
+		//		listBricks.push_back(coObjects->at(i));
+		//// kiểm ra va chạm với Brick
+		//if (state != SIMON_STATE_DIE)
+		//	CalcPotentialCollisions(&listBricks, coEvents);
+		//if (coEvents.size() == 0)
+		//{
+		//	x += dx;
+		//	y += dy;
+		//	isOnBase = false;
+		//}
+		//else
+		//{
+		//	float min_tx, min_ty, nx = 0, ny;
+		//	float rdx = 0;
+		//	float rdy = 0;
+		//	// TODO: This is a very ugly designed function!!!!
+		//	FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-			if (nx != 0) nx = 0;
-			if (ny == -1) {
-				y += min_ty * dy + ny * 0.4f;
-				if (isJump) {
-					isJump = isJumpLeft = isJumpRight = false;
-					vx = 0;
-					if (isAutoGoWithJump)
-						autoGoX3 = x;
-				}
-			}
-			else
-				y += dy;
-		}
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+		//	x += min_tx * dx + nx * 0.4f;			
+		//	if (ny != 0) {
+		//		isOnBase = true;
+		//		//vy = 0;
+		//	}
+		//	else isOnBase = false;
+
+		//	//if (nx != 0) nx = 0;
+		//	if (ny == -1) {
+		//		y += min_ty * dy + ny * 0.4f;
+		//		vy = 0;
+		//		if (isJump) {
+		//			isJump = isJumpLeft = isJumpRight = false;
+		//			vx = 0;
+		//			if (isAutoGoWithJump)
+		//				autoGoX3 = x;
+		//		}
+		//	}
+		//	else
+		//		y += dy;
+		//}
+		//for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
 	// vị trí khi chảy
 
@@ -239,6 +242,61 @@ void Simon::attackWeapon(gameType weaponType)
 		//weapons[weaponType]->resetFrame();
 		weapons[weaponType]->SetAttack(true);
 	}
+}
+
+void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+{
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+
+	vector<LPGAMEOBJECT> listBricks;
+	listBricks.clear();
+
+	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
+		if (coObjects->at(i)->getType() == gameType::BRICK)
+			listBricks.push_back(coObjects->at(i));
+
+	// kiểm ra va chạm với Brick
+	if (state != SIMON_STATE_DIE)
+		CalcPotentialCollisions(&listBricks, coEvents);
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+		isOnBase = false;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		// TODO: This is a very ugly designed function!!!!
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
+		x += min_tx * dx + nx * 0.4f;
+
+		if (ny == 1) {		
+			//vy = 0;
+		}
+		else isOnBase = false;
+
+		//if (nx != 0) nx = 0;
+		if (ny < 0) {
+			y += min_ty * dy + ny * 0.4f;
+			vy = 0;
+			if (isJump) {
+				isJump = isJumpLeft = isJumpRight = false;
+				vx = 0;
+				if (isAutoGoWithJump)
+					autoGoX3 = x;
+			}
+			isOnBase = true;
+		}
+		else
+			y += dy;
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 

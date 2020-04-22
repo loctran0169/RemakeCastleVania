@@ -108,6 +108,7 @@ void CPlayScene::checkCollisonWithItem()
 
 void CPlayScene::checkCollisonWithHideObj()
 {
+	bool isAllowJump = true;
 	for (UINT i = 0; i < objects.size(); i++) {
 		if (player->isCollitionObjectWithObject(objects[i])) {
 			switch (objects[i]->getType())
@@ -135,11 +136,15 @@ void CPlayScene::checkCollisonWithHideObj()
 				DebugOut(L"[INFO] vào trạng thái tự đi \n");
 				break;
 			}
+			case gameType::DISABLE_JUMP:
+				isAllowJump = false;
+				break;
 			default:
 				break;
 			}
 		}
 	}
+	player->isAllowJump = isAllowJump;
 }
 
 void CPlayScene::checkCollisonWithEnemy(vector<LPGAMEOBJECT>* coObjects)
@@ -290,22 +295,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case gameType::BRICK: {
 		int numberObj = atoi(tokens[4].c_str());
 		int isCross = atoi(tokens[5].c_str());
-		if (isCross == 0)
-			for (int i = 0; i < numberObj; i++) {
-				obj = new CBrick();
-				obj->SetPosition(x + BRICK_BBOX_WIDTH * i, y);
-				LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-				obj->SetAnimationSet(ani_set);
-				objects.push_back(obj);
-			}
+		if (numberObj > 1) {
+			if (isCross == 0)
+				obj = new CBrick(x, y, x + BRICK_BBOX_WIDTH * numberObj, y + BRICK_BBOX_HEIGHT);
+			else
+				obj = new CBrick(x, y, x + BRICK_BBOX_WIDTH, y + BRICK_BBOX_HEIGHT * numberObj);
+		}
 		else
-			for (int i = 0; i < numberObj; i++) {
-				obj = new CBrick();
-				obj->SetPosition(x, y + BRICK_BBOX_WIDTH * i);
-				LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-				obj->SetAnimationSet(ani_set);
-				objects.push_back(obj);
-			}
+			obj = new CBrick();
 		break;
 	}
 	//case object torch
@@ -333,23 +330,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CHidenObject(x, y, r, b);
 	}
 	break;
+	case gameType::DISABLE_JUMP: {
+		float r = atof(tokens[4].c_str());
+		float b = atof(tokens[5].c_str());
+		obj = new CHidenObject(x, y, r, b);
+		obj->setType(gameType::DISABLE_JUMP);
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
 
 	// General object setup
-	if (object_type != gameType::BRICK) {
-		obj->SetPosition(x, y);
-		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-		if (object_type == gameType::SIMON) {
-			int ani_set_whip_id = atoi(tokens[4].c_str());
-			LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
-			dynamic_cast<Whip*>(((Simon*)obj)->weapons[gameType::WHIP])->SetAnimationSet(ani_set_whip);
-		}
-		obj->SetAnimationSet(ani_set);
-		objects.push_back(obj);
+	obj->SetPosition(x, y);
+	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+	if (object_type == gameType::SIMON) {
+		int ani_set_whip_id = atoi(tokens[4].c_str());
+		LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
+		dynamic_cast<Whip*>(((Simon*)obj)->weapons[gameType::WHIP])->SetAnimationSet(ani_set_whip);
 	}
+	if (object_type != gameType::BRICK) 
+		obj->SetAnimationSet(ani_set);
+		
+	objects.push_back(obj);
 }
 
 Item * CPlayScene::getNewItem(int id, float x, float y)
@@ -609,8 +613,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
 	switch (KeyCode)
 	{
-	case DIK_S: {
-		if (simon->isJump == 0 && simon->isSit == false)
+	case DIK_S:
+		if (!simon->isAllowJump)return;
+		if (simon->isJump == 0 && simon->isSit == false )
 			if (simon->isAttact == false) {				
 				if (game->IsKeyDown(DIK_RIGHT))
 				{
@@ -628,7 +633,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_JUMP);
 			}
 		break;
-	}
 	case DIK_A:
 		if (!simon->isAttact && !simon->isEatItem)
 			if(game->IsKeyDown(DIK_UP)&&simon->currentWeapon!=0)

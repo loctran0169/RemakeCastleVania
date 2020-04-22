@@ -30,6 +30,7 @@ public:
 	
 	bool isSit = false;//trạng thái ngồi
 	bool isJump = false; // trạng thái nhảy
+	bool isAllowJump = true; //cho phép nhảy
 	bool isAttact = false; // trạng thái đánh
 	bool isEatItem = false; //trạng thái khi ăn whip item
 	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
@@ -52,6 +53,7 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void attackWeapon(gameType weaponType);
+	void checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 
 	void setEatItem(bool b) { isEatItem = b; }
 	bool getEatItem() { return isEatItem; }

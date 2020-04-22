@@ -125,11 +125,12 @@ enum gameType
 	HOLLYWATER = 14,
 
 	//objects
-	SIMON = 50,
-	BRICK = 51,
-	TORCH = 52,
-	PORTAL = 53,
-	CHECK_AUTO_GO = 54
+	SIMON = 50, // player
+	BRICK = 51, //gạch
+	TORCH = 52, //đuốc
+	PORTAL = 53, //chuyển màn
+	CHECK_AUTO_GO = 54, //auto đi bộ qua hết obj này
+	DISABLE_JUMP = 55 // không cho jump
 };
 
 //effect
