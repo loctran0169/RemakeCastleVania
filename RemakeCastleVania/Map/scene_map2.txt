@@ -127,8 +127,8 @@
 409	10081	100
 4090	11081	100
 # SIMON_ANI_IDLE_UP
-410	10061	100
-4100	11061	100
+410	10062	300
+4100	11061	300
 # SIMON_ANI_IDLE_DOWN
 411	10071	100
 4110	11071	100
@@ -191,6 +191,9 @@
 51	0	370	0	14	0
 #Disable jump
 55	448	178	0	480	242
+#stair up
+#type	x	y	ani_set_id	r	b	nx
+56	208	354	0	240	370	1
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id/autoGo
 53	1407	100	0	1430	338	3

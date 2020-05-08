@@ -51,7 +51,7 @@
 #define SIMON_PADDING_ATTACT		16
 
 #define SIMON_SIT_BBOX_WIDTH		32
-#define SIMON_SIT_BBOX_HEIGHT		47
+#define SIMON_SIT_BBOX_HEIGHT		48
 #define SIMON_PADDING_ANI			15
 //tốc độ simon
 #define SIMON_WALKING_SPEED			0.12f 
@@ -130,7 +130,9 @@ enum gameType
 	TORCH = 52, //đuốc
 	PORTAL = 53, //chuyển màn
 	CHECK_AUTO_GO = 54, //auto đi bộ qua hết obj này
-	DISABLE_JUMP = 55 // không cho jump
+	DISABLE_JUMP = 55, // không cho jump
+	GO_UP_STAIR = 56, //đi lên cầu thang
+	GO_DOWN_STAIR = 57 // đi xuống cầu thang
 };
 
 //effect

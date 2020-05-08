@@ -109,13 +109,15 @@ void CPlayScene::checkCollisonWithItem()
 void CPlayScene::checkCollisonWithHideObj()
 {
 	bool isAllowJump = true;
-	for (UINT i = 0; i < objects.size(); i++) {
-		if (player->isCollitionObjectWithObject(objects[i])) {
-			switch (objects[i]->getType())
+	bool isOnUpStair = false;
+	bool isOnDownStair = false;
+	for (UINT i = 0; i < listHidenObjects.size(); i++) {
+		if (player->isCollitionObjectWithObject(listHidenObjects[i])) {
+			switch (listHidenObjects[i]->getType())
 			{
 			case gameType::PORTAL: {
 				if (player->isAutoGoWithJump)break;
-				CPortal *p = dynamic_cast<CPortal *>(objects[i]);	
+				CPortal *p = dynamic_cast<CPortal *>(listHidenObjects[i]);
 				DebugOut(L"collision portal \n");
 				if (!player->isAutoGoWithJump) {
 					DebugOut(L"[INFO] Switching to scene %d \n", p->GetSceneId());
@@ -125,26 +127,46 @@ void CPlayScene::checkCollisonWithHideObj()
 				break;
 			}
 			case gameType::CHECK_AUTO_GO: {
-				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
+				if (player->isAutoGoWithJump)break;
+				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
 				float l, t, r, b;
 				p->GetBoundingBox(l, t, r, b);
 				player->isAutoGo = true;
-				if (player->isJump)
+				if (player->isJump) {
+					player->collXFirst = l;
 					player->isAutoGoWithJump = true;
-				player->autoGoX1 = l - SIMON_BBOX_WIDTH/2;
-				player->autoGoX2 = r - SIMON_BBOX_WIDTH;
-				DebugOut(L"[INFO] vào trạng thái tự đi \n");
+				}
+				else
+					//DebugOut(L"[INFO] vào trạng thái tự đi \n");
+					player->setValueAutoGo(r - l, 0.0f, SIMON_STATE_IDLE, 1);//chưa xử lý trường lợp -1
 				break;
 			}
 			case gameType::DISABLE_JUMP:
 				isAllowJump = false;
+				break;
+			case gameType::GO_UP_STAIR: {
+				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
+				float l, t, r, b;
+				p->GetBoundingBox(l, t, r, b);
+
+				isOnUpStair = true;
+				player->nxCheckStairUp = p->nx;
+				player->xStairUp = l;
+				break;
+			}
+			case gameType::GO_DOWN_STAIR:
+				isOnDownStair = true;
+				player->nxCheckStairDown = listHidenObjects[i]->nx;
 				break;
 			default:
 				break;
 			}
 		}
 	}
+
 	player->isAllowJump = isAllowJump;
+	player->isOnCheckStairUp = isOnUpStair;
+	player->isOnCheckStairDown = isOnDownStair;
 }
 
 void CPlayScene::checkCollisonWithEnemy(vector<LPGAMEOBJECT>* coObjects)
@@ -279,6 +301,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	CGameObject *obj = NULL;
 
+	bool isHidenObject = false;
+
 	switch (object_type)
 	{
 	case gameType::SIMON:
@@ -320,6 +344,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[6].c_str());
 		nextScence = scene_id;
 		obj = new CPortal(x, y, r, b, scene_id);
+		isHidenObject = true;
 		break;
 	}
 	case gameType::CHECK_AUTO_GO:
@@ -328,13 +353,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		obj = new CHidenObject(x, y, r, b);
+		isHidenObject = true;
+		break;
 	}
-	break;
 	case gameType::DISABLE_JUMP: {
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		obj = new CHidenObject(x, y, r, b);
 		obj->setType(gameType::DISABLE_JUMP);
+		isHidenObject = true;
+		break;
+	}
+	case gameType::GO_UP_STAIR: {
+		float r = atof(tokens[4].c_str());
+		float b = atof(tokens[5].c_str());
+		float nx = atof(tokens[6].c_str());
+		obj = new CHidenObject(x, y, r, b);
+		obj->setType(gameType::GO_UP_STAIR);
+		obj->nx = nx;
+		isHidenObject = true;
 		break;
 	}
 	default:
@@ -352,8 +389,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	if (object_type != gameType::BRICK) 
 		obj->SetAnimationSet(ani_set);
-		
-	objects.push_back(obj);
+	if (isHidenObject == true)
+		listHidenObjects.push_back(obj);
+	else
+		objects.push_back(obj);
 }
 
 Item * CPlayScene::getNewItem(int id, float x, float y)
@@ -438,7 +477,6 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
 	// Update camera to follow simon
 	float cx, cy;
 	player->GetPosition(cx, cy);
@@ -594,6 +632,8 @@ void CPlayScene::Render()
 		objects[i]->Render();
 	for (int i = 0; i < listItems.size(); i++)// render items
 		listItems[i]->Render();
+	for (int i = 0; i < listHidenObjects.size(); i++)// render hiden
+		listHidenObjects[i]->Render();
 	player->Render();
 }
 
@@ -602,6 +642,7 @@ void CPlayScene::Unload()
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	listItems.clear();
+	listHidenObjects.clear();
 	objects.clear();
 	player = NULL;
 }
@@ -610,7 +651,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
+	if (simon->isAttact || simon->isEatItem /*|| simon->isAutoGo*/)return;
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -692,6 +733,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				simon->SetState(SIMON_STATE_SIT);
 			}
 		}
+
+	if (game->IsKeyDown(DIK_UP) && !simon->isAttact) {
+		simon->goUpStair();
+	}
 
 	if (game->IsKeyDown(DIK_RIGHT)) {
 		if (!simon->isAttact && !simon->isJump)

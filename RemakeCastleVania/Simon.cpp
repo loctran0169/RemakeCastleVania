@@ -14,6 +14,7 @@ Simon::Simon() : CGameObject()
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	CGameObject::Update(dt);
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
@@ -21,26 +22,59 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 	if (isAutoGo&&!isJump) {
-		if (isAutoGoWithJump) {
-			if (autoGoX3 != 0 && x > autoGoX1) {
-				x += SIMON_AUTO_GO_SPEED * nx;
-				nx = -1.0f;
+		//if (!isStair) {
+		//	if (isAutoGoWithJump) {
+		//		if (autoGoX3 != 0 && x > autoGoX1) {
+		//			x += SIMON_AUTO_GO_SPEED * nx;
+		//			nx = -1.0f;
+		//		}
+		//		else {
+		//			isAutoGoWithJump = false;
+		//			autoGoX3 = 0;
+		//			nx = 1.0f;
+		//		}
+		//	}
+		//	else {
+		//		x += SIMON_AUTO_GO_SPEED * nx;
+		//		if (x > autoGoX2) {
+		//			isAutoGo = false;
+		//			vx = 0;
+		//		}
+		//	}
+		//}
+		//else {
+		//	//if(x < )
+		//}
+
+		if ((abs(dx) <= abs(autoGoX_Distance)&& autoGoX_Distance !=0)|| (abs(dy) <= abs(autoGoY_Distance) && autoGoY_Distance != 0))
+		{
+			if (abs(dx) <= abs(autoGoX_Distance))
+			{
+				x += dx*nx;
+				autoGoX_Distance -= abs(dx);
 			}
-			else{
-				isAutoGoWithJump = false;
-				autoGoX3 = 0;
-				nx = 1.0f;
+			if (abs(dy) <= abs(autoGoY_Distance))
+			{
+				y += dy;
+				autoGoY_Distance -= abs(dy);
 			}
 		}
 		else {
-			x += SIMON_AUTO_GO_SPEED * nx;
-			if (x > autoGoX2)
-				isAutoGo = false;
+			isAutoGo = false;
+			isAutoGoWithJump = false;
+
+			nx = nx_new;
+			SetState(state_new);
+			autoGoX_Distance = 0;
+			autoGoY_Distance = 0;
+
 		}
+	}
+	else if (isStair) {
+
 	}
 	else {
 		// Calculate dx, dy 
-		CGameObject::Update(dt);
 		if (isJump) {// xét đang nhãy thì ko đổi hướng
 			if (isJumpRight)
 				vx = SIMON_WALKING_SPEED * 1.0f;
@@ -59,57 +93,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		checkCollisonWithBricks(dt,coObjects);
 
-		//vector<LPCOLLISIONEVENT> coEvents;
-		//vector<LPCOLLISIONEVENT> coEventsResult;
-		//coEvents.clear();
-
-		//vector<LPGAMEOBJECT> listBricks;
-		//listBricks.clear();
-		//for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
-		//	if (coObjects->at(i)->getType() == gameType::BRICK)
-		//		listBricks.push_back(coObjects->at(i));
-		//// kiểm ra va chạm với Brick
-		//if (state != SIMON_STATE_DIE)
-		//	CalcPotentialCollisions(&listBricks, coEvents);
-		//if (coEvents.size() == 0)
-		//{
-		//	x += dx;
-		//	y += dy;
-		//	isOnBase = false;
-		//}
-		//else
-		//{
-		//	float min_tx, min_ty, nx = 0, ny;
-		//	float rdx = 0;
-		//	float rdy = 0;
-		//	// TODO: This is a very ugly designed function!!!!
-		//	FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		//	x += min_tx * dx + nx * 0.4f;			
-		//	if (ny != 0) {
-		//		isOnBase = true;
-		//		//vy = 0;
-		//	}
-		//	else isOnBase = false;
-
-		//	//if (nx != 0) nx = 0;
-		//	if (ny == -1) {
-		//		y += min_ty * dy + ny * 0.4f;
-		//		vy = 0;
-		//		if (isJump) {
-		//			isJump = isJumpLeft = isJumpRight = false;
-		//			vx = 0;
-		//			if (isAutoGoWithJump)
-		//				autoGoX3 = x;
-		//		}
-		//	}
-		//	else
-		//		y += dy;
-		//}
-		//for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
 	// vị trí khi chảy
-
+	//DebugOut(L"midle %d \n",midleStairUp);
 	for (auto&weapon : weapons) {
 		if (weapon.second->GetAttack()) {
 			if (weapon.second->getType() == gameType::WHIP)
@@ -126,6 +112,12 @@ void Simon::Render()
 		ani = SIMON_ANI_DIE;
 	else if (isAutoGo&&!isJump)
 		ani = SIMON_ANI_WALKING;
+	else if (isStair) {
+		/*if(isGoUp)
+			ani = SIMON_ANI_GO_UP;
+		else if(SIMON_STATE_IDLE_STAIR)*/
+			ani = SIMON_ANI_IDLE_UP;
+	}
 	else if (isAttact) {
 		if (!isEatItem) {
 			if (isSit)
@@ -161,7 +153,7 @@ void Simon::Render()
 
 	currentAni = ani;
 	if (isEatItem) {
-		animation_set->at(prevAni + 13)->RenderIdFrame(animation_set->at(prevAni)->getCurrentFrame(), x - SIMON_PADDING_ANI, y, nx, alpha);
+		animation_set->at(prevAni + 13)->RenderIdFrame(animation_set->at(prevAni)->getCurrentFrame(), x - SIMON_PADDING_ANI, y, nx, D3DCOLOR_ARGB(128, rand() % 256, rand() % 256, rand() % 256));
 	}
 	else {
 
@@ -190,6 +182,28 @@ void Simon::SetState(int state)
 	case SIMON_STATE_WALKING_LEFT:
 		vx = -SIMON_WALKING_SPEED;
 		nx = -1;
+		break;
+	case SIMON_STATE_DOWN_STAIR:
+		if (isGoUp) nx = -nx;
+		vx = nx * SIMON_AUTO_GO_SPEED;
+		vy = SIMON_AUTO_GO_SPEED;
+		isStair = true;
+		isGoDown = true;
+		isGoUp = false;
+		break;
+	case SIMON_STATE_UP_STAIR:
+		if (isGoDown) nx = -nx;
+		vx = nxCheckStairUp * SIMON_AUTO_GO_SPEED;
+		vy = -SIMON_AUTO_GO_SPEED;
+		isStair = true;
+		isGoDown = false;
+		isGoUp = true;
+		break;
+	case SIMON_STATE_IDLE_STAIR:
+		vx = vy = 0;
+		isStair = true;
+		isGoDown = false;
+		isGoUp = false;
 		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED_Y;
@@ -222,6 +236,11 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 
 void Simon::attackWeapon(gameType weaponType)
 {
+	for (auto&weapon : weapons) {
+		if (weapon.second->GetAttack() && weapon.second->getType() == weaponType)
+			return;
+	}
+
 	switch (weaponType)
 	{
 	case gameType::WHIP:
@@ -276,11 +295,6 @@ void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		x += min_tx * dx + nx * 0.4f;
 
-		if (ny == 1) {		
-			//vy = 0;
-		}
-		else isOnBase = false;
-
 		//if (nx != 0) nx = 0;
 		if (ny < 0) {
 			y += min_ty * dy + ny * 0.4f;
@@ -288,15 +302,52 @@ void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (isJump) {
 				isJump = isJumpLeft = isJumpRight = false;
 				vx = 0;
-				if (isAutoGoWithJump)
-					autoGoX3 = x;
+				if (isAutoGoWithJump) {
+					SetState(SIMON_STATE_WALKING_RIGHT);
+					this->nx = (collXFirst > this->x) ? 1 : -1;
+					setValueAutoGo(abs(collXFirst -10.0f - this->x), 0.0f, SIMON_STATE_WALKING_RIGHT, 1);
+				}
 			}
 			isOnBase = true;
+			float l, t, r, b;
+			GetBoundingBox(l, t, r, b);
+			ground_Y = b;
 		}
-		else
+		else {
 			y += dy;
+			isOnBase = false;
+		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	//DebugOut(L"ground: %d \n", ground_Y);
+}
+
+void Simon::setValueAutoGo(float disX, float disY, int new_state, int new_nx)
+{
+	isAutoGo = true;
+
+	autoGoX_Distance = disX;
+	autoGoY_Distance = disY;
+	state_new = new_state;
+	nx_new = new_nx;
+}
+
+void Simon::goUpStair()
+{
+	if(isStair){
+		/*SetState(SIMON_STATE_UP_STAIR);
+
+		isAutoGo = true;*/
+		return;
+	}
+	else {
+		if (isOnCheckStairUp) {
+			DebugOut(L"%f %f \n",x,xStairUp);
+			SetState(SIMON_STATE_WALKING_RIGHT);
+			this->nx = (xStairUp > this->x) ? 1 : -1;
+			setValueAutoGo(abs(xStairUp - this->x), 0.0f, SIMON_STATE_IDLE_STAIR, nxCheckStairUp);
+		}
+	}
 }
 
 

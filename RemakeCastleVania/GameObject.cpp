@@ -150,7 +150,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r;
 	rect.bottom = (int)b;
 
-	CGame::GetInstance()->Draw(rect.left, rect.top, bbox, rect.left, rect.top, rect.right, rect.bottom, 100);
+	CGame::GetInstance()->Draw(rect.left, rect.top, bbox, rect.left, rect.top, rect.right, rect.bottom, 200);
 }
 
 

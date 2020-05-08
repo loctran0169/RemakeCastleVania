@@ -27,9 +27,6 @@ void CMap::drawMap() {
 	int colStart = (int)xCam / TILE_MAP_SIZE;
 	int colEnd = ((int)xCam + SCREEN_WIDTH) / TILE_MAP_SIZE < colsMap - 1 ? (xCam + SCREEN_WIDTH) / TILE_MAP_SIZE : colsMap - 1;
 
-	/*int rowStart = (int)yCam / TILE_MAP_SIZE;
-	int rowEnd = ((int)yCam + SCREEN_HEIGHT) / TILE_MAP_SIZE < rowsMap - 1 ? (yCam + SCREEN_HEIGHT) / TILE_MAP_SIZE : rowsMap - 1;*/
-
 	for (int i = 0; i < rowsMap; i++)//nếu là game có chiều cao thay đổi
 	{
 		for (int j = colStart; j <= colEnd; j++)
@@ -40,7 +37,7 @@ void CMap::drawMap() {
 			int bottom = top + TILE_MAP_SIZE;
 			CGame::GetInstance()->Draw(TILE_MAP_SIZE*j, TILE_MAP_SIZE*i + HEIGHTBOARD, texturesMap, left, top, right, bottom);
 			if (right==boundingMapRight)
-				DebugOut(L"rightMap: %d \n", right);
+				DebugOut(L"[INFO] Bounding rightMap: %d \n", right);
 		}
 	}
 }

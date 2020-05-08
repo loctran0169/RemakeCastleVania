@@ -99,7 +99,7 @@
 50039	219	330	75	368	5
 # item dagger
 60001	0	0	32	18	6
-# item dagger
+# item heart
 60002	0	0	24	20	7
 # item whip_upgrade
 60003	0	0	32	32	8
