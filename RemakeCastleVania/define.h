@@ -28,7 +28,8 @@
 #define SIMON_STATE_UP_STAIR			13
 #define SIMON_STATE_DOWN_STAIR			14
 #define SIMON_STATE_IDLE_STAIR			15
-#define SIMON_STATE_WALK				16
+#define SIMON_STATE_ATTACK_UP			16
+#define SIMON_STATE_ATTACK_DOWN			17
 
 //animation của simon
 #define SIMON_ANI_IDLE						0
@@ -43,7 +44,9 @@
 #define SIMON_ANI_HURT						9
 #define SIMON_ANI_IDLE_UP					10
 #define SIMON_ANI_IDLE_DOWN					11
-#define SIMON_ANI_DIE						12
+#define SIMON_ANI_ATTACK_UP					12
+#define SIMON_ANI_ATTACK_DOWN				13
+#define SIMON_ANI_DIE						14
 
 //Kích cờ simon
 #define SIMON_BBOX_WIDTH			32
@@ -61,6 +64,7 @@
 #define SIMON_GRAVITY				0.005f
 #define SIMON_DIE_DEFLECT_SPEED		0.5f
 #define SIMON_AUTO_GO_SPEED			0.4f
+#define SIMON_STAIR_SPEED			0.08f
 #define DAGGER_SPEED				0.3f
 
 //Thời gian simon

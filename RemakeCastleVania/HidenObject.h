@@ -12,5 +12,7 @@ public:
 	CHidenObject(float l, float t, float r, float b);
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
+	int getWidht() { return width; }
+	int getHeight() { return height; }
 	~CHidenObject();
 };

@@ -10,6 +10,7 @@
 #include "Map.h"
 #include"Whip.h"
 #include"Knife.h"
+
 class Simon;
 class CPlayScene : public CScene
 {

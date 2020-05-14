@@ -138,7 +138,7 @@ void CPlayScene::checkCollisonWithHideObj()
 				}
 				else
 					//DebugOut(L"[INFO] vào trạng thái tự đi \n");
-					player->setValueAutoGo(r - l, 0.0f, SIMON_STATE_IDLE, 1);//chưa xử lý trường lợp -1
+					player->setValueAutoGo(r - l, 0.0f, SIMON_STATE_IDLE, 1,false);//chưa xử lý trường lợp -1
 				break;
 			}
 			case gameType::DISABLE_JUMP:
@@ -151,13 +151,19 @@ void CPlayScene::checkCollisonWithHideObj()
 
 				isOnUpStair = true;
 				player->nxCheckStairUp = p->nx;
-				player->xStairUp = l;
+				player->xStairUp = l + ((p->nx < 0) ? SIMON_BBOX_WIDTH / 2.0f : 0);
 				break;
 			}
-			case gameType::GO_DOWN_STAIR:
+			case gameType::GO_DOWN_STAIR: {
+				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
+				float l, t, r, b;
+				p->GetBoundingBox(l, t, r, b);
+
 				isOnDownStair = true;
-				player->nxCheckStairDown = listHidenObjects[i]->nx;
+				player->nxCheckStairDown = p->nx;
+				player->xStairDown = l + ((p->nx < 0) ? 2 : -2);
 				break;
+			}
 			default:
 				break;
 			}
@@ -370,6 +376,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float nx = atof(tokens[6].c_str());
 		obj = new CHidenObject(x, y, r, b);
 		obj->setType(gameType::GO_UP_STAIR);
+		obj->nx = nx;
+		isHidenObject = true;
+		break;
+	}
+	case gameType::GO_DOWN_STAIR: {
+		float r = atof(tokens[4].c_str());
+		float b = atof(tokens[5].c_str());
+		float nx = atof(tokens[6].c_str());
+		obj = new CHidenObject(x, y, r, b);
+		obj->setType(gameType::GO_DOWN_STAIR);
 		obj->nx = nx;
 		isHidenObject = true;
 		break;
@@ -651,11 +667,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem /*|| simon->isAutoGo*/)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (!simon->isAllowJump)return;
+		if (!simon->isAllowJump||simon->isStair)return;
 		if (simon->isJump == 0 && simon->isSit == false )
 			if (simon->isAttact == false) {				
 				if (game->IsKeyDown(DIK_RIGHT))
@@ -726,7 +742,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 
 	if (game->IsKeyDown(DIK_DOWN))
-		if (!simon->isAttact && !simon->isSit) {
+		if (simon->isOnCheckStairDown || simon->isStair)
+			simon->goDownStair();
+		else if (!simon->isAttact && !simon->isSit) {
 			if (!simon->isJump) {
 				if (!simon->isSit)
 					simon->y += (SIMON_BBOX_HEIGHT - SIMON_SIT_BBOX_HEIGHT);
@@ -739,7 +757,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 
 	if (game->IsKeyDown(DIK_RIGHT)) {
-		if (!simon->isAttact && !simon->isJump)
+		if (!simon->isAttact && !simon->isJump && !simon->isStair)
 			if (!simon->isSit && !simon->isEatItem)
 				simon->SetState(SIMON_STATE_WALKING_RIGHT);
 			else
@@ -747,7 +765,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 
 	if (game->IsKeyDown(DIK_LEFT)) {
-		if (!simon->isAttact && !simon->isJump)
+		if (!simon->isAttact && !simon->isJump && !simon->isStair)
 			if (!simon->isSit && !simon->isEatItem)
 				simon->SetState(SIMON_STATE_WALKING_LEFT);
 			else
