@@ -56,6 +56,7 @@
 #define SIMON_SIT_BBOX_WIDTH		32
 #define SIMON_SIT_BBOX_HEIGHT		48
 #define SIMON_PADDING_ANI			15
+#define SIMON_PADDING_WEAPON_ATTACK	10
 //tốc độ
 #define SIMON_WALKING_SPEED			0.12f 
 #define SIMON_JUMP_SPEED_Y			0.34f
@@ -67,6 +68,9 @@
 #define SIMON_STAIR_SPEED			0.08f
 #define DAGGER_SPEED				0.3f
 #define BOOMERANG_SPEED				0.45f
+#define AXE_SPEED_X					0.2f
+#define AXE_SPEED_Y					0.5f
+#define	AXE_SPEED_GRAVITY			0.0012f
 
 //Thời gian simon
 #define SIMON_UNTOUCHABLE_TIME		3000

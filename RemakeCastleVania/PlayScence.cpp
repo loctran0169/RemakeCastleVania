@@ -91,7 +91,7 @@ void CPlayScene::checkCollisonWithItem()
 					LPANIMATION_SET ani_set = animation_sets->Get(gameType::DAGGER);
 					player->weapons[gameType::DAGGER]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::DAGGER;
-					DebugOut(L"Đã nhặt dao \n", player->heartWeapon);
+					DebugOut(L"Đã nhặt dao \n");
 					break;
 				}
 				case gameType::ITEM_BOOMERANG: {
@@ -100,11 +100,18 @@ void CPlayScene::checkCollisonWithItem()
 					LPANIMATION_SET ani_set = animation_sets->Get(gameType::BOOMERANG);
 					player->weapons[gameType::BOOMERANG]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::BOOMERANG;
-					DebugOut(L"Đã boomerang \n", player->heartWeapon);
+					DebugOut(L"Đã nhặt boomerang \n");
 					break;
 				}
-				case gameType::AXE:
+				case gameType::ITEM_AXE: {
+					player->weapons[gameType::AXE] = new CAxe();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::AXE);
+					player->weapons[gameType::AXE]->SetAnimationSet(ani_set);
+					player->currentWeapon = gameType::AXE;
+					DebugOut(L"Đã nhặt axe \n");
 					break;
+				}
 				default:
 					break;
 				}
@@ -695,7 +702,6 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"key: %d \n", KeyCode);
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
 	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;

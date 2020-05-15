@@ -47,8 +47,8 @@ void CBoomerang::setPosition(float _x, float _y, int _nx)
 	isFirst = false;
 	this->nx = _nx;
 	if (nx > 0)
-		CGameObject::SetPosition(_x - SIMON_PADDING_ANI - 10, _y + 10);
+		CGameObject::SetPosition(_x - SIMON_PADDING_ANI - SIMON_PADDING_WEAPON_ATTACK, _y + SIMON_PADDING_WEAPON_ATTACK);
 	else
-		CGameObject::SetPosition(_x + SIMON_BBOX_WIDTH, _y + 10);
+		CGameObject::SetPosition(_x + SIMON_BBOX_WIDTH, _y + SIMON_PADDING_WEAPON_ATTACK);
 	timeAttact = GetTickCount();
 }
