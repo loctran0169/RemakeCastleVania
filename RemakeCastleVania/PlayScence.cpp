@@ -80,6 +80,7 @@ void CPlayScene::checkCollisonWithItem()
 					break;
 				}
 				case gameType::ITEM_HEART: {
+					player->heartWeapon++;
 					DebugOut(L"Chạm item heart: %d tim\n",player->heartWeapon);
 					// cộng tim cho simon(chưa làm)
 					break;
@@ -87,16 +88,23 @@ void CPlayScene::checkCollisonWithItem()
 				case gameType::ITEM_KNIFE: {
 					player->weapons[gameType::DAGGER] = new CKnife();
 					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
-					LPANIMATION_SET ani_set = animation_sets->Get(5);
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::DAGGER);
 					player->weapons[gameType::DAGGER]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::DAGGER;
 					DebugOut(L"Đã nhặt dao \n", player->heartWeapon);
 					break;
 				}
 				case gameType::ITEM_BOOMERANG: {
-					//add boomerang vào danh sách (chưa làm)
+					player->weapons[gameType::BOOMERANG] = new CBoomerang();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::BOOMERANG);
+					player->weapons[gameType::BOOMERANG]->SetAnimationSet(ani_set);
+					player->currentWeapon = gameType::BOOMERANG;
+					DebugOut(L"Đã boomerang \n", player->heartWeapon);
 					break;
 				}
+				case gameType::AXE:
+					break;
 				default:
 					break;
 				}
@@ -344,7 +352,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case gameType::PORTAL:
 	{
-		DebugOut(L"Tạo portal \n");
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
@@ -355,7 +362,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case gameType::CHECK_AUTO_GO:
 	{
-		DebugOut(L"Tạo autoGo \n");
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		obj = new CHidenObject(x, y, r, b);
@@ -428,13 +434,37 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 		item = new Item(gameType::ITEM_WHIP);
 		item->SetPosition(x, y);
 		break;
+	case gameType::ITEM_MONEY_1:
+		item = new Item(gameType::ITEM_MONEY_1);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_MONEY_2:
+		item = new Item(gameType::ITEM_MONEY_2);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_MONEY_3:
+		item = new Item(gameType::ITEM_MONEY_3);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_BOOMERANG:
+		item = new Item(gameType::ITEM_BOOMERANG);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_WATER_FIRE:
+		item = new Item(gameType::ITEM_WATER_FIRE);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_AXE:
+		item = new Item(gameType::ITEM_AXE);
+		item->SetPosition(x, y);
+		break;
 	default:
 		item = new Item(gameType::ITEM_WHIP);
 		item->SetPosition(x, y);
 		break;
 	}
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
-	LPANIMATION_SET ani_set = animation_sets->Get(5);
+	LPANIMATION_SET ani_set = animation_sets->Get(ANI_SET_ITEM);
 	item->SetAnimationSet(ani_set);
 	item->timeExit = GetTickCount();
 	return item;
@@ -665,6 +695,7 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
+	DebugOut(L"key: %d \n", KeyCode);
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
 	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
@@ -693,7 +724,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_A:
 		if (!simon->isAttact && !simon->isEatItem)
 			if(game->IsKeyDown(DIK_UP)&&simon->currentWeapon!=0)
-				simon->attackWeapon(gameType::DAGGER);
+				simon->attackWeapon(simon->currentWeapon);
 			simon->attackWeapon(gameType::WHIP);
 		break;
 	case DIK_R: // reset
@@ -712,6 +743,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		DestroyWindow(game->getHwnd());
 		break;
 	}
+	
 }
 
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)

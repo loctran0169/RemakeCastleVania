@@ -4,7 +4,7 @@ void CKnife::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float xCam, yCam;
 	game->GetCamPos(xCam, yCam);
-	if (x < xCam || x > xCam + SCREEN_WIDTH)
+	if (x + KNIFE_BBOX_WIDTH < xCam || x > xCam + SCREEN_WIDTH)
 		SetAttack(false);
 	else if(isAttack){
 		vx = DAGGER_SPEED * nx;

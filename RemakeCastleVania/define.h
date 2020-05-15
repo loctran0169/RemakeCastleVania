@@ -56,7 +56,7 @@
 #define SIMON_SIT_BBOX_WIDTH		32
 #define SIMON_SIT_BBOX_HEIGHT		48
 #define SIMON_PADDING_ANI			15
-//tốc độ simon
+//tốc độ
 #define SIMON_WALKING_SPEED			0.12f 
 #define SIMON_JUMP_SPEED_Y			0.34f
 #define SIMON_JUMP_GRAVITY			0.0009f
@@ -66,6 +66,7 @@
 #define SIMON_AUTO_GO_SPEED			0.4f
 #define SIMON_STAIR_SPEED			0.08f
 #define DAGGER_SPEED				0.3f
+#define BOOMERANG_SPEED				0.45f
 
 //Thời gian simon
 #define SIMON_UNTOUCHABLE_TIME		3000
@@ -91,22 +92,30 @@
 //items
 #define ITEM_GRAVITY				0.002f
 #define ITEM_TIME_EXIT				3000
-#define HEART_BBOX_WIDTH			24
-#define HEART_BBOX_HEIGHT			20
 
-#define WHIPITEM_BBOX_WIDTH			32
-#define WHIPITEM_BBOX_HEIGHT		32
+#define ITEM_HEART_BBOX_WIDTH			24
+#define ITEM_HEART_BBOX_HEIGHT			20
 
-#define MONEY_BBOX_WIDTH			30
-#define MONEY_BBOX_HEIGHT			30
+#define ITEM_WHIP_BBOX_WIDTH			32
+#define ITEM_WHIP_BBOX_HEIGHT		32
+
+#define ITEM_MONEY_BBOX_WIDTH			30
+#define ITEM_MONEY_BBOX_HEIGHT			30
 
 #define KNIFE_BBOX_WIDTH			32
 #define KNIFE_BBOX_HEIGHT			18
 
-#define HOLYWATER_BBOX_WIDTH		32
-#define HOLYWATER_BBOX_HEIGHT		32
+#define WATERFIRE_BBOX_WIDTH		32
+#define WATERFIRE_BBOX_HEIGHT		32
+
+#define AXE_BBOX_WIDTH				28
+#define AXE_BBOX_HEIGHT				28
+
+#define BOOMERANG_BBOX_WIDTH		28
+#define BOOMERANG_HEIGHT			28
 
 //ani item_type
+#define ANI_SET_ITEM				5
 #define ANI_SET_ITEM_WHIP			0
 #define ANI_SET_ITEM_WHIP			1
 #define ANI_SET_ITEM_WHIP			2
@@ -118,15 +127,20 @@ enum gameType
 	ITEM_KNIFE = 0,
 	ITEM_HEART = 1,
 	ITEM_WHIP = 2,
-	ITEM_MONEY = 3,
-	ITEM_BOOMERANG = 4,
+	ITEM_MONEY_1 = 3,
+	ITEM_MONEY_2 = 4,
+	ITEM_MONEY_3 = 5,
+	ITEM_BOOMERANG = 6,
+	ITEM_WATER_FIRE = 7,
+	ITEM_AXE = 8,
 
 	//weapon
-	WHIP = 10,
-	DAGGER = 11,
-	AXE = 12,
-	BOONMERANG = 13,
-	HOLLYWATER = 14,
+	WEAPON_SPECIAL = 10,
+	WHIP = 11,
+	DAGGER = 12,
+	AXE = 13,
+	BOOMERANG = 14,
+	WATER_FIRE = 15,
 
 	//objects
 	SIMON = 50, // player

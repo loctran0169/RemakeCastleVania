@@ -114,6 +114,15 @@
     <ClCompile Include="HidenObject.cpp">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Axe.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterFire.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Boomerang.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -172,6 +181,15 @@
     </ClInclude>
     <ClInclude Include="HidenObject.h">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterFire.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Axe.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Boomerang.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

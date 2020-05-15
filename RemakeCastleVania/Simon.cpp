@@ -259,6 +259,9 @@ void Simon::attackWeapon(gameType weaponType)
 	case gameType::DAGGER:
 		heartWeapon--;
 		break;
+	case gameType::BOOMERANG:
+		heartWeapon--;
+		break;
 	default:
 		break;
 	}
@@ -268,7 +271,6 @@ void Simon::attackWeapon(gameType weaponType)
 		attactTime = GetTickCount();
 		if (!isJump) vx = 0;
 		weapons[weaponType]->setPosition(x, y, nx);
-		//weapons[weaponType]->resetFrame();
 		weapons[weaponType]->SetAttack(true);
 	}
 }
@@ -313,7 +315,7 @@ void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isJump = isJumpLeft = isJumpRight = false;
 				vx = 0;
 				if (isAutoGoWithJump) {
-					SetState(SIMON_STATE_WALKING_RIGHT);
+					SetState(SIMON_STATE_WALKING_LEFT);
 					this->nx = (collXFirst > this->x) ? 1 : -1;
 					setValueAutoGo(abs(collXFirst -10.0f - this->x), 0.0f,SIMON_STATE_WALKING_RIGHT, 1, true);
 				}

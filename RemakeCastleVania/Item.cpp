@@ -58,20 +58,40 @@ void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 	l = x;
 	t = y;
 	if (type == gameType::ITEM_HEART) {
-		r = x + HEART_BBOX_WIDTH;
-		b = y + HEART_BBOX_HEIGHT;
+		r = x + ITEM_HEART_BBOX_WIDTH;
+		b = y + ITEM_HEART_BBOX_HEIGHT;
 	}
 	else if (type == gameType::ITEM_KNIFE) {
 		r = x + KNIFE_BBOX_WIDTH;
 		b = y + KNIFE_BBOX_HEIGHT;
 	}
-	else if (type == gameType::ITEM_MONEY) {
-		r = x + MONEY_BBOX_WIDTH;
-		b = y + MONEY_BBOX_HEIGHT;
+	else if (type == gameType::ITEM_MONEY_1) {
+		r = x + ITEM_MONEY_BBOX_WIDTH;
+		b = y + ITEM_MONEY_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_MONEY_2) {
+		r = x + ITEM_MONEY_BBOX_WIDTH;
+		b = y + ITEM_MONEY_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_MONEY_3) {
+		r = x + ITEM_MONEY_BBOX_WIDTH;
+		b = y + ITEM_MONEY_BBOX_HEIGHT;
 	}
 	else if (type == gameType::ITEM_WHIP) {
-		r = x + WHIPITEM_BBOX_WIDTH;
-		b = y + WHIPITEM_BBOX_HEIGHT;
+		r = x + ITEM_WHIP_BBOX_WIDTH;
+		b = y + ITEM_WHIP_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_AXE) {
+		r = x + AXE_BBOX_WIDTH;
+		b = y + AXE_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_BOOMERANG) {
+		r = x + BOOMERANG_BBOX_WIDTH;
+		b = y + BOOMERANG_HEIGHT;
+	}
+	else if (type == gameType::ITEM_WATER_FIRE) {
+		r = x + WATERFIRE_BBOX_WIDTH;
+		b = y + WATERFIRE_BBOX_HEIGHT;
 	}
 }
 
