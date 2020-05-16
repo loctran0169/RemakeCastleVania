@@ -13,7 +13,7 @@
 #include"Boomerang.h"
 #include"Axe.h"
 #include"WaterFire.h"
-
+#include"SkateBoard.h"
 class Simon;
 class CPlayScene : public CScene
 {

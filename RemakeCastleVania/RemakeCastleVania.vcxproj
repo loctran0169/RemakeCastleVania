@@ -136,6 +136,7 @@
     <ClCompile Include="Knife.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Simon.cpp" />
+    <ClCompile Include="SkateBoard.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Knife.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Simon.h" />
+    <ClInclude Include="SkateBoard.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />

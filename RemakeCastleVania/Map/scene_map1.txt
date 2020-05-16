@@ -5,6 +5,7 @@
 2	textures\\simon\\whip.png	255	0	255
 3	textures\\items\\item.png	255	0	255
 4	textures\\items\\weapon.png	255	0	255
+-100	textures\\bbox.png	255	0	255
 # map
 [MAPTXT]
 0	Map\\txt_map1.txt

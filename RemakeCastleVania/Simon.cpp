@@ -84,6 +84,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				vx = SIMON_WALKING_SPEED * 1.0f;
 			else if (isJumpLeft)
 				vx = -SIMON_WALKING_SPEED * 1.0f;
+			else
+				vx = 0;
 			vy += SIMON_JUMP_GRAVITY * dt;
 		}
 		else {
@@ -95,8 +97,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (x + SIMON_BBOX_WIDTH > CMap::GetInstance()->boundingMapRight)
 			x = CMap::GetInstance()->boundingMapRight - SIMON_BBOX_WIDTH;
 
-		checkCollisonWithBricks(dt,coObjects);
-
+		if (!checkCollisonWithSkateBoard(dt, coObjects)) {
+			if (!checkCollisonWithBricks(dt, coObjects))
+			{
+				x += dx;
+				y += dy;
+			}
+		}
+		else 
+			x += dx;	
 	}
 
 	for (auto&weapon : weapons) {
@@ -147,15 +156,19 @@ void Simon::Render()
 	}
 	else {
 		if (vx == 0) {
-			if (!isSit) {
+			if (!isSit)
+				ani = SIMON_ANI_IDLE;
+			else
+				ani = SIMON_ANI_SITTING;
+		}
+		else {
+			if (state == SIMON_STATE_ON_SKATE && !game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT)) {
+				DebugOut(L"vào 1 \n");
 				ani = SIMON_ANI_IDLE;
 			}
-			else {
-				ani = SIMON_ANI_SITTING;
-			}
+			else
+				ani = SIMON_ANI_WALKING;
 		}
-		else
-			ani = SIMON_ANI_WALKING;
 	}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -230,7 +243,10 @@ void Simon::SetState(int state)
 	case SIMON_STATE_DIE:
 		vy = -SIMON_DIE_DEFLECT_SPEED;
 		break;
+	case SIMON_STATE_ON_SKATE:
+		break;
 	}
+	stateSpeed = vx;
 }
 
 void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -275,7 +291,7 @@ void Simon::attackWeapon(gameType weaponType)
 	}
 }
 
-void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -293,9 +309,7 @@ void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		CalcPotentialCollisions(&listBricks, coEvents);
 	if (coEvents.size() == 0)
 	{
-		x += dx;
-		y += dy;
-		isOnBase = false;
+		return false;
 	}
 	else
 	{
@@ -323,15 +337,64 @@ void Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			
 			float l, t, r, b;
 			GetBoundingBox(l, t, r, b);
-			ground_Y = b;
 		}
 		else {
 			y += dy;
 		}
-		isOnBase = true;
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	//DebugOut(L"ground: %d \n", ground_Y);
+	return true;
+}
+
+bool Simon::checkCollisonWithSkateBoard(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+
+	vector<LPGAMEOBJECT> listSkates;
+	listSkates.clear();
+
+	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách ván trược
+		if (coObjects->at(i)->getType() == gameType::SKATEBOARD)
+			listSkates.push_back(coObjects->at(i));
+
+	// kiểm ra va chạm với skate board
+	if (state != SIMON_STATE_DIE)
+		CalcPotentialCollisions(&listSkates, coEvents);
+	if (coEvents.size() == 0)
+	{
+		return false;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		// TODO: This is a very ugly designed function!!!!
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
+		for (UINT i = 0; i < coEventsResult.size(); i++) {
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			CSkateBoard * skate = dynamic_cast<CSkateBoard*>(e->obj);
+
+			if (ny < 0) {
+				y += min_ty * dy + ny * 0.4f;
+				SetState(SIMON_STATE_IDLE);
+				if (isJump) {
+					isJump = isJumpLeft = isJumpRight = false;
+					vx = 0;
+				}
+				
+				if (stateSpeed == 0) {
+					SetState(SIMON_STATE_ON_SKATE);
+					vx = SKATEBOARD_SPEED_X * skate->nx;
+				}
+			}		
+		}		
+	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	return true;
 }
 
 void Simon::setValueAutoGo(float disX, float disY, int new_state, int new_nx,bool auto_afterAutoGo)

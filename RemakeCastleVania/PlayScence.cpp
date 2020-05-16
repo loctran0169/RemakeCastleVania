@@ -363,7 +363,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case gameType::TORCH: {
 		int itemId = atoi(tokens[4].c_str());
 		obj = new CTorch();
-		obj->setID(itemId);
+		obj->setItemID(itemId);
 		break;
 	}
 	case gameType::PORTAL:
@@ -410,6 +410,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->setType(gameType::GO_DOWN_STAIR);
 		obj->nx = nx;
 		isHidenObject = true;
+		break;
+	}
+	case gameType::SKATEBOARD:{
+		int bL = atoi(tokens[4].c_str());
+		int bR = atoi(tokens[5].c_str());
+		obj = new CSkateBoard(bL,bR);
 		break;
 	}
 	default:
@@ -647,10 +653,11 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
-	for (size_t i = 0; i < objects.size(); i++)
+	for (size_t i = 1; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+	objects[0]->Update(dt, &coObjects);
 	//update items
 	for (size_t i = 0; i < listItems.size(); i++)
 	{
@@ -671,7 +678,7 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CTorch *>(objects.at(i))) {
 			auto *torch = dynamic_cast<CTorch*>(objects.at(i));
 			if (torch->isFinish) {
-				listItems.push_back(getNewItem(torch->ID, torch->x, torch->y));
+				listItems.push_back(getNewItem(torch->itemID, torch->x, torch->y));
 				objects.erase(objects.begin() + i);
 				delete torch;
 			}
@@ -789,7 +796,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 
 	if (game->IsKeyDown(DIK_DOWN))
-		if (simon->isOnCheckStairDown || simon->isStair)
+		if ((simon->isOnCheckStairDown || simon->isStair) && !simon->isJump)
 			simon->goDownStair();
 		else if (!simon->isAttact && !simon->isSit) {
 			if (!simon->isJump) {
@@ -799,7 +806,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			}
 		}
 
-	if (game->IsKeyDown(DIK_UP) && !simon->isAttact) {
+	if (game->IsKeyDown(DIK_UP) && !simon->isAttact && !simon->isJump) {
 		simon->goUpStair();
 	}
 

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameObject.h"
 #include "Brick.h"
+#include"SkateBoard.h"
 #include"define.h"
 #include"Whip.h"
 #include "Utils.h"
@@ -19,7 +20,7 @@ public:
 	int currentAni;
 	int prevAni;
 	int heartWeapon;
-	
+	float stateSpeed = 0.0f;
 	//thời gian hành động
 	DWORD untouchable_start;
 	DWORD attactTime = 0;
@@ -35,7 +36,6 @@ public:
 	bool isEatItem = false; //trạng thái khi ăn whip item
 	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
 	bool isJumpLeft = false;// nhảy trái thì ko đổi hướng
-	bool isOnBase = false; //đang đúng dưới sàn
 	bool isRenderLopping = false; //render ani còn lại khi khi đóng băng
 
 	//cầu thang
@@ -49,9 +49,6 @@ public:
 	bool isGoUp = false; //đi lên cầu thang
 	bool isGoDown = false; // đi xuống cầu thang
 	bool isGoStairByUp = false;
-
-	float distanceYGone = 0;
-	float ground_Y = 0.0f;
 
 	//autoGO
 	bool isAutoGo=false;
@@ -73,7 +70,8 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void attackWeapon(gameType weaponType);
-	void checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	bool checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	bool checkCollisonWithSkateBoard(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void setValueAutoGo(float disX, float disY, int new_state, int new_nx, bool auto_afterAutoGo);
 	void goUpStair();
 	void goDownStair();

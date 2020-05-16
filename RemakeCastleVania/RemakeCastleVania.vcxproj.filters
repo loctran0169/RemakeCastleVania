@@ -123,6 +123,9 @@
     <ClCompile Include="Boomerang.cpp">
       <Filter>FrameWork\GameObjects\weapon</Filter>
     </ClCompile>
+    <ClCompile Include="SkateBoard.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="Boomerang.h">
       <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="SkateBoard.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
