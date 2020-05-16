@@ -116,7 +116,7 @@
 # item water
 60008	64	64	96	96	3
 # item axe
-60009	128	32	160	64	3
+60009	128	32	159	64	3
 ##weapon
 # axe
 70001	84	0	114	28	4
@@ -127,6 +127,10 @@
 80001	0	0	28	28	4
 80002	28	0	56	28	4
 80003	56	0	84	28	4
+# water fire
+90001	274	0	294	20	4
+90002	300	0	332	30	4
+90003	332	0	364	30	4
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -217,6 +221,9 @@
 2001	70001	100	70002	100	70003	100	70004	100
 # weapon boomerang
 2002	80001	100	80002	100	80003	100
+# weapon water fire
+2003	90001	100
+2004	90002	100	90003	100
 #
 #
 # id	ani1	ani2	ani3
@@ -237,6 +244,8 @@
 13	2001
 # boomerang
 14	2002
+# water fire
+15	2003	2004
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
@@ -248,7 +257,7 @@
 51	0	338	0	47	0
 #Torch
 #type	x	y	ani_set_id	id_item
-52	180	274	3	8
+52	180	274	3	7
 52	440	274	3	2
 52	690	274	3	2
 52	950	274	3	1

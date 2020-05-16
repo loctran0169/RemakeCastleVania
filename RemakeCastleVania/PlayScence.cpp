@@ -112,6 +112,15 @@ void CPlayScene::checkCollisonWithItem()
 					DebugOut(L"Đã nhặt axe \n");
 					break;
 				}
+				case gameType::ITEM_WATER_FIRE: {
+					player->weapons[gameType::WATER_FIRE] = new CWaterFire();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::WATER_FIRE);
+					player->weapons[gameType::WATER_FIRE]->SetAnimationSet(ani_set);
+					player->currentWeapon = gameType::WATER_FIRE;
+					DebugOut(L"Đã nhặt water fire \n");
+					break;
+				}
 				default:
 					break;
 				}

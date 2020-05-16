@@ -82,16 +82,16 @@ void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 		b = y + ITEM_WHIP_BBOX_HEIGHT;
 	}
 	else if (type == gameType::ITEM_AXE) {
-		r = x + AXE_BBOX_WIDTH;
-		b = y + AXE_BBOX_HEIGHT;
+		r = x + ITEM_AXE_BBOX_WIDTH;
+		b = y + ITEM_AXE_BBOX_HEIGHT;
 	}
 	else if (type == gameType::ITEM_BOOMERANG) {
 		r = x + BOOMERANG_BBOX_WIDTH;
 		b = y + BOOMERANG_HEIGHT;
 	}
 	else if (type == gameType::ITEM_WATER_FIRE) {
-		r = x + WATERFIRE_BBOX_WIDTH;
-		b = y + WATERFIRE_BBOX_HEIGHT;
+		r = x + ITEM_WATERFIRE_BBOX_WIDTH;
+		b = y + ITEM_WATERFIRE_BBOX_HEIGHT;
 	}
 }
 
