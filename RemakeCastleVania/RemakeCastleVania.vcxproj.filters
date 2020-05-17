@@ -52,6 +52,9 @@
     <Filter Include="FrameWork\GameObjects\items">
       <UniqueIdentifier>{1e2dcbd3-2ed9-477d-bfb9-da1c89eb3166}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FrameWork\Data">
+      <UniqueIdentifier>{d15c884c-09d3-4da1-8b4a-23ae43e82b9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -126,6 +129,12 @@
     <ClCompile Include="SkateBoard.cpp">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClCompile>
+    <ClCompile Include="DataNextScreen.cpp">
+      <Filter>FrameWork\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="DataScreen.cpp">
+      <Filter>FrameWork\Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -196,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="SkateBoard.h">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DataNextScreen.h">
+      <Filter>FrameWork\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="DataScreen.h">
+      <Filter>FrameWork\Data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

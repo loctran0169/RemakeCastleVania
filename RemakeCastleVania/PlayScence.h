@@ -14,6 +14,9 @@
 #include"Axe.h"
 #include"WaterFire.h"
 #include"SkateBoard.h"
+#include"DataNextScreen.h"
+#include"DataScreen.h"
+
 class Simon;
 class CPlayScene : public CScene
 {
@@ -33,7 +36,10 @@ protected:
 public:
 	CMap *map;
 	int currentScence;
+	DataNextScreen *dataNextScreen;
+	DataScreen *dataScreen;
 	int nextScence;
+	bool nextIsStair;
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
 
@@ -44,7 +50,7 @@ public:
 	void checkCollisonWithEnemy(vector<LPGAMEOBJECT> *coObjects);
 
 	Item * getNewItem(int id, float x, float y);
-	virtual void Load();
+	virtual void Load(bool isNextScreen = false);
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();

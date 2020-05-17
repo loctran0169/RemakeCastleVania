@@ -42,7 +42,7 @@ class CGame
 	int screen_height;
 
 	unordered_map<int, LPSCENE> scenes;
-	int current_scene;
+	int current_scene=-1;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -61,7 +61,7 @@ public:
 	int GetCurrentSceneId() { return current_scene; }
 	unordered_map<int, LPSCENE> getScenes() { return scenes; }
 
-	void SwitchScene(int scene_id);
+	void SwitchScene(int scene_id, bool isNextScreen);
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }

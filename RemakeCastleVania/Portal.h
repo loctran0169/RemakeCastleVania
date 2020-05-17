@@ -9,6 +9,7 @@ class CPortal : public CHidenObject
 {
 	int scene_id;	// target scene to switch to 
 public:
+	bool isStair = false;
 	CPortal(float l, float t, float r, float b, int scene_id) :CHidenObject(l, t, r, b) {
 		this->scene_id = scene_id;
 		type = gameType::PORTAL;

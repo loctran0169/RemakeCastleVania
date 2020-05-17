@@ -13,8 +13,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	currentScence = id;
-	map=CMap::GetInstance();
+	map = CMap::GetInstance();
 	game = CGame::GetInstance();
+	dataNextScreen = DataNextScreen::GetInstance();
+	dataScreen = DataScreen::GetInstance();
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
@@ -145,7 +147,7 @@ void CPlayScene::checkCollisonWithHideObj()
 				DebugOut(L"collision portal \n");
 				if (!player->isAutoGoWithJump) {
 					DebugOut(L"[INFO] Switching to scene %d \n", p->GetSceneId());
-					CGame::GetInstance()->SwitchScene(p->GetSceneId());
+					CGame::GetInstance()->SwitchScene(p->GetSceneId(), p->isStair);
 					return;
 				}
 				break;
@@ -172,7 +174,7 @@ void CPlayScene::checkCollisonWithHideObj()
 				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
 				float l, t, r, b;
 				p->GetBoundingBox(l, t, r, b);
-
+				DebugOut(L"chạm stair \n");
 				isOnUpStair = true;
 				player->nxCheckStairUp = p->nx;
 				player->xStairUp = l + ((p->nx < 0) ? SIMON_BBOX_WIDTH / 2.0f : 0);
@@ -335,7 +337,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type)
 	{
-	case gameType::SIMON:
+	case gameType::SIMON: {
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] Simon object was created before! ");
@@ -345,7 +347,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Simon();
 		player = (Simon*)obj;
 		break;
-	//case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
+	}
 	case gameType::BRICK: {
 		int numberObj = atoi(tokens[4].c_str());
 		int isCross = atoi(tokens[5].c_str());
@@ -359,25 +361,35 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CBrick();
 		break;
 	}
-	//case object torch
 	case gameType::TORCH: {
 		int itemId = atoi(tokens[4].c_str());
 		obj = new CTorch();
 		obj->setItemID(itemId);
 		break;
 	}
-	case gameType::PORTAL:
-	{
+	case gameType::PORTAL:{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		nextScence = scene_id;
 		obj = new CPortal(x, y, r, b, scene_id);
 		isHidenObject = true;
+
+		int isOnStair = atoi(tokens[7].c_str());
+		int px = atoi(tokens[8].c_str());
+		int py = atoi(tokens[9].c_str());
+		int pnx = atoi(tokens[10].c_str());
+		int pny = atoi(tokens[11].c_str());
+		if (isOnStair == 1) {
+			nextIsStair = true;
+			dynamic_cast<CPortal*>((CPortal*)obj)->isStair = true;
+			dataNextScreen->setData(isOnStair, px, py, pnx, pny);
+		}
+		else
+			dynamic_cast<CPortal*>((CPortal*)obj)->isStair = false;
 		break;
 	}
-	case gameType::CHECK_AUTO_GO:
-	{
+	case gameType::CHECK_AUTO_GO:{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		obj = new CHidenObject(x, y, r, b);
@@ -492,7 +504,7 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 	return item;
 }
 
-void CPlayScene::Load()
+void CPlayScene::Load(bool isNextScreen_Stair)
 {
 	sceneFilePath = game->getScenes()[game->GetCurrentSceneId()]->getPath();
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
@@ -538,6 +550,25 @@ void CPlayScene::Load()
 	}
 
 	f.close();
+	if (isNextScreen_Stair) {
+		DataScreen * p = DataScreen::GetInstance();
+		if (p->isOnStair) {
+			player->isStair = true;
+			player->x = p->x;
+			player->y = p->y;
+			player->nx = p->nx;
+			if (p->ny == 1) {
+				player->SetState(SIMON_STATE_IDLE_STAIR);
+				player->isGoDown = true;
+				player->isGoStairByUp = true;
+			}
+			else {
+				player->SetState(SIMON_STATE_IDLE_STAIR);
+				player->isGoUp = true;
+				player->isGoStairByUp = false;
+			}
+		}
+	}
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -753,12 +784,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		for (auto&scence : game->getScenes()) {
 			DebugOut(L"scene: %d \n",scence.second->getID());
 		}
-		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId());
+		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(),false);
 		break;
 	case DIK_M:
 		try {
 			if (((CPlayScene*)scence)->nextScence == NULL) return;
-			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence);
+			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence, false);
 		}catch(exception ex){}
 		break;
 	case DIK_ESCAPE:

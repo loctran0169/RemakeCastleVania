@@ -61,12 +61,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (prev_state != SIMON_STATE_WALKING_RIGHT || prev_state != SIMON_STATE_WALKING_LEFT)
 						SetState(SIMON_STATE_IDLE);
 				}
-				else if ((isGoDown&&isOnCheckStairUp) || (isGoUp&&isOnCheckStairDown)) {
+				else if ((isGoDown && isOnCheckStairUp) || (isGoUp && isOnCheckStairDown)) {
 					if (xStairUp != 0 && abs(x - xStairUp) >= BRICK_BBOX_WIDTH * 1.5f)
 						SetState(SIMON_STATE_IDLE);
 					else if (xStairDown != 0 && abs(x - xStairDown) >= BRICK_BBOX_WIDTH * 1.5f)
 						SetState(SIMON_STATE_IDLE);
-					else if (isOnCheckStairDown&&!isGoStairByUp)
+					else if (isOnCheckStairDown && !isGoStairByUp)
 						SetState(SIMON_STATE_IDLE);
 					else if (isOnCheckStairUp&&isGoStairByUp)
 						SetState(SIMON_STATE_IDLE);
@@ -115,6 +115,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			weapon.second->Update(dt, coObjects);
 		}
 	}
+	//DebugOut(L"x= %f y=%f \n", x, y);
 }
 void Simon::Render()
 {
@@ -162,10 +163,8 @@ void Simon::Render()
 				ani = SIMON_ANI_SITTING;
 		}
 		else {
-			if (state == SIMON_STATE_ON_SKATE && !game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT)) {
-				DebugOut(L"vào 1 \n");
+			if (state == SIMON_STATE_ON_SKATE && !game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 				ani = SIMON_ANI_IDLE;
-			}
 			else
 				ani = SIMON_ANI_WALKING;
 		}
