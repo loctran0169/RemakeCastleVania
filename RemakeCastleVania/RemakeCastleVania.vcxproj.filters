@@ -135,6 +135,12 @@
     <ClCompile Include="DataScreen.cpp">
       <Filter>FrameWork\Data</Filter>
     </ClCompile>
+    <ClCompile Include="Candle.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>FrameWork\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -211,6 +217,12 @@
     </ClInclude>
     <ClInclude Include="DataScreen.h">
       <Filter>FrameWork\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Candle.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>FrameWork\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

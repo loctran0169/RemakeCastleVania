@@ -256,33 +256,34 @@
 #skate board
 58	702
 [OBJECTS]
-# type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
+# grid type	x	y	ani_set_id	extra_settings per object type
 # Simon 
-#type	x	y	ani_set_id	ani_whip
-50	35	306	50	11
+# grid type	x	y	ani_set_id	ani_whip
+0	50	35	306	50	11
 #50	400	100	50	11
 # BRICK 
-#type	x	y	ani_set_id	number_object
-51	0	50	0	3	1
-51	32	146	0	1	0
-51	64	178	0	8	0
-51	32	210	0	2	1
-51	0	242	0	3	1
-51	448	50	0	4	1
-51	480	178	0	2	1
-51	320	242	0	5	0
-51	448	274	0	3	1
-51	0	370	0	14	0
+#grid	type	x	y	ani_set_id	number_object
+0	51	0	50	0	3	1
+0	51	32	146	0	1	0
+0	51	64	178	0	6	0
+1	51	256	178	0	2	0
+0	51	32	210	0	2	1
+0	51	0	242	0	3	1
+1	51	448	50	0	4	1
+1	51	480	178	0	2	1
+1	51	320	242	0	5	0
+1	51	448	274	0	3	1
+0	51	0	370	0	8	0
+1	51	256	370	0	8	0
 #Disable jump
-55	448	178	0	480	242
+1	55	448	178	0	480	242
 #stair up
 #type	x	y	ani_set_id	r	b	nx
-56	210	360	0	256	370	1
-56	146	166	0	192	178	1
+0	56	210	360	0	256	370	1
+0	56	146	166	0	192	178	1
 #stair down
 #type	x	y	ani_set_id	r	b	nx
-57	338	178	0	368	190	-1
+1	57	338	178	0	368	190	-1
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
-53	256	0	0	288	20	3	1	770	320	1	-1
+1	53	256	0	0	288	20	3	1	770	320	1	-1

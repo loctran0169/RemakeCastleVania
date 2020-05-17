@@ -16,6 +16,7 @@
 #include"SkateBoard.h"
 #include"DataNextScreen.h"
 #include"DataScreen.h"
+#include"Grid.h"
 
 class Simon;
 class CPlayScene : public CScene
@@ -24,7 +25,6 @@ protected:
 	Simon *player;					// A play scene has to have player, right? 
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
-	vector<LPGAMEOBJECT> listHidenObjects;
 	vector<Item*> listItems;
 
 	void _ParseSection_TEXTURES(string line);
@@ -35,6 +35,7 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 public:
 	CMap *map;
+	CGrid *grid;
 	int currentScence;
 	DataNextScreen *dataNextScreen;
 	DataScreen *dataScreen;

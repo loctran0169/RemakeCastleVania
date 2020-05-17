@@ -14,6 +14,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 {
 	currentScence = id;
 	map = CMap::GetInstance();
+	grid = CGrid::GetInstance();
 	game = CGame::GetInstance();
 	dataNextScreen = DataNextScreen::GetInstance();
 	dataScreen = DataScreen::GetInstance();
@@ -137,13 +138,13 @@ void CPlayScene::checkCollisonWithHideObj()
 	bool isAllowJump = true;
 	bool isOnUpStair = false;
 	bool isOnDownStair = false;
-	for (UINT i = 0; i < listHidenObjects.size(); i++) {
-		if (player->isCollitionObjectWithObject(listHidenObjects[i])) {
-			switch (listHidenObjects[i]->getType())
+	for (UINT i = 0; i < objects.size(); i++) {
+		if (player->isCollitionObjectWithObject(objects[i])) {
+			switch (objects[i]->getType())
 			{
 			case gameType::PORTAL: {
 				if (player->isAutoGoWithJump)break;
-				CPortal *p = dynamic_cast<CPortal *>(listHidenObjects[i]);
+				CPortal *p = dynamic_cast<CPortal *>(objects[i]);
 				DebugOut(L"collision portal \n");
 				if (!player->isAutoGoWithJump) {
 					DebugOut(L"[INFO] Switching to scene %d \n", p->GetSceneId());
@@ -154,7 +155,7 @@ void CPlayScene::checkCollisonWithHideObj()
 			}
 			case gameType::CHECK_AUTO_GO: {
 				if (player->isAutoGoWithJump)break;
-				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
+				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				float l, t, r, b;
 				p->GetBoundingBox(l, t, r, b);
 				player->isAutoGo = true;
@@ -171,7 +172,7 @@ void CPlayScene::checkCollisonWithHideObj()
 				isAllowJump = false;
 				break;
 			case gameType::GO_UP_STAIR: {
-				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
+				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				float l, t, r, b;
 				p->GetBoundingBox(l, t, r, b);
 				DebugOut(L"chạm stair \n");
@@ -181,7 +182,7 @@ void CPlayScene::checkCollisonWithHideObj()
 				break;
 			}
 			case gameType::GO_DOWN_STAIR: {
-				CHidenObject *p = dynamic_cast<CHidenObject *>(listHidenObjects[i]);
+				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				float l, t, r, b;
 				p->GetBoundingBox(l, t, r, b);
 
@@ -247,6 +248,8 @@ void CPlayScene::_ParseSection_MAPTXT(string line)
 	map->scene = texID;
 	map->setTexture(CTextures::GetInstance()->Get(texID));
 	map->readMapTxt(pathFile.c_str());
+	grid->clearObjects();
+	grid->setNumberCells();
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -319,21 +322,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
-
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
+	int numGrid = atoi(tokens[0].c_str());
+	int object_type = atoi(tokens[1].c_str());
+	//DebugOut(L"id objects %d \n", object_type);
+	float x = atof(tokens[2].c_str());
+	float y = atof(tokens[3].c_str());
 
-	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
-
-	int ani_set_id = atoi(tokens[3].c_str());
+	int ani_set_id = atoi(tokens[4].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 
 	CGameObject *obj = NULL;
-
-	bool isHidenObject = false;
 
 	switch (object_type)
 	{
@@ -346,11 +346,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERROR] Đã tạo simon \n");
 		obj = new Simon();
 		player = (Simon*)obj;
+		int ani_set_whip_id = atoi(tokens[5].c_str());
+		LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
+		player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
 		break;
 	}
 	case gameType::BRICK: {
-		int numberObj = atoi(tokens[4].c_str());
-		int isCross = atoi(tokens[5].c_str());
+		int numberObj = atoi(tokens[5].c_str());
+		int isCross = atoi(tokens[6].c_str());
 		if (numberObj > 1) {
 			if (isCross == 0)
 				obj = new CBrick(x, y, x + BRICK_BBOX_WIDTH * numberObj, y + BRICK_BBOX_HEIGHT);
@@ -362,24 +365,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case gameType::TORCH: {
-		int itemId = atoi(tokens[4].c_str());
+		int itemId = atoi(tokens[5].c_str());
 		obj = new CTorch();
 		obj->setItemID(itemId);
 		break;
 	}
 	case gameType::PORTAL:{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
-		int scene_id = atoi(tokens[6].c_str());
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
+		int scene_id = atoi(tokens[7].c_str());
 		nextScence = scene_id;
 		obj = new CPortal(x, y, r, b, scene_id);
-		isHidenObject = true;
 
-		int isOnStair = atoi(tokens[7].c_str());
-		int px = atoi(tokens[8].c_str());
-		int py = atoi(tokens[9].c_str());
-		int pnx = atoi(tokens[10].c_str());
-		int pny = atoi(tokens[11].c_str());
+		int isOnStair = atoi(tokens[8].c_str());
+		int px = atoi(tokens[9].c_str());
+		int py = atoi(tokens[10].c_str());
+		int pnx = atoi(tokens[11].c_str());
+		int pny = atoi(tokens[12].c_str());
 		if (isOnStair == 1) {
 			nextIsStair = true;
 			dynamic_cast<CPortal*>((CPortal*)obj)->isStair = true;
@@ -390,43 +392,39 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case gameType::CHECK_AUTO_GO:{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
 		obj = new CHidenObject(x, y, r, b);
-		isHidenObject = true;
 		break;
 	}
 	case gameType::DISABLE_JUMP: {
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
 		obj = new CHidenObject(x, y, r, b);
 		obj->setType(gameType::DISABLE_JUMP);
-		isHidenObject = true;
 		break;
 	}
 	case gameType::GO_UP_STAIR: {
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
-		float nx = atof(tokens[6].c_str());
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
+		float nx = atof(tokens[7].c_str());
 		obj = new CHidenObject(x, y, r, b);
 		obj->setType(gameType::GO_UP_STAIR);
 		obj->nx = nx;
-		isHidenObject = true;
 		break;
 	}
 	case gameType::GO_DOWN_STAIR: {
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
-		float nx = atof(tokens[6].c_str());
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
+		float nx = atof(tokens[7].c_str());
 		obj = new CHidenObject(x, y, r, b);
 		obj->setType(gameType::GO_DOWN_STAIR);
 		obj->nx = nx;
-		isHidenObject = true;
 		break;
 	}
 	case gameType::SKATEBOARD:{
-		int bL = atoi(tokens[4].c_str());
-		int bR = atoi(tokens[5].c_str());
+		int bL = atoi(tokens[5].c_str());
+		int bR = atoi(tokens[6].c_str());
 		obj = new CSkateBoard(bL,bR);
 		break;
 	}
@@ -438,17 +436,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	// General object setup
 	obj->SetPosition(x, y);
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-	if (object_type == gameType::SIMON) {
-		int ani_set_whip_id = atoi(tokens[4].c_str());
-		LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
-		dynamic_cast<Whip*>(((Simon*)obj)->weapons[gameType::WHIP])->SetAnimationSet(ani_set_whip);
-	}
 	if (object_type != gameType::BRICK) 
 		obj->SetAnimationSet(ani_set);
-	if (isHidenObject == true)
-		listHidenObjects.push_back(obj);
-	else
-		objects.push_back(obj);
+	if (obj != NULL && object_type != gameType::SIMON) {
+		obj->cellID = numGrid;
+		grid->addObjectToCell(numGrid, obj);
+	}
 }
 
 Item * CPlayScene::getNewItem(int id, float x, float y)
@@ -506,6 +499,7 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 
 void CPlayScene::Load(bool isNextScreen_Stair)
 {
+	
 	sceneFilePath = game->getScenes()[game->GetCurrentSceneId()]->getPath();
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
@@ -591,7 +585,8 @@ void CPlayScene::Update(DWORD dt)
 		if (GetTickCount() - player->timeEatItem < SIMON_EATTING_TIME) {
 			return;
 		}
-		else {			Whip * whip = dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
+		else {			
+			Whip * whip = dynamic_cast<Whip*>(player->weapons[gameType::WHIP]);
 			whip->animation_set->at(whip->getAniID())->setLopping(false);
 			player->animation_set->at(player->prevAni)->setLopping(false);
 			if (!player->isAttact || !player->isJump) {
@@ -599,6 +594,10 @@ void CPlayScene::Update(DWORD dt)
 			}
 			player->isEatItem = false;
 		}		
+	}
+	else {
+		objects.clear();
+		grid->getObjectFromGrid(objects, game->cam_x, game->cam_y);
 	}
 	//process update sau hki ăn item (đóng băng thời gian)
 	if (player->isRenderLopping) {
@@ -679,16 +678,16 @@ void CPlayScene::Update(DWORD dt)
 
 	//update objects tĩnh
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
 	}
 
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-	objects[0]->Update(dt, &coObjects);
+	player->Update(dt, &coObjects);
 	//update items
 	for (size_t i = 0; i < listItems.size(); i++)
 	{
@@ -710,8 +709,8 @@ void CPlayScene::Update(DWORD dt)
 			auto *torch = dynamic_cast<CTorch*>(objects.at(i));
 			if (torch->isFinish) {
 				listItems.push_back(getNewItem(torch->itemID, torch->x, torch->y));
-				objects.erase(objects.begin() + i);
-				delete torch;
+				
+				grid->deleteObject(torch->cellID, torch);
 			}
 		}
 	}
@@ -728,12 +727,10 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->drawMap();
-	for (int i = 1; i < objects.size(); i++)//render objects
+	for (int i = 0; i < objects.size(); i++)//render objects
 		objects[i]->Render();
 	for (int i = 0; i < listItems.size(); i++)// render items
 		listItems[i]->Render();
-	for (int i = 0; i < listHidenObjects.size(); i++)// render hiden
-		listHidenObjects[i]->Render();
 	player->Render();
 }
 
@@ -742,7 +739,6 @@ void CPlayScene::Unload()
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	listItems.clear();
-	listHidenObjects.clear();
 	objects.clear();
 	player = NULL;
 }

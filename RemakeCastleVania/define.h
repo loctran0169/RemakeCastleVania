@@ -171,7 +171,8 @@ enum gameType
 	DISABLE_JUMP = 55, // không cho jump
 	GO_UP_STAIR = 56, //đi lên cầu thang
 	GO_DOWN_STAIR = 57, // đi xuống cầu thang
-	SKATEBOARD = 58
+	SKATEBOARD = 58, // thanh trược
+	CANDLE = 59 //cây nến
 };
 
 //effect

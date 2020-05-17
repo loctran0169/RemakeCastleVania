@@ -259,28 +259,33 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
-#type	x	y	ani_set_id	ani_whip
-50	1470	242	50	11
-#50	200	0	50	11
+#grid	type	x	y	ani_set_id	ani_whip
+0	50	1470	242	50	11
+#0	50	200	0	50	11
 # BRICK 
 #type	x	y	ani_set_id	number_object	ngang/thẳng(0/1)
-51	256	370	0	34	0
-51	1344	338	0	6	0
-51	1472	210	0	6	0
-51	608	274	0	1	0
-51	832	274	0	2	0
-51	128	338	0	4	0
-51	64	274	0	2	0
-51	192	210	0	6	0
-51	32	50	0	11	1
-51	1504	242	0	3	1
+1	51	256	370	0	8	0
+2	51	512	370	0	8	0
+3	51	768	370	0	8	0
+4	51	1024	370	0	8	0
+5	51	1280	370	0	2	0
+5	51	1344	338	0	6	0
+5	51	1472	210	0	6	0
+2	51	608	274	0	1	0
+3	51	832	274	0	2	0
+0	51	128	338	0	4	0
+0	51	64	274	0	2	0
+0	51	192	210	0	4	0
+1	51	320	210	0	2	0
+0	51	32	50	0	11	1
+5	51	1504	242	0	3	1
 #Disable Jump
-55	608	306	0	640	402
-55	832	306	0	896	402
+2	55	608	306	0	640	402
+3	55	832	306	0	896	402
 #stair up
 #type	x	y	ani_set_id	r	b	nx
-56	286	198	0	336	210	-1
+1	56	286	198	0	336	210	-1
 # --- SCENE PORTAL ----
-# type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
-53	160	0	0	192	20	5	1	160	322	-1	-1
+# grid	type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
+0	53	160	0	0	192	20	5	1	160	322	-1	-1
 #54	0	100	0	500	338	1

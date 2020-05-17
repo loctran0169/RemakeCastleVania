@@ -45,6 +45,7 @@ class CGameObject
 {
 public:
 	int itemID;
+	int cellID;
 
 	float x;
 	float y;
