@@ -83,6 +83,9 @@
 30002	192	0	224	64	3
 # skate board
 30003	0	0	64	16	5
+# CANDLE
+30004	224	0	240	32	3
+30005	240	0	256	32	3
 #EFFECT
 40001	224	32	256	64	3
 40002	256	32	288	64	3
@@ -190,6 +193,8 @@
 701	30001	100	30002	100
 # skate board
 702	30003	100
+# candle
+703	30004	100	30005	100
 # TORCH - Effect
 801	40001	100	40002	100	40003	100
 #whip lv1 right
@@ -255,6 +260,8 @@
 15	2003	2004
 #skate board
 58	702
+# candle
+59	703	801
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # grid	type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
@@ -284,6 +291,18 @@
 5	51	1408	242	0	2	0
 5	51	1472	274	0	2	0
 5	51	1472	146	0	2	0
+# candle
+#grid	type	x	y	ani_set_id	id_item
+0	59	312	146	59	7
+1	59	440	274	59	7
+2	59	568	274	59	7
+2	59	696	274	59	7
+3	59	824	210	59	7
+3	59	952	306	59	7
+4	59	1080	306	59	7
+4	59	1208	274	59	7
+4	59	1336	274	59	7
+4	59	1464	178	59	7
 #stair up
 #grid	type	x	y	ani_set_id	r	b	nx
 0	56	114	326	0	160	338	1

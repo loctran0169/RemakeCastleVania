@@ -17,7 +17,7 @@
 #include"DataNextScreen.h"
 #include"DataScreen.h"
 #include"Grid.h"
-
+#include"Candle.h"
 class Simon;
 class CPlayScene : public CScene
 {

@@ -40,6 +40,14 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 							}
 							break;
 						}
+						case gameType::CANDLE: {
+							gameObj->isHitted = true;
+							if (weapon.second->getType() == gameType::DAGGER) {
+								player->weapons[gameType::DAGGER]->SetAttack(false);
+								DebugOut(L"exits attack dagger \n");
+							}
+							break;
+						}
 						case gameType::BRICK: {
 							// mấy cục đá đánh rớt item
 							break;
@@ -324,7 +332,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 	int numGrid = atoi(tokens[0].c_str());
 	int object_type = atoi(tokens[1].c_str());
-	//DebugOut(L"id objects %d \n", object_type);
+
 	float x = atof(tokens[2].c_str());
 	float y = atof(tokens[3].c_str());
 
@@ -388,6 +396,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		else
 			dynamic_cast<CPortal*>((CPortal*)obj)->isStair = false;
+		break;
+	}
+	case gameType::CANDLE: {
+		int itemId = atoi(tokens[5].c_str());
+		obj = new CCandle();
+		obj->setItemID(itemId);
 		break;
 	}
 	case gameType::CHECK_AUTO_GO:{
@@ -707,8 +721,14 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CTorch *>(objects.at(i))) {
 			auto *torch = dynamic_cast<CTorch*>(objects.at(i));
 			if (torch->isFinish) {
+				listItems.push_back(getNewItem(torch->itemID, torch->x, torch->y));			
+				grid->deleteObject(torch->cellID, torch);
+			}
+		}
+		else if (dynamic_cast<CCandle *>(objects.at(i))) {
+			auto *torch = dynamic_cast<CCandle*>(objects.at(i));
+			if (torch->isFinish) {
 				listItems.push_back(getNewItem(torch->itemID, torch->x, torch->y));
-				
 				grid->deleteObject(torch->cellID, torch);
 			}
 		}

@@ -2,6 +2,11 @@
 #include"GameObject.h"
 #include"Sprites.h"
 #include"define.h"
+
+//Torch
+#define CANDLE_BBOX_WIDGHT							16
+#define CANDLE_BBOX_HEIGHT							32
+
 class CCandle :public CGameObject
 {
 public:
