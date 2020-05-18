@@ -172,7 +172,17 @@ enum gameType
 	GO_UP_STAIR = 56, //đi lên cầu thang
 	GO_DOWN_STAIR = 57, // đi xuống cầu thang
 	SKATEBOARD = 58, // thanh trược
-	CANDLE = 59 //cây nến
+	CANDLE = 59, //cây nến
+
+	//monster
+	WARRIOR = 100, // chiến binh thép
+	BAT = 101,	//đơi xéo -> thẳng
+	MONKEY = 102, // khỉ
+	BONE = 103, // quái xương
+	GHOST_FLY = 104, //ma bay
+	GHOST_WALK = 105, //ma đi bộ
+	BIRD = 106, // quạ đen
+	BOSS_BAT = 107 //BOSS bat
 };
 
 //effect

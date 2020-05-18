@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="FrameWork">
       <UniqueIdentifier>{c281c5c0-354d-413c-abab-e209eea1c9e2}</UniqueIdentifier>
     </Filter>
@@ -54,6 +50,13 @@
     </Filter>
     <Filter Include="FrameWork\Data">
       <UniqueIdentifier>{d15c884c-09d3-4da1-8b4a-23ae43e82b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\GameObjects\monters">
+      <UniqueIdentifier>{45a00298-aa12-49ad-9cda-800c338d1b78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\GameObjects\monters\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +144,33 @@
     <ClCompile Include="Grid.cpp">
       <Filter>FrameWork\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Monter.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="Warrior.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="Bird.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackBat.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBat.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostFly.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostWalk.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="Monkey.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
+    <ClCompile Include="Bone.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -223,6 +253,33 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>FrameWork\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Monter.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="Warrior.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="Bird.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackBat.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="Bone.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBat.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostFly.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostWalk.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="Monkey.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

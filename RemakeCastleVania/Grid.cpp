@@ -15,7 +15,6 @@ void CGrid::deleteObject(int cellId, LPGAMEOBJECT object)
 			cells[cellId]->objects.erase(cells[cellId]->objects.begin()+i);
 		}
 	}
-	DebugOut(L"\n");
 }
 
 void CGrid::addObjectToCell(int idCell, LPGAMEOBJECT object)

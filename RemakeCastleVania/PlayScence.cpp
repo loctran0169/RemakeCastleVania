@@ -33,7 +33,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 						switch (gameObj->getType())
 						{
 						case gameType::TORCH: {
-							DebugOut(L"Va chạm torch\n");
 							gameObj->isHitted = true;
 							if (weapon.second->getType() == gameType::DAGGER) {
 								player->weapons[gameType::DAGGER]->SetAttack(false);

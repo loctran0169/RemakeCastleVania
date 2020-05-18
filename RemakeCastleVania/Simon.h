@@ -13,6 +13,8 @@
 
 class Simon : public CGameObject
 {
+private:
+	static Simon* __instance;
 public:
 	CGame *game;
 	int level;
@@ -76,6 +78,7 @@ public:
 	void goUpStair();
 	void goDownStair();
 
+	static Simon* GetInstance();
 	void setEatItem(bool b) { isEatItem = b; }
 	bool getEatItem() { return isEatItem; }
 	void SetState(int state);

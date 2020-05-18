@@ -1,6 +1,14 @@
 ﻿#include "Simon.h"
 #include"Textures.h"
 
+Simon* Simon::__instance = NULL;
+
+Simon* Simon::GetInstance()
+{
+	if (__instance == NULL) __instance = new Simon();
+	return __instance;
+}
+
 Simon::Simon() : CGameObject()
 {
 	game = CGame::GetInstance();

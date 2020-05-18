@@ -34,13 +34,13 @@ void CWaterFire::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjec
 	}
 	else
 	{
-		DebugOut(L"water chạm gạch \n");
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		y -= (WATERFIRE_BBOX_HEIGHT - WATERFIRE_WATER_BBOX_HEIGHT);
+		if(ny==-1)
+			y -= (WATERFIRE_BBOX_HEIGHT - WATERFIRE_WATER_BBOX_HEIGHT);
 
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
@@ -63,8 +63,8 @@ void CWaterFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (isWater) {
 			vy += WATERFIRE_SPEED_GRAVITY * dt;
 			CGameObject::Update(dt, coObjects); // cập nhật thời gian, vận tốc
-			x += dx;
-			y += dy;
+			/*x += dx;
+			y += dy;*/
 
 			checkCollisonWithBricks(dt, coObjects);// xét va chạm gạch thì nổ lửa
 		}
