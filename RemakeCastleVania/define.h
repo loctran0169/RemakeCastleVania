@@ -173,6 +173,8 @@ enum gameType
 	GO_DOWN_STAIR = 57, // đi xuống cầu thang
 	SKATEBOARD = 58, // thanh trược
 	CANDLE = 59, //cây nến
+	BRICKBLACK_1 = 60, //BRICK nổ 1
+	BRICKBLACK_2 = 61, // Brick nổ 2
 
 	//monster
 	WARRIOR = 100, // chiến binh thép

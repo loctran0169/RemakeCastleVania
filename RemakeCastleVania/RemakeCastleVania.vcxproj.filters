@@ -58,6 +58,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="FrameWork\GameObjects\effects">
+      <UniqueIdentifier>{e8d60ee4-b647-453d-aaa7-c8a10f8adc44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -171,6 +174,9 @@
     <ClCompile Include="Bone.cpp">
       <Filter>FrameWork\GameObjects\monters</Filter>
     </ClCompile>
+    <ClCompile Include="BrickBlack.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -280,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="Monkey.h">
       <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickBlack.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

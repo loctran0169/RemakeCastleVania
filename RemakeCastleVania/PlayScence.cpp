@@ -9,6 +9,8 @@
 
 using namespace std;
 
+Simon* CPlayScene::player = NULL;
+
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
@@ -48,8 +50,18 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 							}
 							break;
 						}
-						case gameType::BRICK: {
-							// mấy cục đá đánh rớt item
+						case gameType::BRICKBLACK_1: {
+							if (weapon.second->getType() == gameType::WHIP) {
+								auto brick = dynamic_cast<CBrickBlack*>(gameObj);
+								brick->beAttack();
+							}
+							break;
+						}
+						case gameType::BRICKBLACK_2: {
+							if (weapon.second->getType() == gameType::WHIP) {
+								auto brick = dynamic_cast<CBrickBlack*>(gameObj);
+								brick->beAttack();
+							}
 							break;
 						}
 						default:
@@ -152,7 +164,7 @@ void CPlayScene::checkCollisonWithHideObj()
 			case gameType::PORTAL: {
 				if (player->isAutoGoWithJump)break;
 				CPortal *p = dynamic_cast<CPortal *>(objects[i]);
-				DebugOut(L"collision portal \n");
+				player->isAutoGo = false;
 				if (!player->isAutoGoWithJump) {
 					DebugOut(L"[INFO] Switching to scene %d \n", p->GetSceneId());
 					CGame::GetInstance()->SwitchScene(p->GetSceneId(), p->isStair);
@@ -182,7 +194,7 @@ void CPlayScene::checkCollisonWithHideObj()
 				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				float l, t, r, b;
 				p->GetBoundingBox(l, t, r, b);
-				DebugOut(L"chạm stair \n");
+
 				isOnUpStair = true;
 				player->nxCheckStairUp = p->nx;
 				player->xStairUp = l + ((p->nx < 0) ? SIMON_BBOX_WIDTH / 2.0f : 0);
@@ -348,10 +360,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] Simon object was created before! ");
+			player->SetPosition(x, y);
+
+			for (auto&weapon : player->weapons) {
+				LPANIMATION_SET ani_weapon = animation_sets->Get(weapon.second->getType());
+				player->weapons[weapon.second->getType()]->SetAnimationSet(ani_weapon);
+			}
+
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			player->SetAnimationSet(ani_set);
 			return;
 		}
 		DebugOut(L"[ERROR] Đã tạo simon \n");
-		obj = new Simon();
+		obj = Simon::GetInstance();
 		player = (Simon*)obj;
 		int ani_set_whip_id = atoi(tokens[5].c_str());
 		LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
@@ -441,6 +462,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CSkateBoard(bL,bR);
 		break;
 	}
+	case gameType::BRICKBLACK_1: {
+		int isDelete = atoi(tokens[5].c_str());
+		obj = new CBrickBlack(gameType::BRICKBLACK_1,isDelete);
+		break;
+	}
+	case gameType::BRICKBLACK_2: {
+		int isDelete = atoi(tokens[5].c_str());
+		obj = new CBrickBlack(gameType::BRICKBLACK_2, isDelete);
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -448,9 +479,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
-	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-	if (object_type != gameType::BRICK) 
+	
+	if (ani_set_id != 0) {
+		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
+	}
 	if (obj != NULL && object_type != gameType::SIMON) {
 		obj->cellID = numGrid;
 		grid->addObjectToCell(numGrid, obj);
@@ -732,6 +765,12 @@ void CPlayScene::Update(DWORD dt)
 				grid->deleteObject(torch->cellID, torch);
 			}
 		}
+		else if (dynamic_cast<CBrickBlack *>(objects.at(i))) {
+			auto *brick = dynamic_cast<CBrickBlack *>(objects.at(i));
+			if (brick->isFinish) {
+				grid->deleteObject(brick->cellID, brick);
+			}
+		}
 	}
 	//update xóa item
 	for (int i = 0; i < listItems.size(); i++) {
@@ -759,14 +798,14 @@ void CPlayScene::Unload()
 		delete objects[i];
 	listItems.clear();
 	objects.clear();
-	player = NULL;
+	//player = NULL;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo) return;
 	switch (KeyCode)
 	{
 	case DIK_S:

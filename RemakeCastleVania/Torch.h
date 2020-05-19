@@ -5,8 +5,6 @@
 class CTorch :public CGameObject
 {
 public:
-	bool isFinish = false;
-	
 	CTorch() :CGameObject() {
 		CGameObject::type = gameType::TORCH;
 	}

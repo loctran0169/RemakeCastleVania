@@ -86,6 +86,18 @@
 # CANDLE
 30004	224	0	240	32	3
 30005	240	0	256	32	3
+# black box 1
+30006	288	96	320	128	3
+# black box 2
+30007	224	64	256	128	3
+# brick 1 white
+#30008	0	96	32	128	3
+# brick 1 blue
+30008	32	96	64	128	3
+# brick 2 two brick
+30009	192	64	224	128	3
+# brick 2 one brick
+30010	256	64	288	128	3
 #EFFECT
 40001	224	32	256	64	3
 40002	256	32	288	64	3
@@ -195,6 +207,13 @@
 702	30003	100
 # candle
 703	30004	100	30005	100
+# brick 1
+704	30008	100
+705	30006	100
+# brick 2
+706	30009	100
+707	30010	100
+708	30007	100
 # TORCH - Effect
 801	40001	100	40002	100	40003	100
 #whip lv1 right
@@ -262,6 +281,10 @@
 58	702
 # candle
 59	703	801
+# brick 1
+60	704	705
+# brick 2
+61	706	707	708
 [OBJECTS]
 # grid type	x	y	ani_set_id	extra_settings per object type
 # Simon 
@@ -269,7 +292,7 @@
 0	50	35	306	50	11
 #50	400	100	50	11
 # BRICK 
-#grid	type	x	y	ani_set_id	number_object
+#grid	type	x	y	ani_set_id	number_object	isThang
 0	51	0	50	0	3	1
 0	51	32	146	0	1	0
 0	51	64	178	0	6	0
@@ -287,8 +310,11 @@
 0	59	160	242	59	7
 0	59	400	242	59	7
 1	59	280	50	59	7
+# brick 2
+#grid	type	x	y	ani_set_id	isDelete(0/1)(k/co)
+1	61	448	178	61	1
 #Disable jump
-1	55	448	178	0	480	242
+1	55	450	178	0	480	242
 #stair up
 #type	x	y	ani_set_id	r	b	nx
 0	56	210	360	0	256	370	1

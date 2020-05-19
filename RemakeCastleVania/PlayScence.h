@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include"HidenObject.h"
 #include "Brick.h"
+#include"BrickBlack.h"
 #include"Item.h"
 #include "Simon.h"
 #include "Map.h"
@@ -22,7 +23,8 @@ class Simon;
 class CPlayScene : public CScene
 {
 protected:
-	Simon *player;					// A play scene has to have player, right? 
+	//Simon *player;					// A play scene has to have player, right? 
+	static Simon* player;
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
 	vector<Item*> listItems;

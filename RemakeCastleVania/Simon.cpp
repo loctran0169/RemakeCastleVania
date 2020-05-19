@@ -23,7 +23,7 @@ Simon::Simon() : CGameObject()
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
-
+	DebugOut(L"isAutoGo %d \n", isAutoGo);
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
@@ -308,7 +308,9 @@ bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	listBricks.clear();
 
 	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
-		if (coObjects->at(i)->getType() == gameType::BRICK)
+		if (coObjects->at(i)->getType() == gameType::BRICK||
+			(coObjects->at(i)->getType() == gameType::BRICKBLACK_1 && !coObjects->at(i)->isFinish)||
+			(coObjects->at(i)->getType() == gameType::BRICKBLACK_2 && !coObjects->at(i)->isFinish))
 			listBricks.push_back(coObjects->at(i));
 
 	// kiểm ra va chạm với Brick

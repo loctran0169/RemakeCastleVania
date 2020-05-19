@@ -63,6 +63,7 @@ public:
 	gameType type;//kiểu objects
 
 	bool isHitted = false; //bị đánh
+	bool isFinish = false; //kết thúc vòng đời
 	DWORD timeBeAttacked;  // thời gian lúc bị đánh
 
 	DWORD dt;

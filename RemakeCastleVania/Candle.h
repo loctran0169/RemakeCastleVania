@@ -10,8 +10,6 @@
 class CCandle :public CGameObject
 {
 public:
-	bool isFinish = false;
-
 	CCandle() :CGameObject() {
 		CGameObject::type = gameType::CANDLE;
 	}
