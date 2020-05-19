@@ -309,8 +309,8 @@ bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách brick
 		if (coObjects->at(i)->getType() == gameType::BRICK||
-			(coObjects->at(i)->getType() == gameType::BRICKBLACK_1 && !coObjects->at(i)->isFinish)||
-			(coObjects->at(i)->getType() == gameType::BRICKBLACK_2 && !coObjects->at(i)->isFinish))
+			(coObjects->at(i)->getType() == gameType::BRICKBLACK_1 && !coObjects->at(i)->isHitted)||
+			(coObjects->at(i)->getType() == gameType::BRICKBLACK_2 && !coObjects->at(i)->isHitted))
 			listBricks.push_back(coObjects->at(i));
 
 	// kiểm ra va chạm với Brick

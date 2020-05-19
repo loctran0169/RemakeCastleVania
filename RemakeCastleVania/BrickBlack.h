@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Utils.h"
 
@@ -8,11 +8,11 @@
 #define BRICKBLACK_2_BBOX_WIDTH  32
 #define BRICKBLACK_2_BBOX_HEIGHT 64
 
-class CBrickBlack : public CGameObject
+class CBrickBlack : public CGameObject // gạch nổ
 {
-	DWORD lastTimeBeAttack = 0;
-	int countCollision = 0;
-	bool isDelete = false;
+	DWORD lastTimeBeAttack = 0;//thời gian bị đánh cuối cùng
+	int countCollision = 0; // số lần bị đánh
+	bool isDelete = false; //cho phép xóa khi hết
 public:
 	CBrickBlack(gameType _type,bool _isDelete) :CGameObject() {
 		type = _type;

@@ -11,7 +11,7 @@ void CBrickBlack::Render()
 		if (countCollision < 3)
 			animation_set->at(countCollision)->Render(x, y);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBrickBlack::GetBoundingBox(float & l, float & t, float & r, float & b)
@@ -36,7 +36,10 @@ void CBrickBlack::beAttack()
 		countCollision++;
 	else if (type == gameType::BRICKBLACK_2 && countCollision < 2)
 		countCollision++;
-	if (isDelete && ((type == gameType::BRICKBLACK_1 && countCollision > 0) || (type == gameType::BRICKBLACK_2&& countCollision > 1)))
-		isFinish = true;
+	if (type == gameType::BRICKBLACK_1 && countCollision > 0 || type == gameType::BRICKBLACK_2&& countCollision > 1) {
+		isHitted = true;
+		if(isDelete)
+			isFinish = true;
+	}
 	lastTimeBeAttack = GetTickCount();
 }

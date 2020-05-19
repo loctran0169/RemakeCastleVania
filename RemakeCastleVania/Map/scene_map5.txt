@@ -86,6 +86,18 @@
 # CANDLE
 30004	224	0	240	32	3
 30005	240	0	256	32	3
+# black box 1
+30006	288	96	320	128	3
+# black box 2
+30007	224	64	256	128	3
+# brick 1 white
+#30008	0	96	32	128	3
+# brick 1 blue
+30008	32	96	64	128	3
+# brick 2 two brick
+30009	192	64	224	128	3
+# brick 2 one brick
+30010	256	64	288	128	3
 #EFFECT
 40001	224	32	256	64	3
 40002	256	32	288	64	3
@@ -195,6 +207,13 @@
 702	30003	100
 # candle
 703	30004	100	30005	100
+# brick 1
+704	30008	100
+705	30006	100
+# brick 2
+706	30009	100
+707	30010	100
+708	30007	100
 # TORCH - Effect
 801	40001	100	40002	100	40003	100
 #whip lv1 right
@@ -262,6 +281,10 @@
 58	702
 # candle
 59	703	801
+# brick 1
+60	704	705
+# brick 2
+61	706	707	708
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # grid	type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
