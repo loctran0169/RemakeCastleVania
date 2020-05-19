@@ -143,7 +143,7 @@
 
 enum gameType
 {
-	//item
+	//item0 ->
 	ITEM_KNIFE = 0,
 	ITEM_HEART = 1,
 	ITEM_WHIP = 2,
@@ -154,7 +154,7 @@ enum gameType
 	ITEM_WATER_FIRE = 7,
 	ITEM_AXE = 8,
 
-	//weapon
+	//weapon 10->
 	WEAPON_SPECIAL = 10,
 	WHIP = 11,
 	DAGGER = 12,
@@ -162,7 +162,7 @@ enum gameType
 	BOOMERANG = 14,
 	WATER_FIRE = 15,
 
-	//objects
+	//objects 50->
 	SIMON = 50, // player
 	BRICK = 51, //gạch
 	TORCH = 52, //đuốc
@@ -176,7 +176,7 @@ enum gameType
 	BRICKBLACK_1 = 60, //BRICK nổ 1
 	BRICKBLACK_2 = 61, // Brick nổ 2
 
-	//monster
+	//monster 100->
 	WARRIOR = 100, // chiến binh thép
 	BAT = 101,	//đơi xéo -> thẳng
 	MONKEY = 102, // khỉ
@@ -184,7 +184,11 @@ enum gameType
 	GHOST_FLY = 104, //ma bay
 	GHOST_WALK = 105, //ma đi bộ
 	BIRD = 106, // quạ đen
-	BOSS_BAT = 107 //BOSS bat
+	BOSS_BAT = 107, //BOSS bat
+
+	//effect 200->
+	EFFECT_BRICKBLACK = 200 //mảnh vỡ
+
 };
 
 //effect

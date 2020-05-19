@@ -54,13 +54,25 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 							if (weapon.second->getType() == gameType::WHIP) {
 								auto brick = dynamic_cast<CBrickBlack*>(gameObj);
 								brick->beAttack();
+								if (brick->isEffect) {
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 1));
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 2));
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 3));
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 4));
+								}
 							}
 							break;
 						}
 						case gameType::BRICKBLACK_2: {
 							if (weapon.second->getType() == gameType::WHIP) {
-								auto brick = dynamic_cast<CBrickBlack*>(gameObj);
+								auto brick = dynamic_cast<CBrickBlack*>(gameObj);	
 								brick->beAttack();
+								if (brick->isEffect) {
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 1));
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 2));
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 3));
+									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 4));
+								}												
 							}
 							break;
 						}
@@ -739,6 +751,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		listItems[i]->Update(dt, &coObjects);
 	}
+	for (size_t i = 0; i < listEffect.size(); i++)
+	{
+		listEffect[i]->Update(dt);
+	}
 	// update enemy mà chưa làm
 	//*************************************************************************************************
 
@@ -780,6 +796,14 @@ void CPlayScene::Update(DWORD dt)
 			delete item;
 		}
 	}
+	//update xóa effect
+	for (int i = 0; i < listEffect.size(); i++) {
+		auto *effect = dynamic_cast<CEffectBrickBlack *>(listEffect.at(i));
+		if (effect->isFinish) {
+			listEffect.erase(listEffect.begin() + i);
+			delete effect;
+		}
+	}
 }
 
 void CPlayScene::Render()
@@ -789,6 +813,9 @@ void CPlayScene::Render()
 		objects[i]->Render();
 	for (int i = 0; i < listItems.size(); i++)// render items
 		listItems[i]->Render();
+	DebugOut(L"number effect %d \n", listEffect.size());
+	for (int i = 0; i < listEffect.size(); i++)// render effect
+		listEffect[i]->Render();
 	player->Render();
 }
 
@@ -797,6 +824,7 @@ void CPlayScene::Unload()
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	listItems.clear();
+	listEffect.clear();
 	objects.clear();
 	//player = NULL;
 }

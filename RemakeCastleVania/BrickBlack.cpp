@@ -30,14 +30,20 @@ void CBrickBlack::GetBoundingBox(float & l, float & t, float & r, float & b)
 
 void CBrickBlack::beAttack()
 {
-	if (GetTickCount() - lastTimeBeAttack < SIMON_ATTACT_TIME)return;
+	isEffect = false;
+	if (GetTickCount() - lastTimeBeAttack < SIMON_ATTACT_TIME) {
+		return;
+	}
 
-	if (type == gameType::BRICKBLACK_1 && countCollision < 1)
+	if (type == gameType::BRICKBLACK_1 && countCollision < 1) {
+		isEffect = true;
 		countCollision++;
-	else if (type == gameType::BRICKBLACK_2 && countCollision < 2)
+	}
+	else if (type == gameType::BRICKBLACK_2 && countCollision < 2) {
+		isEffect = true;
 		countCollision++;
+	}
 	if (type == gameType::BRICKBLACK_1 && countCollision > 0 || type == gameType::BRICKBLACK_2&& countCollision > 1) {
-		isHitted = true;
 		if(isDelete)
 			isFinish = true;
 	}

@@ -6,6 +6,7 @@
 3	textures\\items\\item.png	255	0	255
 4	textures\\items\\weapon.png	255	0	255
 5	textures\\slider.png	255	0	255
+6	textures\\effect\\broken.png	255	0	255
 -100	textures\\bbox.png	255	0	255
 # map
 [MAPTXT]
@@ -99,6 +100,8 @@
 30009	192	64	224	128	3
 # brick 2 one brick
 30010	256	64	288	128	3
+# broken brick
+30011	0	0	36	23	6
 #EFFECT
 40001	224	32	256	64	3
 40002	256	32	288	64	3
@@ -215,6 +218,8 @@
 706	30009	100
 707	30010	100
 708	30007	100
+# broken brick
+709	30011	100
 # TORCH - Effect
 801	40001	100	40002	100	40003	100
 #whip lv1 right
@@ -286,6 +291,8 @@
 60	704	705
 # brick 2
 61	706	707	708
+# broken brick
+200	709
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas

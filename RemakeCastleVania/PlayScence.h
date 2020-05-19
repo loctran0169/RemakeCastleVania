@@ -19,6 +19,8 @@
 #include"DataScreen.h"
 #include"Grid.h"
 #include"Candle.h"
+#include"EffectBrickBlack.h"
+
 class Simon;
 class CPlayScene : public CScene
 {
@@ -27,6 +29,7 @@ protected:
 	static Simon* player;
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> listEffect;
 	vector<Item*> listItems;
 
 	void _ParseSection_TEXTURES(string line);

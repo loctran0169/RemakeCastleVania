@@ -139,6 +139,7 @@
     <ClCompile Include="DataNextScreen.cpp" />
     <ClCompile Include="DataScreen.cpp" />
     <ClCompile Include="define.h" />
+    <ClCompile Include="EffectBrickBlack.cpp" />
     <ClCompile Include="GhostFly.cpp" />
     <ClCompile Include="GhostWalk.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Candle.h" />
     <ClInclude Include="DataNextScreen.h" />
     <ClInclude Include="DataScreen.h" />
+    <ClInclude Include="EffectBrickBlack.h" />
     <ClInclude Include="GhostFly.h" />
     <ClInclude Include="GhostWalk.h" />
     <ClInclude Include="Grid.h" />

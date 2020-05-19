@@ -14,6 +14,7 @@ class CBrickBlack : public CGameObject // gạch nổ
 	int countCollision = 0; // số lần bị đánh
 	bool isDelete = false; //cho phép xóa khi hết
 public:
+	bool isEffect = false;
 	CBrickBlack(gameType _type,bool _isDelete) :CGameObject() {
 		type = _type;
 		isDelete = _isDelete;

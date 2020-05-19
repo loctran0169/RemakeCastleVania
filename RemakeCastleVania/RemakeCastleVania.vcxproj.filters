@@ -177,6 +177,9 @@
     <ClCompile Include="BrickBlack.cpp">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClCompile>
+    <ClCompile Include="EffectBrickBlack.cpp">
+      <Filter>FrameWork\GameObjects\effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="BrickBlack.h">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectBrickBlack.h">
+      <Filter>FrameWork\GameObjects\effects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
