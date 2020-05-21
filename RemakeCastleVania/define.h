@@ -161,7 +161,7 @@ enum gameType
 	AXE = 13,
 	BOOMERANG = 14,
 	WATER_FIRE = 15,
-
+	BONE_WEAPON = 16,
 	//objects 50->
 	SIMON = 50, // player
 	BRICK = 51, //gạch

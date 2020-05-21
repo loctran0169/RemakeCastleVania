@@ -7,6 +7,7 @@
 #include"Utils.h"
 #include"Weapon.h"
 #include"Brick.h"
+#include"BrickBlack.h"
 #include <algorithm>
 
 #define WATERFIRE_ATTACK_TIME	1500

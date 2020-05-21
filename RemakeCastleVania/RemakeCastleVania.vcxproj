@@ -136,6 +136,7 @@
     <ClCompile Include="BrickBlack.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="Zone.cpp" />
     <ClCompile Include="DataNextScreen.cpp" />
     <ClCompile Include="DataScreen.cpp" />
     <ClCompile Include="define.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickBlack.h" />
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="Zone.h" />
     <ClInclude Include="DataNextScreen.h" />
     <ClInclude Include="DataScreen.h" />
     <ClInclude Include="EffectBrickBlack.h" />

@@ -4,12 +4,14 @@
 #include"Sprites.h"
 #include"define.h"
 #include"Utils.h"
+
 class CMonter : public CGameObject
 {
+public:
 	bool isDead = false;
 public:
 	CMonter() :CGameObject() {
-
+		
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();

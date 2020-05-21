@@ -6,6 +6,7 @@
 3	textures\\items\\item.png	255	0	255
 4	textures\\items\\weapon.png	255	0	255
 6	textures\\effect\\broken.png	255	0	255
+7	textures\\enemy\\enemy.png	0	128	0
 -100	textures\\bbox.png	255	0	255
 # map
 [MAPTXT]
@@ -153,6 +154,40 @@
 90001	274	0	294	20	4
 90002	300	0	332	30	4
 90003	332	0	364	30	4
+#==== Enemy
+# warrior
+11001	798	56	830	120	7
+11002	832	56	864	120	7
+11003	867	56	899	120	7
+# bat black
+11004	474	22	506	54	7
+11005	508	22	540	54	7
+11006	542	22	574	54	7
+11007	576	22	608	54	7
+# bird
+11008	554	150	586	182	7
+11009	588	150	620	182	7
+11010	622	150	654	182	7
+11011	656	150	688	182	7
+# bone
+11012	698	150	730	214	7
+11013	732	150	764	214	7
+11014	766	150	782	182	7
+11015	784	150	816	182	7
+11016	818	150	850	182	7
+# boss bat
+11017	114	22	146	54	7
+11018	148	22	244	66	7
+11019	246	22	310	68	7
+# ghost fly
+11020	2	150	34	182	7
+11021	36	150	68	182	7
+# ghost walk
+11022	2	56	34	120	7
+11023	36	56	68	120	7
+# monkey
+11024	400	150	432	182	7
+11025	434	150	466	182	7
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ==== SIMON =========
@@ -217,10 +252,10 @@
 706	30009	100
 707	30010	100
 708	30007	100
-# broken brick
-709	30011	100
 # TORCH - Effect
 801	40001	100	40002	100	40003	100
+# broken brick - effect
+802	30011	100
 #whip lv1 right
 901	50001	130	50002	130	50003	130
 #whip lv2 right
@@ -260,6 +295,29 @@
 # weapon water fire
 2003	90001	100
 2004	90002	100	90003	100
+## enemy
+# warrior
+301	11001	100	11002	100	11003	100
+# bat black
+302	11004	100
+303	11005	100	11006	100	11007	100
+# bird
+304	11008	100
+305	11009	100	11010	100	11011	100
+# bone
+306	11012	100	11013	100
+307	11013	100
+308	11014	100	11015	100	11016	100
+# boss bat
+309	11017	100
+310	11018	100	11019	100
+# ghost fly
+311	11020	10	11021	100
+# ghost walk
+312	11022	100	11023	100
+# monkey
+313	11024	100	11025	100
+314	11025	100
 #
 #
 # id	ani1	ani2	ani3
@@ -282,6 +340,8 @@
 14	2002
 # water fire
 15	2003	2004
+# bone weapon
+16	308
 #skate board
 58	702
 # candle
@@ -291,7 +351,24 @@
 # brick 2
 61	706	707	708
 # broken brick
-200	709
+200	802
+## enemy
+#warrior
+100	301
+#bat black
+101	302	303
+#monkey
+102	313	314
+#bone
+103	306	307
+# ghost fly
+104	311
+# ghost walk
+105	312
+# bird
+106	304	305
+# boss bat
+107	309	310
 [OBJECTS]
 # grid type	x	y	ani_set_id	extra_settings per object type
 # Simon 
@@ -323,12 +400,15 @@
 #Disable jump
 1	55	450	178	0	480	242
 #stair up
-#type	x	y	ani_set_id	r	b	nx
+#grid	type	x	y	ani_set_id	r	b	nx
 0	56	210	360	0	256	370	1
 0	56	146	166	0	192	178	1
-#stair down
-#type	x	y	ani_set_id	r	b	nx
+# stair down
+#grid	type	x	y	ani_set_id	r	b	nx
 1	57	338	178	0	368	190	-1
+#warrior
+#grid	type	x	y	ani	l	t	r	b	boundl	boundr
+1	100	208	114	100	80	114	448	170	80	320
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 1	53	256	0	0	288	20	3	1	770	320	1	-1

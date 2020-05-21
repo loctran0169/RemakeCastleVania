@@ -20,13 +20,13 @@
 #include"Grid.h"
 #include"Candle.h"
 #include"EffectBrickBlack.h"
-
+#include"Warrior.h"
 class Simon;
 class CPlayScene : public CScene
 {
-protected:
-	//Simon *player;					// A play scene has to have player, right? 
-	static Simon* player;
+protected:			
+
+	static Simon* player; // A play scene has to have player, right? 
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listEffect;

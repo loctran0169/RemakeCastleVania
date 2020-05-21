@@ -2,12 +2,32 @@
 
 void CWarrior::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	zone->Update(dt);
+	if (zone->isCollitionSimon) {
+		if (x > zone->simon->x)
+			nx = -1;
+		else
+			nx = 1;
 
+		if (x + WARRIOR_BBOX_WIDTH >= boundLeft)
+			nx = -1;
+		else if (x <= zone->x)
+			nx = 1;
+	}
+	else {
+		if (x + WARRIOR_BBOX_WIDTH >= boundLeft)
+			nx = -1;
+		else if (x <= zone->x)
+			nx = 1;
+	}
+	vx = WARRIOR_SPEED_X * nx;
+	CGameObject::Update(dt);
+	x += dx;
 }
 
 void CWarrior::Render()
 {
-	animation_set->at(0)->Render(x, y, nx);
+	animation_set->at(0)->Render(x, y, -nx);
 	//RenderBoundingBox();
 }
 

@@ -9,7 +9,6 @@
 #include"Torch.h"
 #include"Portal.h"
 #include"Map.h"
-#include"PlayScence.h"
 
 class Simon : public CGameObject
 {

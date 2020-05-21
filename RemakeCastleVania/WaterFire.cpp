@@ -5,8 +5,14 @@ void CWaterFire::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<CBrick *>(coObjects->at(i)))
-		{
+		if (dynamic_cast<CBrick *>(coObjects->at(i))){
+			LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
+
+			if (e->t > 0 && e->t <= 1.0f)
+				coEvents.push_back(e);
+			else
+				delete e;
+		}else if (dynamic_cast<CBrickBlack *>(coObjects->at(i)) && !coObjects->at(i)->isHitted){
 			LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
 			if (e->t > 0 && e->t <= 1.0f)

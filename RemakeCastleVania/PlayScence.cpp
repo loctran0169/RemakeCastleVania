@@ -38,7 +38,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 							gameObj->isHitted = true;
 							if (weapon.second->getType() == gameType::DAGGER) {
 								player->weapons[gameType::DAGGER]->SetAttack(false);
-								DebugOut(L"exits attack dagger \n");
 							}
 							break;
 						}
@@ -46,7 +45,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 							gameObj->isHitted = true;
 							if (weapon.second->getType() == gameType::DAGGER) {
 								player->weapons[gameType::DAGGER]->SetAttack(false);
-								DebugOut(L"exits attack dagger \n");
 							}
 							break;
 						}
@@ -311,7 +309,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 
 	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
 
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+	//DebugOut(L"--> %d \n", atoi(tokens[0].c_str()));
 
 	LPANIMATION ani = new CAnimation();
 
@@ -482,6 +480,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case gameType::BRICKBLACK_2: {
 		int isDelete = atoi(tokens[5].c_str());
 		obj = new CBrickBlack(gameType::BRICKBLACK_2, isDelete);
+		break;
+	}
+	case gameType::WARRIOR: {
+		int l = atof(tokens[5].c_str());
+		int t = atof(tokens[6].c_str());
+		int r = atof(tokens[7].c_str());
+		int b = atof(tokens[8].c_str());
+
+		int bl = atof(tokens[9].c_str());
+		int br = atof(tokens[10].c_str());
+		obj = new CWarrior(l, t, r, b);
+		((CWarrior*)obj)->setZoneWalk(bl, br);
 		break;
 	}
 	default:
@@ -813,7 +823,6 @@ void CPlayScene::Render()
 		objects[i]->Render();
 	for (int i = 0; i < listItems.size(); i++)// render items
 		listItems[i]->Render();
-	DebugOut(L"number effect %d \n", listEffect.size());
 	for (int i = 0; i < listEffect.size(); i++)// render effect
 		listEffect[i]->Render();
 	player->Render();
@@ -826,7 +835,6 @@ void CPlayScene::Unload()
 	listItems.clear();
 	listEffect.clear();
 	objects.clear();
-	//player = NULL;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)

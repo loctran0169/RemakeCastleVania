@@ -180,6 +180,9 @@
     <ClCompile Include="EffectBrickBlack.cpp">
       <Filter>FrameWork\GameObjects\effects</Filter>
     </ClCompile>
+    <ClCompile Include="Zone.cpp">
+      <Filter>FrameWork\GameObjects\monters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -295,6 +298,9 @@
     </ClInclude>
     <ClInclude Include="EffectBrickBlack.h">
       <Filter>FrameWork\GameObjects\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zone.h">
+      <Filter>FrameWork\GameObjects\monters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

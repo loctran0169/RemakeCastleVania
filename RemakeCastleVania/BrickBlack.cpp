@@ -44,6 +44,7 @@ void CBrickBlack::beAttack()
 		countCollision++;
 	}
 	if (type == gameType::BRICKBLACK_1 && countCollision > 0 || type == gameType::BRICKBLACK_2&& countCollision > 1) {
+		isHitted = true;
 		if(isDelete)
 			isFinish = true;
 	}
