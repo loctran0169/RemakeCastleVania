@@ -199,7 +199,7 @@ void Simon::Render()
 void Simon::SetState(int state)
 {
 	CGameObject::SetState(state);
-
+	lastTimeChangeState = GetTickCount();
 	switch (state)
 	{
 	case SIMON_STATE_WALKING_RIGHT:

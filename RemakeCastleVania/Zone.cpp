@@ -1,18 +1,19 @@
-#include "Zone.h"
+﻿#include "Zone.h"
 
 
 void CZone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	isCollitionSimon = false;
-	if (isCollitionObjectWithObject(simon)) {
+{	
+	if (this->isCollitionObjectWithObject(simon)) {
 		isCollitionSimon = true;
 		float l, t, r, b;
 		simon->GetBoundingBox(l,t,r,b);
 		if ((l + r) / 2 > (x + right) / 2)
-			isRight = false;
-		else
 			isRight = true;
+		else
+			isRight = false;
 	}
+	else
+		isCollitionSimon = false;
 }
 
 void CZone::Render()

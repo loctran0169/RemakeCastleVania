@@ -410,8 +410,11 @@
 5	59	1336	306	59	7
 5	59	1464	274	59	7
 #stair up
-#type	x	y	ani_set_id	r	b	nx
+#tgrid	type	x	y	ani_set_id	r	b	nx
 1	56	286	198	0	336	210	-1
+# zone ghost fly
+#grid	type	x	y	ani	l	t	r	b	px	yDef
+4	62	1120	274	0	928	242	1536	370	1	290
 # --- SCENE PORTAL ----
 # grid	type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 0	53	160	0	0	192	20	5	1	160	322	-1	-1

@@ -175,6 +175,7 @@ enum gameType
 	CANDLE = 59, //cây nến
 	BRICKBLACK_1 = 60, //BRICK nổ 1
 	BRICKBLACK_2 = 61, // Brick nổ 2
+	ZONE_GHOST_FLY = 62, // khu vực tạo ghost fly
 
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép

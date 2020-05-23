@@ -7,10 +7,15 @@
 #define WARRIOR_BBOX_HEIGHT			64
 
 #define WARRIOR_SPEED_X				0.055f
+
+#define WARRIOR_TIME_WAIT_ATTACK	380
 class CWarrior : public CMonter // chiến binh thép
 {
 private:
-	int boundRight, boundLeft;
+	int health = 3; // máu
+	bool isIdle = false; //đang đứng im hay ko
+	DWORD timeBeAttack = 0; // thời gian cuối bị đánh
+	int boundRight, boundLeft; // vùng di chuyển
 	CZone *zone;
 public:
 	CWarrior(int _zl, int _zt, int _zr, int _zb) :CMonter() {
@@ -22,6 +27,7 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void setZoneWalk(int _right, int _left) { boundLeft = _left; boundRight = _right; }
+	void beAttack();
 	~CWarrior();
 };
 

@@ -74,6 +74,21 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 							}
 							break;
 						}
+						case gameType::BAT: {
+							auto bat = dynamic_cast<CBlackBat*>(gameObj);
+							bat->isHitted = true;
+							break;
+						}
+						case gameType::WARRIOR: {
+							auto warrior = dynamic_cast<CWarrior*>(gameObj);
+							warrior->beAttack();
+							break;
+						}
+						case gameType::GHOST_FLY: {
+							auto ghost = dynamic_cast<CGhostFly*>(gameObj);
+							ghost->beAttack();
+							break;
+						}
 						default:
 							break;
 						}
@@ -197,9 +212,10 @@ void CPlayScene::checkCollisonWithHideObj()
 					player->setValueAutoGo(r - l, 0.0f, SIMON_STATE_IDLE, 1,false);//chưa xử lý trường lợp -1
 				break;
 			}
-			case gameType::DISABLE_JUMP:
+			case gameType::DISABLE_JUMP: {
 				isAllowJump = false;
 				break;
+			}
 			case gameType::GO_UP_STAIR: {
 				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				float l, t, r, b;
@@ -218,6 +234,17 @@ void CPlayScene::checkCollisonWithHideObj()
 				isOnDownStair = true;
 				player->nxCheckStairDown = p->nx;
 				player->xStairDown = l + ((p->nx < 0) ? 2 : -2);
+				break;
+			}
+			case gameType::ZONE_GHOST_FLY: {
+				CZoneGhostFly *zone = dynamic_cast<CZoneGhostFly *>(objects[i]);
+				if (zone->isAllowToCreate) {
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::GHOST_FLY);
+					auto * ghost = zone->createGhostFly();
+					ghost->SetAnimationSet(ani_set);
+					listEnemy.push_back(ghost);
+				}				
 				break;
 			}
 			default:
@@ -352,6 +379,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
+
 	int numGrid = atoi(tokens[0].c_str());
 	int object_type = atoi(tokens[1].c_str());
 
@@ -492,6 +520,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int br = atof(tokens[10].c_str());
 		obj = new CWarrior(l, t, r, b);
 		((CWarrior*)obj)->setZoneWalk(bl, br);
+		break;
+	}
+	case gameType::BAT: {
+		int l = atof(tokens[5].c_str());
+		int t = atof(tokens[6].c_str());
+		int r = atof(tokens[7].c_str());
+		int b = atof(tokens[8].c_str());
+		obj = new CBlackBat(l, t, r, b);
+		break;
+	}
+	case gameType::ZONE_GHOST_FLY: {
+		int l = atof(tokens[5].c_str());
+		int t = atof(tokens[6].c_str());
+		int r = atof(tokens[7].c_str());
+		int b = atof(tokens[8].c_str());
+
+		int px = atof(tokens[9].c_str());
+		int YDefault = atof(tokens[10].c_str());
+		obj = new CZoneGhostFly(l, t, r, b, x, y, px, YDefault);
 		break;
 	}
 	default:
@@ -665,7 +712,8 @@ void CPlayScene::Update(DWORD dt)
 	}
 	else {
 		objects.clear();
-		grid->getObjectFromGrid(objects, game->cam_x, game->cam_y);
+		grid->getObjectFromGrid(objects,listEnemy, game->cam_x, game->cam_y);
+		//listEnemy.insert(listEnemy.end(),listEnemyNotDelete.begin(), listEnemyNotDelete.end());
 	}
 	//process update sau hki ăn item (đóng băng thời gian)
 	if (player->isRenderLopping) {
@@ -761,6 +809,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		listItems[i]->Update(dt, &coObjects);
 	}
+	for (size_t i = 0; i < listEnemy.size(); i++)// update quái
+	{
+		listEnemy[i]->Update(dt, &coObjects);
+	}
 	for (size_t i = 0; i < listEffect.size(); i++)
 	{
 		listEffect[i]->Update(dt);
@@ -806,6 +858,23 @@ void CPlayScene::Update(DWORD dt)
 			delete item;
 		}
 	}
+	//update xóa enemy
+	for (int i = 0; i < objects.size(); i++) {
+		if (objects[i]->isHitted) {
+			if (dynamic_cast<CBlackBat *>(objects.at(i))) {
+				auto *bat = dynamic_cast<CBlackBat*>(objects.at(i));
+				grid->deleteObject(bat->cellID, bat);
+			}
+			else if (dynamic_cast<CWarrior *>(objects.at(i))) {
+				auto *warrior = dynamic_cast<CWarrior*>(objects.at(i));
+				grid->deleteObject(warrior->cellID, warrior);
+			}
+			else if (dynamic_cast<CGhostFly *>(objects.at(i))) {
+				auto *warrior = dynamic_cast<CGhostFly*>(objects.at(i));
+				grid->deleteObject(warrior->cellID, warrior);
+			}
+		}
+	}
 	//update xóa effect
 	for (int i = 0; i < listEffect.size(); i++) {
 		auto *effect = dynamic_cast<CEffectBrickBlack *>(listEffect.at(i));
@@ -821,10 +890,13 @@ void CPlayScene::Render()
 	map->drawMap();
 	for (int i = 0; i < objects.size(); i++)//render objects
 		objects[i]->Render();
+	for (int i = 0; i < listEnemy.size(); i++)// render Enemy
+		listEnemy[i]->Render();
 	for (int i = 0; i < listItems.size(); i++)// render items
 		listItems[i]->Render();
 	for (int i = 0; i < listEffect.size(); i++)// render effect
 		listEffect[i]->Render();
+
 	player->Render();
 }
 

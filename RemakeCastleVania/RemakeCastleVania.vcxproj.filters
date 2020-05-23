@@ -54,12 +54,15 @@
     <Filter Include="FrameWork\GameObjects\monters">
       <UniqueIdentifier>{45a00298-aa12-49ad-9cda-800c338d1b78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FrameWork\GameObjects\monters\Resource Files">
+    <Filter Include="FrameWork\GameObjects\effects">
+      <UniqueIdentifier>{e8d60ee4-b647-453d-aaa7-c8a10f8adc44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameWork\GameObjects\monters\Math">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="FrameWork\GameObjects\effects">
-      <UniqueIdentifier>{e8d60ee4-b647-453d-aaa7-c8a10f8adc44}</UniqueIdentifier>
+    <Filter Include="FrameWork\GameObjects\monters\zones">
+      <UniqueIdentifier>{9fef8705-f42c-4b87-8adf-83d3fe5bd562}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,8 +183,14 @@
     <ClCompile Include="EffectBrickBlack.cpp">
       <Filter>FrameWork\GameObjects\effects</Filter>
     </ClCompile>
+    <ClCompile Include="Line.cpp">
+      <Filter>FrameWork\GameObjects\monters\Math</Filter>
+    </ClCompile>
     <ClCompile Include="Zone.cpp">
-      <Filter>FrameWork\GameObjects\monters</Filter>
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClCompile>
+    <ClCompile Include="ZoneGhostFly.cpp">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,8 +308,14 @@
     <ClInclude Include="EffectBrickBlack.h">
       <Filter>FrameWork\GameObjects\effects</Filter>
     </ClInclude>
+    <ClInclude Include="Line.h">
+      <Filter>FrameWork\GameObjects\monters\Math</Filter>
+    </ClInclude>
     <ClInclude Include="Zone.h">
-      <Filter>FrameWork\GameObjects\monters</Filter>
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClInclude>
+    <ClInclude Include="ZoneGhostFly.h">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

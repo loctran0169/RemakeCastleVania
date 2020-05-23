@@ -46,7 +46,7 @@ class CGameObject
 public:
 	int itemID;
 	int cellID;
-
+	bool deteleFromGrid = true;
 	float x;
 	float y;
 
@@ -78,7 +78,7 @@ public:
 
 	int GetState() { return this->state; }
 
-	void RenderBoundingBox();
+	void RenderBoundingBox(int _x = 0, int _y = 0);
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 

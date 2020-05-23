@@ -406,9 +406,12 @@
 # stair down
 #grid	type	x	y	ani_set_id	r	b	nx
 1	57	338	178	0	368	190	-1
-#warrior
+# warrior
 #grid	type	x	y	ani	l	t	r	b	boundl	boundr
 1	100	208	114	100	80	114	448	170	80	320
+# black bat 
+#grid	type	x	y	ani	l	t	r	b
+1	101	80	64	101	80	114	272	170
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 1	53	256	0	0	288	20	3	1	770	320	1	-1

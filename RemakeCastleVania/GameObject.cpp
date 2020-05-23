@@ -136,7 +136,7 @@ void CGameObject::FilterCollision(
 }
 
 
-void CGameObject::RenderBoundingBox()
+void CGameObject::RenderBoundingBox(int _x, int _y)
 {
 	RECT rect;
 
@@ -145,10 +145,10 @@ void CGameObject::RenderBoundingBox()
 	float l, t, r, b;
 
 	GetBoundingBox(l, t, r, b);
-	rect.left = (int)l;
-	rect.top = (int)t;
-	rect.right = (int)r;
-	rect.bottom = (int)b;
+	rect.left = (_x == 0) ? (int)l : _x;
+	rect.top = (_y == 0) ? (int)t : _y;
+	rect.right = (_x == 0) ? (int)r : (_x + (int)(r - l));
+	rect.bottom = (_y == 0) ? (int)b : (_y + (int)(b - t));
 
 	CGame::GetInstance()->Draw(rect.left, rect.top, bbox, rect.left, rect.top, rect.right, rect.bottom, 200);
 }

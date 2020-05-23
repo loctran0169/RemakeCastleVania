@@ -1,4 +1,4 @@
-#include "Grid.h"
+﻿#include "Grid.h"
 
 CGrid * CGrid::__instance = NULL;
 
@@ -13,6 +13,7 @@ void CGrid::deleteObject(int cellId, LPGAMEOBJECT object)
 	for (int i = 0; i < cells[cellId]->objects.size(); i++) {
 		if (cells[cellId]->objects[i]== object) {
 			cells[cellId]->objects.erase(cells[cellId]->objects.begin()+i);
+			DebugOut(L"Đã xóa obj id = %d \n",object->getType());
 		}
 	}
 }
@@ -30,15 +31,27 @@ void CGrid::setNumberCells()
 	}
 }
 
-void CGrid::getObjectFromGrid(vector<LPGAMEOBJECT>& list,int x, int y)
+void CGrid::getObjectFromGrid(vector<LPGAMEOBJECT>& listObj, vector<LPGAMEOBJECT>& listEnemy,int x, int y)
 {
-	list.clear();
+	listObj.clear();
 	int colStart = (int)x / GRID_CELL_WIDTH;
 	int colEnd = ceil((x + SCREEN_WIDTH) / GRID_CELL_WIDTH);
 	if (colEnd >= map->boundingMapRight / GRID_CELL_WIDTH)
 		colEnd = map->boundingMapRight / GRID_CELL_WIDTH-1;
 	for (int i = colStart; i <= colEnd; i++) {
-		list.insert(list.end(),cells[i]->objects.begin(),cells[i]->objects.end());
+		//list.insert(list.end(),cells[i]->objects.begin(),cells[i]->objects.end());
+		CCell * cell = cells[i];
+		for (int j = 0; j < cell->objects.size(); j++) {
+			gameType type = cell->objects[j]->getType();
+			if (type == gameType::WARRIOR || type == gameType::BAT ||
+				type == gameType::MONKEY || type == gameType::BONE ||
+				type == gameType::GHOST_WALK || type == gameType::BIRD || type == gameType::BOSS_BAT) {
+				if (std::find(listEnemy.begin(), listEnemy.end(), cell->objects[j]) == listEnemy.end())
+					listEnemy.push_back(cell->objects[j]);
+			}
+			else
+				listObj.push_back(cell->objects[j]);
+		}
 	}
 }
 

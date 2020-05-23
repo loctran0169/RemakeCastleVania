@@ -136,6 +136,8 @@
     <ClCompile Include="BrickBlack.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="ZoneGhostFly.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="Zone.cpp" />
     <ClCompile Include="DataNextScreen.cpp" />
     <ClCompile Include="DataScreen.cpp" />
@@ -178,6 +180,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickBlack.h" />
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="DataNextScreen.h" />
     <ClInclude Include="DataScreen.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="WaterFire.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Whip.h" />
+    <ClInclude Include="ZoneGhostFly.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

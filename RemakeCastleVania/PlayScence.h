@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Game.h"
 #include "Textures.h"
 #include "Scence.h"
@@ -21,6 +21,10 @@
 #include"Candle.h"
 #include"EffectBrickBlack.h"
 #include"Warrior.h"
+#include"BlackBat.h"
+#include"GhostFly.h"
+#include"ZoneGhostFly.h"
+
 class Simon;
 class CPlayScene : public CScene
 {
@@ -30,6 +34,8 @@ protected:
 	CGame *game;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listEffect;
+	vector<LPGAMEOBJECT> listEnemy;// load từ grid ra
+	//vector<LPGAMEOBJECT> listEnemyNotDelete; //không mất khi ra khỏi grid
 	vector<Item*> listItems;
 
 	void _ParseSection_TEXTURES(string line);

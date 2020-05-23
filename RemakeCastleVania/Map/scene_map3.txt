@@ -415,6 +415,9 @@
 #grid	type	x	y	ani	l	t	r	b	boundl	boundr
 2	100	640	242	100	640	256	704	306	640	704
 1	100	192	114	100	192	120	320	178	192	320
+# black bat 
+#grid	type	x	y	ani	l	t	r	b
+2	101	592	64	101	432	50	784	170
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 3	53	768	390	0	800	416	2	1	225	34	-1	1

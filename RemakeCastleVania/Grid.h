@@ -25,7 +25,7 @@ public:
 	void deleteObject(int cellId, LPGAMEOBJECT object);
 	void addObjectToCell(int idCell, LPGAMEOBJECT object);
 	void setNumberCells();
-	void getObjectFromGrid(vector<LPGAMEOBJECT>& list,int x, int y);
+	void getObjectFromGrid(vector<LPGAMEOBJECT>& listObj, vector<LPGAMEOBJECT>& listEnemy,int x, int y);
 	CGrid(){
 		map = CMap::GetInstance();
 		cells = vector<LPCELL>();

@@ -8,8 +8,6 @@
 class CMonter : public CGameObject
 {
 public:
-	bool isDead = false;
-public:
 	CMonter() :CGameObject() {
 		
 	}

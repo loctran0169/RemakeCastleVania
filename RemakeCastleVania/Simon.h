@@ -23,6 +23,8 @@ public:
 	int heartWeapon;
 	float stateSpeed = 0.0f;
 	//thời gian hành động
+
+	DWORD lastTimeChangeState = 0;
 	DWORD untouchable_start;
 	DWORD attactTime = 0;
 	DWORD jumpTime = 0;
