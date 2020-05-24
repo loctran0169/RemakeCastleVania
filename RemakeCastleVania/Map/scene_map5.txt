@@ -373,11 +373,11 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # grid	type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
-# grid	type	x	y	ani_set_id	ani_whip
+# grid	type	x	y	ani	ani_whip
 0	50	128	274	50	11
 #0	50	300	274	50	11
 # BRICK 
-#grid	type	x	y	ani_set_id	number_object	ngang/thẳng(0/1)
+#grid	type	x	y	ani_	number	ngang/thẳng(0/1)
 0	51	32	50	0	9	1
 0	51	64	338	0	4	0
 1	51	320	338	0	6	0
@@ -399,7 +399,7 @@
 5	51	1472	274	0	2	0
 5	51	1472	146	0	2	0
 # candle
-#grid	type	x	y	ani_set_id	id_item
+#grid	type	x	y	ani	id_item
 0	59	312	146	59	7
 1	59	440	274	59	7
 2	59	568	274	59	7
@@ -411,16 +411,19 @@
 4	59	1336	274	59	7
 4	59	1464	178	59	7
 #stair up
-#grid	type	x	y	ani_set_id	r	b	nx
+#grid	type	x	y	ani	r	b	nx
 0	56	114	326	0	160	338	1
 2	56	754	326	0	784	338	1
 4	56	1246	326	0	1298	338	-1
 #stair down
-#grid	type	x	y	ani_set_id	r	b	nx
+#grid	type	x	y	ani	r	b	nx
 0	57	114	274	0	155	286	1
 0	57	242	146	0	272	160	-1
 3	57	818	210	0	850	222	-1
 4	57	1138	198	0	1168	210	1
+# zone ghost fly
+#grid	type	x	y	ani	l	t	r	b	xDef	yDef
+1	62	384	114	0	0	0	1000	480	314	114
 # --- SCENE PORTAL ----
 # grid	type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 0	53	192	402	0	224	410	4	1	190	34	1	1

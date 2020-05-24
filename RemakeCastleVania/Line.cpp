@@ -8,7 +8,6 @@ CLine::CLine(float _x1, float _y1, float _x2, float _y2)
 	y1 = _y1;
 	y2 = _y2;
 	createLine(x1, y1, x2, y2);
-	DebugOut(L"%f %f %f %f \n", x1, y1, x2, y2);
 
 	if (x2 > x1) {
 		x2 += 50.0f;
@@ -54,15 +53,5 @@ float * CLine::toXY(float _dxy)
 	a[1] = y1Temp + (_dxy / distance(x1, y1, x2, y2))*(y2 - y1Temp);
 	y1Temp = a[1];
 	a[2] = (x1 > x2) ? -1 : 1;
-
-	////cập nhật lại khi đi qua con tọa độ cần đi
-	//if (x1Temp >= x2 && x2 >= x1) {
-	//	x2 += 100.0f;
-	//	y2 = toY(x2);
-	//}
-	//else if (x1 >= x2 && x2 >= x1Temp) {
-	//	x2 -= 100.0f;
-	//	y2 = toY(x2);
-	//}
 	return a;
 }

@@ -35,7 +35,7 @@ public:
 		game = CGame::GetInstance();
 		type = gameType::GHOST_FLY;
 		simon = Simon::GetInstance();
-		deteleFromGrid = false;
+		deteleBeforeLoadFromGrid = false;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();

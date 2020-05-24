@@ -40,6 +40,7 @@ public:
 	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
 	bool isJumpLeft = false;// nhảy trái thì ko đổi hướng
 	bool isRenderLopping = false; //render ani còn lại khi khi đóng băng
+	bool isHurt = false; //Trạng thái bị đánh
 
 	//cầu thang
 	bool isOnCheckStairUp = false; //đang đúng bật cầu thang đi lên

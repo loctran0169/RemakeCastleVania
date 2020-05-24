@@ -46,7 +46,7 @@ class CGameObject
 public:
 	int itemID;
 	int cellID;
-	bool deteleFromGrid = true;
+	bool deteleBeforeLoadFromGrid = true;
 	float x;
 	float y;
 

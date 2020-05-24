@@ -35,7 +35,6 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listEffect;
 	vector<LPGAMEOBJECT> listEnemy;// load từ grid ra
-	//vector<LPGAMEOBJECT> listEnemyNotDelete; //không mất khi ra khỏi grid
 	vector<Item*> listItems;
 
 	void _ParseSection_TEXTURES(string line);
@@ -56,7 +55,7 @@ public:
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
 
 	//collision
-	void checkCollisonWeapon(vector<LPGAMEOBJECT> *coObjects);
+	void checkCollisonWeapon(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *coEnemys);
 	void checkCollisonWithItem();
 	void checkCollisonWithHideObj();
 	void checkCollisonWithEnemy(vector<LPGAMEOBJECT> *coObjects);

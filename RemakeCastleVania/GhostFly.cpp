@@ -21,8 +21,10 @@ void CGhostFly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			line = new CLine(x, y, simon->x, simon->y + GHOSTFLY_PADDING_ATTACK);
 			timeBackUpAddressSimon = GetTickCount();
 		}
-	
-		vx = GHOSTFLY_SPEED;
+		if (isIdle)
+			vx = 0;
+		else
+			vx = GHOSTFLY_SPEED;
 		CGameObject::Update(dt);
 
 		float *xy = line->toXY(abs(dx));
@@ -58,7 +60,7 @@ void CGhostFly::SetPosition(float _x, float _y)
 void CGhostFly::beAttack()
 {
 	if (health > 0 && !isIdle) health--;
-	if (health == 0) isHitted = false;
+	if (health == 0) isHitted = true;
 
 	timeBeAttack = GetTickCount();
 	timeBackUpAddressSimon = GetTickCount();

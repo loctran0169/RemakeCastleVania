@@ -32,8 +32,10 @@ LPGAMEOBJECT CZoneGhostFly::createGhostFly()
 	float _x, _y;
 	if (px == -1)
 		_x = camX + GHOSTFLY_PADDING_SREEN;
-	else
+	else if (px == 1)
 		_x = camX + SCREEN_WIDTH - GHOSTFLY_BBOX_WIDTH - GHOSTFLY_PADDING_SREEN;
+	else
+		_x = px;
 	_y = yDefault;
 	CGhostFly * ghost = new CGhostFly();
 	ghost->SetPosition(_x, _y);

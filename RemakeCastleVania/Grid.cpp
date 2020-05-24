@@ -34,12 +34,15 @@ void CGrid::setNumberCells()
 void CGrid::getObjectFromGrid(vector<LPGAMEOBJECT>& listObj, vector<LPGAMEOBJECT>& listEnemy,int x, int y)
 {
 	listObj.clear();
+	for (int i = 0; i < listEnemy.size(); i++) {
+		if (listEnemy[i]->deteleBeforeLoadFromGrid)
+			listEnemy.erase(listEnemy.begin() + i);
+	}
 	int colStart = (int)x / GRID_CELL_WIDTH;
 	int colEnd = ceil((x + SCREEN_WIDTH) / GRID_CELL_WIDTH);
 	if (colEnd >= map->boundingMapRight / GRID_CELL_WIDTH)
 		colEnd = map->boundingMapRight / GRID_CELL_WIDTH-1;
 	for (int i = colStart; i <= colEnd; i++) {
-		//list.insert(list.end(),cells[i]->objects.begin(),cells[i]->objects.end());
 		CCell * cell = cells[i];
 		for (int j = 0; j < cell->objects.size(); j++) {
 			gameType type = cell->objects[j]->getType();

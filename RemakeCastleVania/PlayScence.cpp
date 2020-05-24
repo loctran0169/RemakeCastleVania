@@ -23,11 +23,11 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
-void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
+void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT> *coEnemys)
 {
 	for (auto& weapon : player->weapons) {
 		if (weapon.second->GetAttack()) {
-			for (UINT i = 0; i < coObjects->size(); i++)
+			for (UINT i = 0; i < coObjects->size(); i++) // xét chạm với obejcts nền
 			{
 				if (weapon.second->GetLastTimeAttack() > coObjects->at(i)->timeBeAttacked) {
 					if (weapon.second->isCollitionObjectWithObject(coObjects->at(i))) {
@@ -94,6 +94,36 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects)
 						}
 						gameObj->timeBeAttacked = GetTickCount();
 						
+					}
+				}
+			}
+			for (UINT i = 0; i < coEnemys->size(); i++) // xét chạm với quái
+			{
+				if (weapon.second->GetLastTimeAttack() > coEnemys->at(i)->timeBeAttacked) {
+					if (weapon.second->isCollitionObjectWithObject(coEnemys->at(i))) {
+						CGameObject *gameObj = coEnemys->at(i);
+						switch (gameObj->getType())
+						{
+						case gameType::BAT: {
+							auto bat = dynamic_cast<CBlackBat*>(gameObj);
+							bat->isHitted = true;
+							break;
+						}
+						case gameType::WARRIOR: {
+							auto warrior = dynamic_cast<CWarrior*>(gameObj);
+							warrior->beAttack();
+							break;
+						}
+						case gameType::GHOST_FLY: {
+							auto ghost = dynamic_cast<CGhostFly*>(gameObj);
+							ghost->beAttack();
+							break;
+						}
+						default:
+							break;
+						}
+						gameObj->timeBeAttacked = GetTickCount();
+
 					}
 				}
 			}
@@ -713,7 +743,6 @@ void CPlayScene::Update(DWORD dt)
 	else {
 		objects.clear();
 		grid->getObjectFromGrid(objects,listEnemy, game->cam_x, game->cam_y);
-		//listEnemy.insert(listEnemy.end(),listEnemyNotDelete.begin(), listEnemyNotDelete.end());
 	}
 	//process update sau hki ăn item (đóng băng thời gian)
 	if (player->isRenderLopping) {
@@ -822,7 +851,7 @@ void CPlayScene::Update(DWORD dt)
 
 	//simon chết thì ko có va chạm
 	if (player->state != SIMON_STATE_DIE) {
-		checkCollisonWeapon(&objects);// với cái objects ko phải enemy
+		checkCollisonWeapon(&objects,&listEnemy);// với cái objects ko phải enemy
 		checkCollisonWithHideObj();
 		checkCollisonWithItem();	
 	}
@@ -859,19 +888,20 @@ void CPlayScene::Update(DWORD dt)
 		}
 	}
 	//update xóa enemy
-	for (int i = 0; i < objects.size(); i++) {
-		if (objects[i]->isHitted) {
-			if (dynamic_cast<CBlackBat *>(objects.at(i))) {
-				auto *bat = dynamic_cast<CBlackBat*>(objects.at(i));
+	for (int i = 0; i < listEnemy.size(); i++) {
+		if (listEnemy[i]->isHitted) {
+			if (dynamic_cast<CBlackBat *>(listEnemy.at(i))) {
+				auto *bat = dynamic_cast<CBlackBat*>(listEnemy.at(i));
 				grid->deleteObject(bat->cellID, bat);
 			}
-			else if (dynamic_cast<CWarrior *>(objects.at(i))) {
-				auto *warrior = dynamic_cast<CWarrior*>(objects.at(i));
+			else if (dynamic_cast<CWarrior *>(listEnemy.at(i))) {
+				auto *warrior = dynamic_cast<CWarrior*>(listEnemy.at(i));
 				grid->deleteObject(warrior->cellID, warrior);
 			}
-			else if (dynamic_cast<CGhostFly *>(objects.at(i))) {
-				auto *warrior = dynamic_cast<CGhostFly*>(objects.at(i));
-				grid->deleteObject(warrior->cellID, warrior);
+			else if (dynamic_cast<CGhostFly *>(listEnemy.at(i))) {
+				auto *ghost = dynamic_cast<CGhostFly*>(listEnemy.at(i));
+				delete ghost;
+				listEnemy.erase(listEnemy.begin() + i);
 			}
 		}
 	}
