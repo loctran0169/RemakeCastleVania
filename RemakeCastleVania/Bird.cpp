@@ -13,6 +13,10 @@ void CBird::GetBoundingBox(float & left, float & top, float & right, float & bot
 {
 }
 
+void CBird::beAttack()
+{
+}
+
 CBird::~CBird()
 {
 }

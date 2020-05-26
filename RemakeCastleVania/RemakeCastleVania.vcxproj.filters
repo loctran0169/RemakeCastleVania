@@ -192,6 +192,9 @@
     <ClCompile Include="ZoneGhostFly.cpp">
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClCompile>
+    <ClCompile Include="ZoneGhostWalk.cpp">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -315,6 +318,12 @@
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClInclude>
     <ClInclude Include="ZoneGhostFly.h">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>FrameWork\GameObjects\monters\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ZoneGhostWalk.h">
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClInclude>
   </ItemGroup>

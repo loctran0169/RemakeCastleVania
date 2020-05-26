@@ -12,6 +12,10 @@ void CBone::GetBoundingBox(float & left, float & top, float & right, float & bot
 {
 }
 
+void CBone::beAttack()
+{
+}
+
 CBone::~CBone()
 {
 }

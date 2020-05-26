@@ -176,7 +176,7 @@ enum gameType
 	BRICKBLACK_1 = 60, //BRICK nổ 1
 	BRICKBLACK_2 = 61, // Brick nổ 2
 	ZONE_GHOST_FLY = 62, // khu vực tạo ghost fly
-
+	ZONE_GHOST_WALK = 63, // khu vực xuất hiện ma đi bộ v:
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép
 	BAT = 101,	//đơi xéo -> thẳng

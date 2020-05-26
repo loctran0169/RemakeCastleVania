@@ -16,6 +16,10 @@ void CMonter::GetBoundingBox(float & left, float & top, float & right, float & b
 
 }
 
+void CMonter::beAttack()
+{
+}
+
 CMonter::~CMonter()
 {
 }

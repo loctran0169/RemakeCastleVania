@@ -173,7 +173,7 @@ int Run()
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
-	
+	srand((unsigned)time(0));
 	game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->InitKeyboard();

@@ -23,7 +23,10 @@
 #include"Warrior.h"
 #include"BlackBat.h"
 #include"GhostFly.h"
+#include"GhostWalk.h"
 #include"ZoneGhostFly.h"
+#include"ZoneGhostWalk.h"
+
 
 class Simon;
 class CPlayScene : public CScene

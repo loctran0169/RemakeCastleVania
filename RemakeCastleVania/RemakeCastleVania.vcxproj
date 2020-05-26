@@ -168,6 +168,7 @@
     <ClCompile Include="WaterFire.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Whip.cpp" />
+    <ClCompile Include="ZoneGhostWalk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="BrickBlack.h" />
     <ClInclude Include="Candle.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="DataNextScreen.h" />
     <ClInclude Include="DataScreen.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="ZoneGhostFly.h" />
+    <ClInclude Include="ZoneGhostWalk.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

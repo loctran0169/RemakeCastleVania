@@ -12,6 +12,10 @@ void CBossBat::GetBoundingBox(float & left, float & top, float & right, float & 
 {
 }
 
+void CBossBat::beAttack()
+{
+}
+
 CBossBat::~CBossBat()
 {
 }

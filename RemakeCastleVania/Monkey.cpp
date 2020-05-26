@@ -7,15 +7,20 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH)
 		isHitted = true;
 
-	if (GetTickCount() - timeChangeState > 2000)
+	if (isIdle && GetTickCount() - timeBeAttack >= WARRIOR_TIME_WAIT_ATTACK) {
+		animation_set->at(0)->setLopping(false);
+	}
+
+	if (isIdle && GetTickCount() - timeChangeState > 2000)
 		isIdle = false;
-	
+	//else if
 	CGameObject::Update(dt);
 	checkCollisonWithBricks(dt,coObjects);
 }
 
 void CMonkey::Render()
 {
+	
 }
 
 void CMonkey::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -94,6 +99,10 @@ void CMonkey::SetState(int state)
 		isJump = true;
 		break;
 	}
+}
+
+void CMonkey::beAttack()
+{
 }
 
 CMonkey::~CMonkey()

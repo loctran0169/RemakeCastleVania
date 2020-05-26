@@ -60,6 +60,11 @@ void CBlackBat::GetBoundingBox(float & left, float & top, float & right, float &
 	bottom = y + BLACKBAT_BBOX_HEIGHT;
 }
 
+void CBlackBat::beAttack()
+{
+	isHitted = true;
+}
+
 void CBlackBat::startFly(int _nx)
 {
 	isAutoGo = true;

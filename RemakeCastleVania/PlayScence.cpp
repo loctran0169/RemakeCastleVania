@@ -106,7 +106,7 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						{
 						case gameType::BAT: {
 							auto bat = dynamic_cast<CBlackBat*>(gameObj);
-							bat->isHitted = true;
+							bat->beAttack();
 							break;
 						}
 						case gameType::WARRIOR: {
@@ -116,6 +116,11 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						}
 						case gameType::GHOST_FLY: {
 							auto ghost = dynamic_cast<CGhostFly*>(gameObj);
+							ghost->beAttack();
+							break;
+						}
+						case gameType::GHOST_WALK: {
+							auto ghost = dynamic_cast<CGhostWalk*>(gameObj);
 							ghost->beAttack();
 							break;
 						}
@@ -275,6 +280,11 @@ void CPlayScene::checkCollisonWithHideObj()
 					ghost->SetAnimationSet(ani_set);
 					listEnemy.push_back(ghost);
 				}				
+				break;
+			}
+			case gameType::ZONE_GHOST_WALK: {
+				CZoneGhostWalk *zone = dynamic_cast<CZoneGhostWalk *>(objects[i]);
+				zone->createGhostWalk(listEnemy);					
 				break;
 			}
 			default:
@@ -569,6 +579,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int px = atof(tokens[9].c_str());
 		int YDefault = atof(tokens[10].c_str());
 		obj = new CZoneGhostFly(l, t, r, b, x, y, px, YDefault);
+		break;
+	}
+	case gameType::ZONE_GHOST_WALK: {
+		int r = atof(tokens[5].c_str());
+		int b = atof(tokens[6].c_str());
+
+		obj = new CZoneGhostWalk(x, y, r, b);
+		int numPointAppear = atof(tokens[7].c_str());
+		int num = 8;
+		for (int i = 0; i < numPointAppear; i++) {
+			int _x = atof(tokens[num].c_str());
+			int _y = atof(tokens[num + 1].c_str());
+			int _nx = atof(tokens[num + 2].c_str());
+			num += 3;
+			CPoint point(_x, _y, _nx);
+			((CZoneGhostWalk*)obj)->addPointAppear(point,i);
+		}
 		break;
 	}
 	default:
@@ -903,6 +930,11 @@ void CPlayScene::Update(DWORD dt)
 				delete ghost;
 				listEnemy.erase(listEnemy.begin() + i);
 			}
+			else if (dynamic_cast<CGhostWalk *>(listEnemy.at(i))) {
+				auto *ghost = dynamic_cast<CGhostWalk*>(listEnemy.at(i));
+				ghost = NULL;
+				listEnemy.erase(listEnemy.begin() + i);
+			}
 		}
 	}
 	//update xóa effect
@@ -936,6 +968,7 @@ void CPlayScene::Unload()
 		delete objects[i];
 	listItems.clear();
 	listEffect.clear();
+	listEnemy.clear();
 	objects.clear();
 }
 
