@@ -177,6 +177,8 @@ enum gameType
 	BRICKBLACK_2 = 61, // Brick nổ 2
 	ZONE_GHOST_FLY = 62, // khu vực tạo ghost fly
 	ZONE_GHOST_WALK = 63, // khu vực xuất hiện ma đi bộ v:
+	DISABLE_CAMERA = 64	, //vào sẻ set cứng camera lại
+
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép
 	BAT = 101,	//đơi xéo -> thẳng

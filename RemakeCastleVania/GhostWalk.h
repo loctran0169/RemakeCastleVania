@@ -9,6 +9,8 @@
 #define GHOSTWALK_SPEED_X			0.18f
 #define GHOSTWALK_SPEED_GRAVITY			0.06f
 
+#define GHOSTWALK_BETWEEN_DIE_TIME	1500
+#define GHOSTWALK_PADDING_X			10
 class CGhostWalk : public CMonter // quái xương
 {
 public:

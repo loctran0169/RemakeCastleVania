@@ -8,6 +8,8 @@ protected:
 	int width;
 	int height;
 public:
+	float x_cam;
+	bool isDeleteEnemy = false;
 	CHidenObject();
 	CHidenObject(float l, float t, float r, float b);
 	virtual void Render();

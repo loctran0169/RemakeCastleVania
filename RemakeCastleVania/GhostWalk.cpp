@@ -10,8 +10,10 @@ void CGhostWalk::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float xCam, yCam;
 	game->GetCamPos(xCam, yCam);
 
-	if (x < xCam || x + GHOSTWALK_BBOX_WIDTH > xCam + SCREEN_WIDTH)
+	if (x < xCam || x + GHOSTWALK_BBOX_WIDTH > xCam + SCREEN_WIDTH) {
 		isHitted = true;
+		timeBeAttacked = GetTickCount() - GHOSTWALK_BETWEEN_DIE_TIME;
+	}
 	vx = GHOSTWALK_SPEED_X * nx;
 	CGameObject::Update(dt);
 	vy += GHOSTWALK_SPEED_GRAVITY * dt;

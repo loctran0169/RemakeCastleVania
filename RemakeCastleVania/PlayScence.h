@@ -26,7 +26,7 @@
 #include"GhostWalk.h"
 #include"ZoneGhostFly.h"
 #include"ZoneGhostWalk.h"
-
+#include"BossBat.h"
 
 class Simon;
 class CPlayScene : public CScene
@@ -54,6 +54,7 @@ public:
 	DataScreen *dataScreen;
 	int nextScence;
 	bool nextIsStair;
+	bool isDisableCamera = false;
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
 

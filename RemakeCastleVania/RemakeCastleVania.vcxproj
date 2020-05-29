@@ -136,6 +136,8 @@
     <ClCompile Include="BrickBlack.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="Expression.cpp" />
+    <ClCompile Include="Parabol.cpp" />
     <ClCompile Include="ZoneGhostFly.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Zone.cpp" />
@@ -181,7 +183,9 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickBlack.h" />
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="Expression.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="Parabol.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="DataNextScreen.h" />

@@ -7,7 +7,7 @@ void CZoneGhostWalk::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CZoneGhostWalk::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CZoneGhostWalk::GetBoundingBox(float & _left, float & _top, float & _right, float & _bottom)
@@ -42,9 +42,9 @@ void CZoneGhostWalk::createGhostWalk(vector<LPGAMEOBJECT>& listEnemy)
 		int position = rand() % pointss.size();
 		int xAppear; // vị trí xuất hiện x
 		if (pointss[position].nx == 1)
-			xAppear = xCam + 10;
+			xAppear = xCam + GHOSTWALK_PADDING_X;
 		else
-			xAppear = xCam + SCREEN_WIDTH - GHOSTWALK_BBOX_WIDTH - 10;
+			xAppear = xCam + SCREEN_WIDTH - GHOSTWALK_BBOX_WIDTH - GHOSTWALK_PADDING_X;
 		CGhostWalk * gh = new CGhostWalk(i, pointss[position].nx, xAppear, pointss[position].y);
 		lastTimeCreate = GetTickCount();
 		timeBeAttacks[i] = 0;

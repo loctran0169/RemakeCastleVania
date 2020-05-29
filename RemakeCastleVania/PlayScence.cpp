@@ -251,6 +251,14 @@ void CPlayScene::checkCollisonWithHideObj()
 				isAllowJump = false;
 				break;
 			}
+			case gameType::DISABLE_CAMERA: {
+				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
+				isDisableCamera = true;
+				map->boundingMapLeft = game->cam_x;
+				p->isHitted = true;
+				if (p->isDeleteEnemy) listEnemy.clear();
+				break;
+			}
 			case gameType::GO_UP_STAIR: {
 				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				float l, t, r, b;
@@ -598,6 +606,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+	case gameType::BOSS_BAT: {
+		int l = atof(tokens[5].c_str());
+		int t = atof(tokens[6].c_str());
+		int r = atof(tokens[7].c_str());
+		int b = atof(tokens[8].c_str());
+
+		int repair = atof(tokens[9].c_str());
+		int repairToAttack = atof(tokens[10].c_str());
+
+		obj = new CBossBat(l, t, r, b, repair, repairToAttack);
+		break;
+	}
+	case gameType::DISABLE_CAMERA: {
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
+
+		float x_cam = atof(tokens[7].c_str());
+		int _isDelteEnemy = atof(tokens[7].c_str());
+		obj = new CHidenObject(x, y, r, b);
+		obj->setType(gameType::DISABLE_CAMERA);
+		((CHidenObject*)obj)->x_cam = x_cam;
+		((CHidenObject*)obj)->isDeleteEnemy = _isDelteEnemy;
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -674,7 +706,7 @@ void CPlayScene::Load(bool isNextScreen_Stair)
 	
 	sceneFilePath = game->getScenes()[game->GetCurrentSceneId()]->getPath();
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
-
+	isDisableCamera = false;
 	ifstream f;
 	f.open(sceneFilePath);
 
@@ -743,14 +775,16 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	// Update camera to follow simon
-	float cx, cy;
-	player->GetPosition(cx, cy);
-	if (cx > SCREEN_WIDTH / 2 && cx < map->boundingMapRight - SCREEN_WIDTH / 2)
-		game->setCamX(cx - SCREEN_WIDTH / 2);
-	else if (cx > map->boundingMapRight - SCREEN_WIDTH / 2)
-		game->setCamX(map->boundingMapRight - SCREEN_WIDTH);
-	else
-		game->setCamX(0);
+	if (!isDisableCamera) {
+		float cx, cy;
+		player->GetPosition(cx, cy);
+		if (cx > SCREEN_WIDTH / 2 && cx < map->boundingMapRight - SCREEN_WIDTH / 2)
+			game->setCamX(cx - SCREEN_WIDTH / 2);
+		else if (cx > map->boundingMapRight - SCREEN_WIDTH / 2)
+			game->setCamX(map->boundingMapRight - SCREEN_WIDTH);
+		else
+			game->setCamX(0);
+	}
 
 	//khi ăn item whip
 	if (player->isEatItem) {
@@ -905,6 +939,12 @@ void CPlayScene::Update(DWORD dt)
 				grid->deleteObject(brick->cellID, brick);
 			}
 		}
+		else if (dynamic_cast<CHidenObject *>(objects.at(i))) {
+			auto *hiden = dynamic_cast<CHidenObject *>(objects.at(i));
+			if (hiden->isHitted) {
+				grid->deleteObject(hiden->cellID, hiden);
+			}
+		}
 	}
 	//update xóa item
 	for (int i = 0; i < listItems.size(); i++) {
@@ -932,6 +972,7 @@ void CPlayScene::Update(DWORD dt)
 			}
 			else if (dynamic_cast<CGhostWalk *>(listEnemy.at(i))) {
 				auto *ghost = dynamic_cast<CGhostWalk*>(listEnemy.at(i));
+				delete ghost;
 				ghost = NULL;
 				listEnemy.erase(listEnemy.begin() + i);
 			}

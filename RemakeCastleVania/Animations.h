@@ -36,6 +36,7 @@ public:
 	int getFrameSize() { return frames.size(); }
 	void resetFrame(){ lastFrameTime = -1; currentFrame = -1; }
 	void setLopping(bool a) { isLopping = a; }
+	float getFrameWidth() { return frames[currentFrame]->GetSprite()->getFrameWidth(); }
 	void Render(float x, float y,int nx=1, int alpha = 255);
 	void RenderIdFrame(int frameId, float x, float y, int nx = 1, int alpha = 255);
 };

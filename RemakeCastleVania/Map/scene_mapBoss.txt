@@ -178,7 +178,7 @@
 # boss bat
 11017	114	22	146	54	7
 11018	148	22	244	66	7
-11019	246	22	310	68	7
+11019	148	68	244	116	7
 # ghost fly
 11020	2	150	34	182	7
 11021	36	150	68	182	7
@@ -374,10 +374,10 @@
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 #grid	type	x	y	ani_set_id	ani_whip
-0	50	0	0	50	11
-#0	50	1300	0	50	11
+#0	50	0	0	50	11
+0	50	1300	0	50	11
 # BRICK 
-#grid	type	x	y	ani_set_id	number_object
+#grid	type	x	y	an	number
 0	51	0	370	0	8	0
 1	51	256	370	0	8	0
 2	51	512	370	0	8	0
@@ -417,8 +417,14 @@
 2	57	592	176	0	624	188	1
 5	57	1426	178	0	1454	190	-1
 #stair down
-#grid	type	x	y	ani_set_id	r	b	numPoint	
+#grid	type	x	y	ani	r	b	numPoint	
 2	63	0	0	0	832	480	4	0	304	1	1500	304	-1	256	176	1	576	176	-1
+#Disable Camera
+#grid	type	x	y	ani	r	b	xCam	delete enemy
+5	64	1313	0	0	1320	480	1024	1
+# boss bat
+#grid	type	x	y	ani	l	t	r	b	repair	toattack
+5	107	1200	66	107	1313	0	1320	480	162	242
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 #53	1407	100	0	1430	338	1
