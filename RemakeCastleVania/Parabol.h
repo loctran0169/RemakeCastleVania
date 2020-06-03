@@ -16,6 +16,9 @@ public:
 	float toY(float _x);
 	float toX(float _Y);
 
+	float getX1() { return x1; }
+	float getX2() { return x2; }
+
 	float distance(float _x1, float _y1, float _x2, float _y2);
 
 	float * toXY(float _dxy, float dyAttack);

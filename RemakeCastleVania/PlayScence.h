@@ -27,6 +27,8 @@
 #include"ZoneGhostFly.h"
 #include"ZoneGhostWalk.h"
 #include"BossBat.h"
+#include"ZoneMonkey.h"
+
 
 class Simon;
 class CPlayScene : public CScene

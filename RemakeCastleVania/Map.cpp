@@ -54,4 +54,5 @@ CMap::CMap()
 
 CMap::~CMap()
 {
+
 }

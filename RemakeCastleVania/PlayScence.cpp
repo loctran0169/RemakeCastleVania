@@ -102,8 +102,8 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 				if (weapon.second->GetLastTimeAttack() > coEnemys->at(i)->timeBeAttacked) {
 					if (weapon.second->isCollitionObjectWithObject(coEnemys->at(i))) {
 						CGameObject *gameObj = coEnemys->at(i);
-						switch (gameObj->getType())
-						{
+
+						switch (gameObj->getType()){
 						case gameType::BAT: {
 							auto bat = dynamic_cast<CBlackBat*>(gameObj);
 							bat->beAttack();
@@ -124,8 +124,11 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							ghost->beAttack();
 							break;
 						}
-						default:
+						case gameType::MONKEY: {
+							auto monkey = dynamic_cast<CMonkey*>(gameObj);
+							monkey->beAttack();
 							break;
+						}
 						}
 						gameObj->timeBeAttacked = GetTickCount();
 
@@ -254,7 +257,6 @@ void CPlayScene::checkCollisonWithHideObj()
 			case gameType::DISABLE_CAMERA: {
 				CHidenObject *p = dynamic_cast<CHidenObject *>(objects[i]);
 				isDisableCamera = true;
-				map->boundingMapLeft = game->cam_x;
 				p->isHitted = true;
 				if (p->isDeleteEnemy) listEnemy.clear();
 				break;
@@ -293,6 +295,11 @@ void CPlayScene::checkCollisonWithHideObj()
 			case gameType::ZONE_GHOST_WALK: {
 				CZoneGhostWalk *zone = dynamic_cast<CZoneGhostWalk *>(objects[i]);
 				zone->createGhostWalk(listEnemy);					
+				break;
+			}
+			case gameType::ZONE_MONKEY: {
+				CZoneMonkey *zone = dynamic_cast<CZoneMonkey *>(objects[i]);
+				zone->createMonkey(listEnemy);
 				break;
 			}
 			default:
@@ -447,7 +454,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			DebugOut(L"[ERROR] Simon object was created before! ");
 			player->SetPosition(x, y);
-
 			for (auto&weapon : player->weapons) {
 				LPANIMATION_SET ani_weapon = animation_sets->Get(weapon.second->getType());
 				player->weapons[weapon.second->getType()]->SetAnimationSet(ani_weapon);
@@ -460,8 +466,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERROR] Đã tạo simon \n");
 		obj = Simon::GetInstance();
 		player = (Simon*)obj;
-		int ani_set_whip_id = atoi(tokens[5].c_str());
-		LPANIMATION_SET ani_set_whip = animation_sets->Get(ani_set_whip_id);
+		LPANIMATION_SET ani_set_whip = animation_sets->Get(gameType::WHIP);
 		player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
 		break;
 	}
@@ -551,11 +556,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case gameType::BRICKBLACK_1: {
 		int isDelete = atoi(tokens[5].c_str());
 		obj = new CBrickBlack(gameType::BRICKBLACK_1,isDelete);
+		int itemId = atoi(tokens[6].c_str());
+		obj->setItemID(itemId);
 		break;
 	}
 	case gameType::BRICKBLACK_2: {
 		int isDelete = atoi(tokens[5].c_str());
 		obj = new CBrickBlack(gameType::BRICKBLACK_2, isDelete);
+		int itemId = atoi(tokens[6].c_str());
+		obj->setItemID(itemId);
 		break;
 	}
 	case gameType::WARRIOR: {
@@ -606,6 +615,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+	case gameType::ZONE_MONKEY: {
+		int r = atof(tokens[5].c_str());
+		int b = atof(tokens[6].c_str());
+		obj = new CZoneMonkey(x, y, r, b);
+		int numPointAppear = atof(tokens[7].c_str());
+		int _xDef = atof(tokens[7].c_str());
+		int _yDef = atof(tokens[8].c_str());
+		((CZoneMonkey*)obj)->setPointPosition(_xDef, _yDef);
+		break;
+	}
 	case gameType::BOSS_BAT: {
 		int l = atof(tokens[5].c_str());
 		int t = atof(tokens[6].c_str());
@@ -651,6 +670,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 Item * CPlayScene::getNewItem(int id, float x, float y)
 {
 	Item *item;
+	y -= 1; // khoản rơi dự trù
 	switch (id)
 	{
 	case gameType::ITEM_KNIFE:
@@ -660,6 +680,11 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 	case gameType::ITEM_HEART:
 		item = new Item(gameType::ITEM_HEART);
 		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_HEART_MINI:
+		item = new Item(gameType::ITEM_HEART_MINI);
+		item->SetPosition(x, y);
+		item->setValueGravity(x + ITEM_HEART_MINI_BBOX_WIDTH / 2 - ITEM_HEART_MINI_BBOX_WIDTH, x + ITEM_HEART_MINI_BBOX_WIDTH / 2 + ITEM_HEART_MINI_BBOX_WIDTH, SMALLHEART_SPEED_X, SMALLHEART_SPEED_Y);
 		break;
 	case gameType::ITEM_WHIP:
 		item = new Item(gameType::ITEM_WHIP);
@@ -689,15 +714,28 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 		item = new Item(gameType::ITEM_AXE);
 		item->SetPosition(x, y);
 		break;
+	case gameType::ITEM_YELLOW:
+		item = new Item(gameType::ITEM_YELLOW);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_TWO_CROSS:
+		item = new Item(gameType::ITEM_TWO_CROSS);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_THREE_CROSS:
+		item = new Item(gameType::ITEM_THREE_CROSS);
+		item->SetPosition(x, y);
+		break;
 	default:
 		item = new Item(gameType::ITEM_WHIP);
 		item->SetPosition(x, y);
 		break;
 	}
+
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(ANI_SET_ITEM);
 	item->SetAnimationSet(ani_set);
-	item->timeExit = GetTickCount();
+	//item->timeExit = GetTickCount();
 	return item;
 }
 
@@ -767,6 +805,7 @@ void CPlayScene::Load(bool isNextScreen_Stair)
 			}
 		}
 	}
+	player->isAutoGo = false;
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -936,7 +975,13 @@ void CPlayScene::Update(DWORD dt)
 		else if (dynamic_cast<CBrickBlack *>(objects.at(i))) {
 			auto *brick = dynamic_cast<CBrickBlack *>(objects.at(i));
 			if (brick->isFinish) {
+				listItems.push_back(getNewItem(brick->itemID, brick->x, brick->y));
+				brick->isGaveItem = true;
 				grid->deleteObject(brick->cellID, brick);
+			}
+			else if (brick->isHitted && !brick->isDelete && !brick->isGaveItem) {
+				listItems.push_back(getNewItem(brick->itemID, brick->x, brick->y));
+				brick->isGaveItem = true;
 			}
 		}
 		else if (dynamic_cast<CHidenObject *>(objects.at(i))) {
@@ -976,6 +1021,12 @@ void CPlayScene::Update(DWORD dt)
 				ghost = NULL;
 				listEnemy.erase(listEnemy.begin() + i);
 			}
+			else if (dynamic_cast<CMonkey *>(listEnemy.at(i))) {
+				auto *monkey = dynamic_cast<CMonkey*>(listEnemy.at(i));
+				delete monkey;
+				monkey = NULL;
+				listEnemy.erase(listEnemy.begin() + i);
+			}
 		}
 	}
 	//update xóa effect
@@ -1011,6 +1062,7 @@ void CPlayScene::Unload()
 	listEffect.clear();
 	listEnemy.clear();
 	objects.clear();
+	isDisableCamera = false;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)

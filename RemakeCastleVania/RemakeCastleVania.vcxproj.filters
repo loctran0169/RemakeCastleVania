@@ -201,6 +201,9 @@
     <ClCompile Include="Expression.cpp">
       <Filter>FrameWork\GameObjects\monters\Math</Filter>
     </ClCompile>
+    <ClCompile Include="ZoneMonkey.cpp">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -337,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="Expression.h">
       <Filter>FrameWork\GameObjects\monters\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ZoneMonkey.h">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

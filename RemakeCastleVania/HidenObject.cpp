@@ -15,7 +15,7 @@ CHidenObject::CHidenObject(float l, float t, float r, float b)
 
 void CHidenObject::Render()
 {
-	//RenderBoundingBox();
+//	RenderBoundingBox();
 }
 
 void CHidenObject::GetBoundingBox(float & l, float & t, float & r, float & b)

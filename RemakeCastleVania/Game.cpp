@@ -435,7 +435,6 @@ void CGame::SwitchScene(int scene_id, bool isNextScreen)
 	CTextures::GetInstance()->Clear();
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
-
 	
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load(isNextScreen);

@@ -47,8 +47,8 @@ void CGrid::getObjectFromGrid(vector<LPGAMEOBJECT>& listObj, vector<LPGAMEOBJECT
 		for (int j = 0; j < cell->objects.size(); j++) {
 			gameType type = cell->objects[j]->getType();
 			if (type == gameType::WARRIOR || type == gameType::BAT ||
-				type == gameType::MONKEY || type == gameType::BONE ||
-				type == gameType::GHOST_WALK || type == gameType::BIRD || type == gameType::BOSS_BAT) {
+				type == gameType::BONE ||type == gameType::GHOST_WALK ||
+				type == gameType::BIRD || type == gameType::BOSS_BAT) {
 				if (std::find(listEnemy.begin(), listEnemy.end(), cell->objects[j]) == listEnemy.end())
 					listEnemy.push_back(cell->objects[j]);
 			}

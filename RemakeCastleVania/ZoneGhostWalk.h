@@ -9,6 +9,7 @@
 
 #define GHOSTWALK_MIN_APPEAR_TIME	2500
 #define GHOSTWALK_BETWEEN_CREATE_TIME	300
+
 class CZoneGhostWalk : public CZone
 {
 private:

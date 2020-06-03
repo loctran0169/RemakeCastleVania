@@ -1,6 +1,5 @@
 ﻿#include "Zone.h"
 
-
 void CZone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {	
 	if (this->isCollitionObjectWithObject(simon)) {

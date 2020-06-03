@@ -40,7 +40,8 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (isGoDown) {
 				parabol = new CParabol(x , y, simon->x - SIMON_BBOX_WIDTH, simon->y + BOSSBAT_PADDING_ATTACK);
 				SetState(BOSSBAT_STATE_FLY);
-				vx = (abs(x - (simon->x - SIMON_BBOX_WIDTH + ((abs(x - (simon->x - SIMON_BBOX_WIDTH)) <= 32) ? 32 : 0))) > 48) ? BOSSBAT_SPEED_X : abs(x - (simon->x - SIMON_BBOX_WIDTH))*BOSSBAT_SPEED_X / 48;
+				vx = (abs(x - parabol->getX2()) > 64) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / 64;
+				
 				timeBeginState = GetTickCount();
 				return;
 			}
@@ -68,8 +69,8 @@ void CBossBat::Render()
 {
 	animation_set->at(getAniId())->Render(x + ((isWaiting) ? 32 : 0), y);
 
-	zone->RenderBoundingBox();
-	RenderBoundingBox();
+	//zone->RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBossBat::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -87,7 +88,7 @@ int CBossBat::getAniId()
 
 float CBossBat::randomX()
 {
-	float ran = float_randomX((int)game->cam_x + BOSSBAT_PADDING_X, (int)game->cam_x + SCREEN_WIDTH - BOSSBAT_PADDING_X);
+	float ran = float_randomX((int)game->cam_x + BOSSBAT_PADDING_X_LEFT, (int)game->cam_x + SCREEN_WIDTH - BOSSBAT_PADDING_X_RIGHT);
 	return ran;
 }
 

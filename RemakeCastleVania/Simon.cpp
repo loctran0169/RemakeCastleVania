@@ -99,10 +99,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			vy += SIMON_GRAVITY * dt;
 		}
 		//simon ko bị rớt ra khỏi camera
-		if (x < CMap::GetInstance()->boundingMapLeft)
-			x = CMap::GetInstance()->boundingMapLeft;
-		if (x + SIMON_BBOX_WIDTH > CMap::GetInstance()->boundingMapRight)
-			x = CMap::GetInstance()->boundingMapRight - SIMON_BBOX_WIDTH;
+		if (x < game->cam_x)
+			x = game->cam_x;
+		if (x + SIMON_BBOX_WIDTH > game->cam_x + SCREEN_WIDTH)
+			x = game->cam_x + SCREEN_WIDTH - SIMON_BBOX_WIDTH;
 
 		if (!checkCollisonWithSkateBoard(dt, coObjects)) {
 			if (!checkCollisonWithBricks(dt, coObjects))

@@ -26,7 +26,6 @@ void CLine::createLine(float _x1, float _y1, float _x2, float _y2)
 {
 	a = (_y1 - _y2) / (_x1 - _x2);
 	b = (_y2*_x1 - _x2 * _y1) / (_x1 - _x2);
-	DebugOut(L"a b %f %f \n", a, b);
 }
 
 float CLine::toY(float _x)
@@ -58,7 +57,7 @@ float * CLine::toXY(float _dxy)
 }
 
 
-float * CLine::toXY(float _dxy, float _dOY, bool isSwap)
+float * CLine::toXY(float _dxy, float _dOY)
 {
 	float *a = new float[4];
 	a[0] = x1Temp + (_dxy / distance(x1, y1, x2, y2))*(x2 - x1Temp);
@@ -67,25 +66,11 @@ float * CLine::toXY(float _dxy, float _dOY, bool isSwap)
 	y1Temp = a[1];
 	a[2] = (x1 > x2) ? -1 : 1;
 	a[3] = 0; //a[3] là check xem dừng lại hay ko
-	if (y1 < y2Def && y1Temp >= _dOY && isReverse == false) {
+	if (y1 < y2Def && y1Temp >= _dOY) {
 		a[3] = 1;
 	}
-	else if (y1 > y2Def && y1Temp <= _dOY && isReverse == false) {
+	else if (y1 > y2Def && y1Temp <= _dOY) {
 		a[3] = 1;
-	}
-	if (isSwap) {
-		if ((y1 < y2Def && y1Temp >= y2Def)||(y1 > y2Def && y1Temp <= y2Def)) {
-			x1Def = x1Def + abs(x1Def - x2Def) * 2 * ((x1Def < x2Def) ? 1 : -1);
-			swap(x1Def, x2Def);
-			swap(y1Def, y2Def);
-			createLine(x1Def, y1Def, x2Def, y2Def);
-			x1 = x1Def;
-			y1 = y1Def;
-			x2 = toX(_dOY);
-			y2 = _dOY;
-			y1Temp = toY(x1Temp);
-			isReverse = false;
-		}
 	}
 	return a;
 }

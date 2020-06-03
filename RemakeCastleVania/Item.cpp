@@ -18,14 +18,33 @@ void Item::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOL
 	std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 
-void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
+void Item::setValueGravity(float _l, float _r,float _vx, float _vy)
+{
+	boundLeft = _l;
+	boundRight = _r;
+	vx = _vx;
+	vy = _vy;
+}
 
-	if (	GetTickCount() - timeExit > ITEM_TIME_EXIT) {
+void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+{
+	if (timeExit != 0 && GetTickCount() - timeExit > ITEM_TIME_EXIT) {
 		isPicked = true;
 	}
-	CGameObject::Update(dt);
 
-	vy += ITEM_GRAVITY * dt;
+	if (type != gameType::ITEM_HEART_MINI) {
+		CGameObject::Update(dt);
+		vy += ITEM_GRAVITY * dt;
+	}
+	else {
+		if (x + ITEM_HEART_MINI_BBOX_WIDTH / 2 >= boundRight)
+			vx = -SMALLHEART_SPEED_X;
+		else if (x + ITEM_HEART_MINI_BBOX_WIDTH / 2 <= boundLeft)
+		{
+			vx = SMALLHEART_SPEED_X;
+		}
+		CGameObject::Update(dt);
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -35,6 +54,7 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 
 	if (coEvents.size() == 0)
 	{
+		x += dx;
 		y += dy;
 	}
 	else
@@ -44,7 +64,12 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		// block 
 		y += min_ty * dy + ny * 0.4f;
-		if (ny != 0) vy = 0;
+		if (ny != 0) {
+			vx = 0;
+			vy = 0;
+			if (timeExit == 0)
+				timeExit = GetTickCount();
+		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
@@ -92,6 +117,22 @@ void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 	else if (type == gameType::ITEM_WATER_FIRE) {
 		r = x + ITEM_WATERFIRE_BBOX_WIDTH;
 		b = y + ITEM_WATERFIRE_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_HEART_MINI) {
+		r = x + ITEM_HEART_MINI_BBOX_WIDTH;
+		b = y + ITEM_HEART_MINI_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_YELLOW) {
+		r = x + ITEM_YELLOW_BBOX_WIDTH;
+		b = y + ITEM_YELLOW_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_TWO_CROSS) {
+		r = x + ITEM_TWO_BBOX_WIDTH;
+		b = y + ITEM_TWO_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_THREE_CROSS) {
+		r = x + ITEM_THREE_BBOX_WIDTH;
+		b = y + ITEM_THREE_BBOX_HEIGHT;
 	}
 }
 

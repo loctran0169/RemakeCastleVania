@@ -83,7 +83,7 @@
 #define WHIP_BBOX_WIDGHT_LV1						42
 #define WHIP_BBOX_WIDGHT_LV2						42
 #define WHIP_BBOX_WIDGHT_LV3						72
-#define WHIP_BBOX_HEIGHT							15
+#define WHIP_BBOX_HEIGHT							20
 #define	WHIP_LEVEL_MAX								3
 #define	WHIP_PADDING_ATTACK							16
 #define	WHIP_PADDING_TOP							17
@@ -103,6 +103,18 @@
 
 #define ITEM_HEART_BBOX_WIDTH						24
 #define ITEM_HEART_BBOX_HEIGHT						20
+
+#define ITEM_HEART_MINI_BBOX_WIDTH					16
+#define ITEM_HEART_MINI_BBOX_HEIGHT					24
+
+#define ITEM_YELLOW_BBOX_WIDTH						32
+#define ITEM_YELLOW_BBOX_HEIGHT						32
+
+#define ITEM_TWO_BBOX_WIDTH							32
+#define ITEM_TWO_BBOX_HEIGHT						32
+
+#define ITEM_THREE_BBOX_WIDTH						32
+#define ITEM_THREE_BBOX_HEIGHT						32
 
 #define ITEM_WHIP_BBOX_WIDTH						32
 #define ITEM_WHIP_BBOX_HEIGHT						32
@@ -153,15 +165,19 @@ enum gameType
 	ITEM_BOOMERANG = 6,
 	ITEM_WATER_FIRE = 7,
 	ITEM_AXE = 8,
+	ITEM_HEART_MINI = 9,
+	ITEM_YELLOW = 10,
+	ITEM_TWO_CROSS = 11, // item 2 gạch
+	ITEM_THREE_CROSS = 12, // item 3 gạch
 
-	//weapon 10->
-	WEAPON_SPECIAL = 10,
-	WHIP = 11,
-	DAGGER = 12,
-	AXE = 13,
-	BOOMERANG = 14,
-	WATER_FIRE = 15,
-	BONE_WEAPON = 16,
+	//weapon 40->
+	WHIP = 40,
+	DAGGER = 41,
+	AXE = 42,
+	BOOMERANG = 43,
+	WATER_FIRE = 44,
+	BONE_WEAPON = 45,
+
 	//objects 50->
 	SIMON = 50, // player
 	BRICK = 51, //gạch
@@ -178,6 +194,7 @@ enum gameType
 	ZONE_GHOST_FLY = 62, // khu vực tạo ghost fly
 	ZONE_GHOST_WALK = 63, // khu vực xuất hiện ma đi bộ v:
 	DISABLE_CAMERA = 64	, //vào sẻ set cứng camera lại
+	ZONE_MONKEY = 65, //khu vực xuất hiện khỉ con
 
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép
