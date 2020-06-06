@@ -195,7 +195,7 @@ enum gameType
 	ZONE_GHOST_WALK = 63, // khu vực xuất hiện ma đi bộ v:
 	DISABLE_CAMERA = 64	, //vào sẻ set cứng camera lại
 	ZONE_MONKEY = 65, //khu vực xuất hiện khỉ con
-
+	ZONE_BIRD = 66, // khu vuc75 tao5 trym
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép
 	BAT = 101,	//đơi xéo -> thẳng

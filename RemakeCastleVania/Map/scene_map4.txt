@@ -433,6 +433,8 @@
 4	62	1120	274	0	928	242	1536	370	1	290
 # zone MONKEY
 #grid	type	x	y	ani	r	b	xDef	yDef
+1	65	0	0	0	672	480	336	177
+2	65	306	0	0	928	480	608	240
 3	65	550	0	0	1248	480	848	240
 # --- SCENE PORTAL ----
 # grid	type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny

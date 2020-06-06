@@ -7,7 +7,7 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH)
 		isHitted = true;
 
-	if (isIdle && GetTickCount() - timeBeAttack >= WARRIOR_TIME_WAIT_ATTACK) {
+	if (isIdle && GetTickCount() - timeBeAttack >= MONKEY_TIME_WAIT_ATTACK) {
 		animation_set->at(0)->setLopping(false);
 	}
 
@@ -35,11 +35,6 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(MONKEY_STATE_WALK);
 				else
 					SetState(MONKEY_STATE_JUMP);
-
-				if (x + MONKEY_BBOX_WIDTH / 2 > simon->x + SIMON_BBOX_WIDTH / 2)
-					nx = -1;
-				else
-					nx = 1;
 			}
 		}
 
@@ -58,7 +53,6 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	checkCollisonWithHidenObjects(dt, coObjects);
 	checkCollisonWithBricks(dt,coObjects);
-	DebugOut(L"isDisableJump %d \n",isDisableJump);
 }
 
 void CMonkey::Render()

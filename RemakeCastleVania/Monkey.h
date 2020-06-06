@@ -23,7 +23,7 @@
 
 #define MONKEY_GRAVITY_SPEED	0.0012f
 
-#define WARRIOR_TIME_WAIT_ATTACK	380
+#define MONKEY_TIME_WAIT_ATTACK	380
 class CMonkey : public CMonter // quái xương
 {
 	Simon * simon;
@@ -43,6 +43,7 @@ public:
 		timeChangeState = GetTickCount();
 		SetState(MONKEY_STATE_IDLE);
 		deteleBeforeLoadFromGrid = false;
+
 		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 		LPANIMATION_SET ani_set = animation_sets->Get(gameType::MONKEY);
 		SetAnimationSet(ani_set);

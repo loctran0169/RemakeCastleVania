@@ -440,6 +440,12 @@
 # zone ghost fly
 #grid	type	x	y	ani	l	t	r	b	xDef	yDef
 1	62	384	114	0	0	0	1000	480	314	114
+# zone bird
+#grid	type	x	y	ani	r	b	xDef	yDef
+2	66	300	0	0	930	480	544	82
+3	66	530	0	0	1200	480	832	178
+3	66	608	0	0	1248	480	960	114
+4	66	784	0	0	1375	480	1040	338
 # --- SCENE PORTAL ----
 # grid	type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 0	53	192	402	0	224	410	4	1	190	34	1	1

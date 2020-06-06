@@ -74,21 +74,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							}
 							break;
 						}
-						case gameType::BAT: {
-							auto bat = dynamic_cast<CBlackBat*>(gameObj);
-							bat->isHitted = true;
-							break;
-						}
-						case gameType::WARRIOR: {
-							auto warrior = dynamic_cast<CWarrior*>(gameObj);
-							warrior->beAttack();
-							break;
-						}
-						case gameType::GHOST_FLY: {
-							auto ghost = dynamic_cast<CGhostFly*>(gameObj);
-							ghost->beAttack();
-							break;
-						}
 						default:
 							break;
 						}
@@ -126,6 +111,11 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						}
 						case gameType::MONKEY: {
 							auto monkey = dynamic_cast<CMonkey*>(gameObj);
+							monkey->beAttack();
+							break;
+						}
+						case gameType::BIRD: {
+							auto monkey = dynamic_cast<CBird*>(gameObj);
 							monkey->beAttack();
 							break;
 						}
@@ -300,6 +290,11 @@ void CPlayScene::checkCollisonWithHideObj()
 			case gameType::ZONE_MONKEY: {
 				CZoneMonkey *zone = dynamic_cast<CZoneMonkey *>(objects[i]);
 				zone->createMonkey(listEnemy);
+				break;
+			}
+			case gameType::ZONE_BIRD: {
+				CZoneBird *zone = dynamic_cast<CZoneBird *>(objects[i]);
+				zone->createBird(listEnemy);
 				break;
 			}
 			default:
@@ -623,6 +618,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int _xDef = atof(tokens[7].c_str());
 		int _yDef = atof(tokens[8].c_str());
 		((CZoneMonkey*)obj)->setPointPosition(_xDef, _yDef);
+		break;
+	}
+	case gameType::ZONE_BIRD: {
+		int r = atof(tokens[5].c_str());
+		int b = atof(tokens[6].c_str());
+		obj = new CZoneBird(x, y, r, b);
+		int numPointAppear = atof(tokens[7].c_str());
+		int _xDef = atof(tokens[7].c_str());
+		int _yDef = atof(tokens[8].c_str());
+		((CZoneBird*)obj)->setPointPosition(_xDef, _yDef);
 		break;
 	}
 	case gameType::BOSS_BAT: {
