@@ -9,17 +9,24 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				timeBeginState = GetTickCount();
 			}
 		}	
-		else if (GetTickCount() - timeBeginState > 300) {
+		else if (GetTickCount() - timeBeginState > BOSSBAT_TIME_WAITING_ACTIVE) {
 			isWaiting = false;
 			line = new CLine(x, y, randomX(), dyRepairToAttack);
 			SetState(BOSSBAT_STATE_AUTOGO_ATTACK);
 		}
 	}
 	else {
+		//if(!isAutoGo && parabol!=NULL)vx = (abs(x - parabol->getX2()) > 64) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / 64;
 		CGameObject::Update(dt);
-		if (GetTickCount() - timeBeginState < 600 && state == BOSSBAT_STATE_AUTOGO_REPAIR)return;
-		if (GetTickCount() - timeBeginState < 600 && state == BOSSBAT_STATE_AUTOGO_ATTACK)return;
-		if (GetTickCount() - timeBeginState < 1500 && state == BOSSBAT_STATE_FLY)return;
+		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_AUTOGO && state == BOSSBAT_STATE_AUTOGO_REPAIR)return;
+		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_AUTOGO && state == BOSSBAT_STATE_AUTOGO_ATTACK)return;
+		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_FLY && state == BOSSBAT_STATE_FLY)return;
+
+		if (isResetPositionParabol) {
+			parabol = new CParabol(x, y, simon->x - SIMON_BBOX_WIDTH, simon->y + BOSSBAT_PADDING_ATTACK);
+			vx = (abs(x - parabol->getX2()) > 64) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / 64;
+			isResetPositionParabol = false;
+		}
 		if(isAutoGo){
 			float *xy = line->toXY(abs(dx), ((state == BOSSBAT_STATE_AUTOGO_ATTACK) ? dyRepairToAttack : dyRepair));
 			x = xy[0];
@@ -38,15 +45,13 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				return;
 			}
 			else if (isGoDown) {
-				parabol = new CParabol(x , y, simon->x - SIMON_BBOX_WIDTH, simon->y + BOSSBAT_PADDING_ATTACK);
 				SetState(BOSSBAT_STATE_FLY);
-				vx = (abs(x - parabol->getX2()) > 64) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / 64;
-				
 				timeBeginState = GetTickCount();
+				isResetPositionParabol = true;
 				return;
 			}
 			else {
-				float * xy = parabol->toXY(abs(dx), dyRepair);
+				float * xy = parabol->toXYWithDx(abs(dx), dyRepair);
 				x = xy[0];
 				y = xy[1];
 				nx = xy[2];
@@ -111,13 +116,13 @@ void CBossBat::SetState(int state)
 		isAutoGo = true;
 		isGoUp = true;
 		isGoDown = false;
-		vx = BOSSBAT_SPEED_AUTOGO;
+		vx = BOSSBAT_SPEED_AUTOGO_X;
 		break;
 	case BOSSBAT_STATE_AUTOGO_ATTACK:
 		isAutoGo = true;
 		isGoUp = false;
 		isGoDown = true;
-		vx = BOSSBAT_SPEED_AUTOGO;
+		vx = BOSSBAT_SPEED_AUTOGO_X;
 		break;
 	case BOSSBAT_STATE_FLY:
 		isAutoGo = false;

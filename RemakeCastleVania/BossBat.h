@@ -14,8 +14,8 @@
 #define BOSSBAT_ANI_IDLE				0
 #define BOSSBAT_ANI_FLY					1
 
-#define BOSSBAT_SPEED_X					0.18f
-#define BOSSBAT_SPEED_AUTOGO			0.14f
+#define BOSSBAT_SPEED_X					0.15f
+#define BOSSBAT_SPEED_AUTOGO_X			0.14f
 
 #define BOSSBAT_PADDING_ATTACK			15.0f
 #define BOSSBAT_PADDING_X_LEFT			64
@@ -27,6 +27,12 @@
 #define BOSSBAT_STATE_FLY				3
 
 #define BOSSBAT_PADDING_ATTACK			15
+
+#define BOSSBAT_TIME_WAITING_ACTIVE		500
+#define BOSSBAT_TIME_WAITING_AUTOGO		600
+#define BOSSBAT_TIME_WAITING_FLY		1500
+
+
 class CBossBat : public CMonter // quái xương
 {
 private:
@@ -44,6 +50,7 @@ private:
 	bool isAutoGo = false; // tự động đi theo đừng thằng
 	bool isGoUp = false; // bay xuống
 	bool isGoDown = false; // bay lên
+	bool isResetPositionParabol = false;
 	float autoGoX_Distance = 0.0f, autoGoY_Distance = 0.0f;
 
 	DWORD timeBeginState = 0;

@@ -31,6 +31,7 @@ vector<float> CExpression::giaiPT2(float a, float b, float c)
 			n.push_back(x2);
 		}
 	}
+	return n;
 }
 
 vector<float> CExpression::giaiPT3(float a, float b, float c, float d)

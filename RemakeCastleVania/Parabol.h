@@ -10,6 +10,7 @@ private:
 	float a, b, c;
 	float x1, x2, y1, y2;
 	float x1Temp, y1Temp;
+	bool isFirstOnI = false;
 public:
 	CParabol(float _x1, float _y1, float _x2, float _y2);
 	void createParabol(float _x1, float _y1, float _x2, float _y2);
@@ -21,7 +22,8 @@ public:
 
 	float distance(float _x1, float _y1, float _x2, float _y2);
 
-	float * toXY(float _dxy, float dyAttack);
+	float * toXYWithDx(float _dxy, float dyAttack);
+	float * toXYWithDy(float _dy, float dyAttack);
 	float * toXYPauseWhenOnI(float _dxy);
 	~CParabol();
 };

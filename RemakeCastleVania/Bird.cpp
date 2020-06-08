@@ -62,6 +62,7 @@ void CBird::setFlyParabol()
 {
 	line = new CLine(x, y, simon->x + SIMON_BBOX_WIDTH / 2, simon->y + BIRD_PADDING_ATTACK);
 	float yFlying = y + ((y < simon->y + BIRD_PADDING_ATTACK) ? 1 : -1)*abs(y - (simon->y + BIRD_PADDING_ATTACK)) * 2 / 3;
+	(yFlying <= 32) ? yFlying = 32 : yFlying = yFlying;
 	parabol = new CParabol(x , y, line->toX(yFlying), yFlying);
 	SetState(BIRD_STATE_FLY_PARABOL);
 }

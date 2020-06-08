@@ -15,6 +15,7 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isIdle = false;
 		numOfSate = 0;
 		SetState(MONKEY_STATE_JUMP);
+		setAutoNx();
 	}
 	else if(!isIdle) {
 		if (timeBeginState != 0 && GetTickCount() - timeBeginState < 300) return;
@@ -36,6 +37,7 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else
 					SetState(MONKEY_STATE_JUMP);
 			}
+			setAutoNx();
 		}
 
 		if (isJump) {// xét đang nhãy thì ko đổi hướng
@@ -138,6 +140,13 @@ void CMonkey::checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT>* coOb
 		if (coObjects->at(i)->getType() == gameType::DISABLE_JUMP)
 			if (isCollitionObjectWithObject(coObjects->at(i)))
 				isDisableJump = true;
+}
+
+void CMonkey::setAutoNx()
+{
+	if (x < simon->x + SIMON_BBOX_WIDTH / 2)
+		nx = 1;
+	else nx = -1;
 }
 
 void CMonkey::SetState(int state)

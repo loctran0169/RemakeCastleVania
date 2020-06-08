@@ -390,8 +390,8 @@
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 #grid	type	x	y	ani_set_id	ani_whip
-0	50	0	0	50	11
-#0	50	1300	0	50	11
+#0	50	0	0	50	11
+0	50	1300	0	50	11
 # BRICK 
 #grid	type	x	y	an	number
 0	51	0	370	0	8	0

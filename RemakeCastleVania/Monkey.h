@@ -53,6 +53,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	void setAutoNx();
 	void SetState(int state);
 	void beAttack();
 	~CMonkey();
