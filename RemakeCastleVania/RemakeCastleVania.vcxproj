@@ -136,6 +136,7 @@
     <ClCompile Include="BrickBlack.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="ZoneBone.cpp" />
     <ClCompile Include="ZoneBird.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="Parabol.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="ZoneBird.h" />
+    <ClInclude Include="ZoneBone.h" />
     <ClInclude Include="ZoneGhostFly.h" />
     <ClInclude Include="ZoneGhostWalk.h" />
     <ClInclude Include="ZoneMonkey.h" />

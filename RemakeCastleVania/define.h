@@ -70,7 +70,6 @@
 #define SIMON_AUTO_GO_SPEED							0.4f
 #define SIMON_STAIR_SPEED							0.08f
 #define DAGGER_SPEED								0.3f
-#define BOOMERANG_SPEED								0.45f
 #define AXE_SPEED_X									0.2f
 #define AXE_SPEED_Y									0.5f
 #define	AXE_SPEED_GRAVITY							0.0012f
@@ -119,6 +118,9 @@
 #define ITEM_WHIP_BBOX_WIDTH						32
 #define ITEM_WHIP_BBOX_HEIGHT						32
 
+#define ITEM_BOOMERANG_BBOX_WIDTH					28.0f
+#define ITEM_BOOMERANG_HEIGHT						28.0f
+
 #define ITEM_MONEY_BBOX_WIDTH						30
 #define ITEM_MONEY_BBOX_HEIGHT						30
 
@@ -140,9 +142,6 @@
 #define AXE_BBOX_WIDTH								28
 #define AXE_BBOX_HEIGHT								28
 
-#define BOOMERANG_BBOX_WIDTH						28
-#define BOOMERANG_HEIGHT							28
-
 #define SKATEBOARD_BBOX_WIDTH						64
 #define SKATEBOARD_BBOX_HEIGHT						16
 
@@ -152,6 +151,7 @@
 #define ANI_SET_ITEM_WHIP							1
 #define ANI_SET_ITEM_WHIP							2
 #define ANI_SET_ITEM_WHIP							3
+
 
 enum gameType
 {
@@ -196,6 +196,10 @@ enum gameType
 	DISABLE_CAMERA = 64	, //vào sẻ set cứng camera lại
 	ZONE_MONKEY = 65, //khu vực xuất hiện khỉ con
 	ZONE_BIRD = 66, // khu vuc75 tao5 trym
+	ZONE_BONE = 67, // khu khu vực xuất hiện bộ xương
+	BE_JUMP = 68, //chạm object thì phải chuyển sang trạng thái nhẩy
+
+
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép
 	BAT = 101,	//đơi xéo -> thẳng

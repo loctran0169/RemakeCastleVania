@@ -27,6 +27,7 @@
 #include"BossBat.h"
 #include"ZoneMonkey.h"
 #include"ZoneBird.h"
+#include"ZoneBone.h"
 
 class Simon;
 class CPlayScene : public CScene
@@ -38,6 +39,7 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listEffect;
 	vector<LPGAMEOBJECT> listEnemy;// load từ grid ra
+	vector<LPGAMEOBJECT> listEnemyWeapon;// danh sách vũ khí xuất hiện quái vật
 	vector<Item*> listItems;
 
 	void _ParseSection_TEXTURES(string line);

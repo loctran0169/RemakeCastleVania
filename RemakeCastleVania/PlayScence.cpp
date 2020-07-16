@@ -297,6 +297,11 @@ void CPlayScene::checkCollisonWithHideObj()
 				zone->createBird(listEnemy);
 				break;
 			}
+			case gameType::ZONE_BONE: {
+				CZoneBone *zone = dynamic_cast<CZoneBone *>(objects[i]);
+				zone->createBone(listEnemy);
+				break;
+			}
 			default:
 				break;
 			}
@@ -524,6 +529,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj->setType(gameType::DISABLE_JUMP);
 		break;
 	}
+	case gameType::BE_JUMP: {
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
+		obj = new CHidenObject(x, y, r, b);
+		obj->setType(gameType::BE_JUMP);
+		break;
+	}
 	case gameType::GO_UP_STAIR: {
 		float r = atof(tokens[5].c_str());
 		float b = atof(tokens[6].c_str());
@@ -628,6 +640,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int _xDef = atof(tokens[7].c_str());
 		int _yDef = atof(tokens[8].c_str());
 		((CZoneBird*)obj)->setPointPosition(_xDef, _yDef);
+		break;
+	}
+	case gameType::ZONE_BONE: {
+		int r = atof(tokens[5].c_str());
+		int b = atof(tokens[6].c_str());
+		obj = new CZoneBone(x, y, r, b);
+		int numPointAppear = atof(tokens[7].c_str());
+		int _xDef = atof(tokens[7].c_str());
+		int _yDef = atof(tokens[8].c_str());
+		((CZoneBone*)obj)->setPointPosition(_xDef, _yDef);
 		break;
 	}
 	case gameType::BOSS_BAT: {

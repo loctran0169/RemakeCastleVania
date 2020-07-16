@@ -25,7 +25,6 @@ void CZoneMonkey::GetBoundingBox(float & _left, float & _top, float & _right, fl
 void CZoneMonkey::createMonkey(vector<LPGAMEOBJECT>& listEnemy)
 {
 	if (isAllowToCreate && allowToCreate()) {
-		DebugOut(L"vào tạo %f %f\n",point->x,point->y);
 		CMonkey * monkey = new CMonkey();
 		monkey->SetPosition(point->x, point->y);
 		listEnemy.push_back(monkey);		

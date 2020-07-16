@@ -64,6 +64,9 @@
     <Filter Include="FrameWork\GameObjects\monters\zones">
       <UniqueIdentifier>{9fef8705-f42c-4b87-8adf-83d3fe5bd562}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FrameWork\GameObjects\monters\weapons">
+      <UniqueIdentifier>{f0809eb7-91bb-46f8-a1c3-1651201245ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,6 +210,9 @@
     <ClCompile Include="ZoneBird.cpp">
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClCompile>
+    <ClCompile Include="ZoneBone.cpp">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -348,6 +354,9 @@
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClInclude>
     <ClInclude Include="ZoneBird.h">
+      <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClInclude>
+    <ClInclude Include="ZoneBone.h">
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClInclude>
   </ItemGroup>

@@ -73,7 +73,7 @@ void CBlackBat::startFly(int _nx)
 	autoGoX_Distance = BLACKBAT_DISTANCE_X;
 	autoGoY_Distance = BLACKBAT_DISTANCE_Y;
 
-	vx = BLACKBAT_SPEED_X_OVA*nx;
+	vx = BLACKBAT_SPEED_X_OVA * nx;
 	vy = BLACKBAT_SPEED_Y_OVA;
 }
 

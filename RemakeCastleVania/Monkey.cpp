@@ -4,14 +4,18 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float camX, camY;
 	game->GetCamPos(camX, camY);
-	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH)
-		isHitted = true;
+	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH) {
+		if (isIdle)
+			timeChangeState = GetTickCount();
+		else
+			isHitted = true;
+	}
 
 	if (isIdle && GetTickCount() - timeBeAttack >= MONKEY_TIME_WAIT_ATTACK) {
 		animation_set->at(0)->setLopping(false);
 	}
 
-	if (isIdle && GetTickCount() - timeChangeState > 1000) {
+	if (isIdle && GetTickCount() - timeChangeState > MONKEY_TIME_WAIT_IDLE) {
 		isIdle = false;
 		numOfSate = 0;
 		SetState(MONKEY_STATE_JUMP);
@@ -48,7 +52,7 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy += MONKEY_GRAVITY_SPEED * dt;
 		}
 		else {
-			vy += SIMON_GRAVITY * dt;
+			vy += MONKEY_GRAVITY_SPEED * dt;
 		}
 	}
 
@@ -142,9 +146,15 @@ void CMonkey::checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT>* coOb
 				isDisableJump = true;
 }
 
+void CMonkey::SetPosition(float _x, float _y)
+{
+	CGameObject::SetPosition(_x, _y);
+	setAutoNx();
+}
+
 void CMonkey::setAutoNx()
 {
-	if (x < simon->x + SIMON_BBOX_WIDTH / 2)
+	if (x + MONKEY_BBOX_WIDTH / 2 < simon->x + SIMON_BBOX_WIDTH / 2)
 		nx = 1;
 	else nx = -1;
 }

@@ -12,11 +12,14 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH) {
 		if (!isFirst) {
 			isFirst = true;
-			nx = -nx;
-			if (x < xCam)
-				x = xCam + 10;
-			else
-				x = xCam + SCREEN_WIDTH - BOOMERANG_BBOX_WIDTH-10;
+			if (x < xCam) {
+				x = xCam + BOOMERANG_PADDING_HIDE;
+				nx = 1;
+			}
+			else {
+				x = xCam + SCREEN_WIDTH - BOOMERANG_BBOX_WIDTH - BOOMERANG_PADDING_HIDE;
+				nx = -1;
+			}
 		}
 		else
 			SetAttack(false);

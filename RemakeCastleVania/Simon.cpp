@@ -88,9 +88,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		// Calculate dx, dy 
 		if (isJump) {// xét đang nhãy thì ko đổi hướng
 			if (isJumpRight)
-				vx = SIMON_WALKING_SPEED * 1.0f;
+				vx = SIMON_WALKING_SPEED;
 			else if (isJumpLeft)
-				vx = -SIMON_WALKING_SPEED * 1.0f;
+				vx = -SIMON_WALKING_SPEED;
 			else
 				vx = 0;
 			vy += SIMON_JUMP_GRAVITY * dt;

@@ -7,6 +7,13 @@
 #include"Utils.h"
 #include"Weapon.h"
 
+#define BOOMERANG_BBOX_WIDTH						28.0f
+#define BOOMERANG_HEIGHT							28.0f
+
+#define BOOMERANG_SPEED								0.45f
+
+#define BOOMERANG_PADDING_HIDE						10.0f
+
 class CBoomerang : public CWeapon
 {
 public:

@@ -16,7 +16,6 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	else {
-		//if(!isAutoGo && parabol!=NULL)vx = (abs(x - parabol->getX2()) > 64) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / 64;
 		CGameObject::Update(dt);
 		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_AUTOGO && state == BOSSBAT_STATE_AUTOGO_REPAIR)return;
 		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_AUTOGO && state == BOSSBAT_STATE_AUTOGO_ATTACK)return;

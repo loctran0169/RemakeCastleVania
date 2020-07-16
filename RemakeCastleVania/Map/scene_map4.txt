@@ -390,8 +390,8 @@
 # type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 #grid	type	x	y	ani_set_id	ani_whip
-0	50	1470	242	50	11
-#0	50	200	0	50	11
+#0	50	1470	242	50	11
+0	50	200	0	50	11
 # BRICK 
 #type	x	y	ani_set_id	number_object	ngang/thẳng(0/1)
 1	51	256	370	0	8	0
@@ -404,7 +404,7 @@
 2	51	608	274	0	1	0
 3	51	832	274	0	2	0
 0	51	128	338	0	4	0
-0	51	64	274	0	2	0
+0	51	32	274	0	3	0
 0	51	192	210	0	4	0
 1	51	320	210	0	2	0
 0	51	32	50	0	11	1
@@ -412,6 +412,11 @@
 #Disable Jump
 2	55	608	306	0	640	402
 3	55	832	306	0	896	402
+#must be jump
+0	68	152	250	0	150	254
+0	68	168	204	0	170	208
+0	68	280	280	0	284	282
+1	68	408	204	0	410	208
 # candle
 #grid	type	x	y	ani_set_id	id_item
 0	59	312	146	59	1
@@ -436,6 +441,9 @@
 1	65	0	0	0	672	480	336	177
 2	65	306	0	0	928	480	608	240
 3	65	550	0	0	1248	480	848	240
+# zone bone
+#grid	type	x	y	ani	r	b	xDef	yDef
+1	67	0	0	0	512	480	66	209
 # --- SCENE PORTAL ----
 # grid	type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
 0	53	160	0	0	192	20	5	1	160	322	-1	-1

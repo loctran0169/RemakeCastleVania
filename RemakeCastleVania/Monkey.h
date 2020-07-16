@@ -24,12 +24,15 @@
 #define MONKEY_GRAVITY_SPEED	0.0012f
 
 #define MONKEY_TIME_WAIT_ATTACK	380
+#define MONKEY_TIME_WAIT_IDLE	1000
+
 class CMonkey : public CMonter // quái xương
 {
 	Simon * simon;
 	CGame *game;
 	DWORD timeChangeState; // thời gian chuyển trạng thái
 	DWORD timeBeAttack;
+
 	bool isIdle = true;
 	bool isJump = false;
 	bool isDisableJump = false;
@@ -53,6 +56,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	void SetPosition(float x, float y);
 	void setAutoNx();
 	void SetState(int state);
 	void beAttack();
