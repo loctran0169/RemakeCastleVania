@@ -390,8 +390,8 @@
 # grid	type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas
 # Simon 
 # grid	type	x	y	ani	ani_whip
-0	50	128	274	50	11
-#0	50	300	274	50	11
+#0	50	128	274	50	11
+0	50	1000	274	50	11
 # BRICK 
 #grid	type	x	y	ani_	number	ngang/thẳng(0/1)
 0	51	32	50	0	9	1
@@ -451,7 +451,12 @@
 3	68	1040	186	0	1042	188	1
 4	68	1065	154	0	1067	156	-1
 4	68	1168	154	0	1170	156	1
-4	68	1193	282	0	1200	284	-1
+4	68	1205	282	0	1210	284	-1
+4	68	1110	314	0	1112	316	1
+#must change nx
+#grid	type	x	y	ani	r	b	nx
+1	69	288	242	0	320	338	1
+4	69	1342	242	0	1408	338	-1
 # zone ghost fly
 #grid	type	x	y	ani	l	t	r	b	xDef	yDef
 1	62	384	114	0	0	0	1000	480	314	114

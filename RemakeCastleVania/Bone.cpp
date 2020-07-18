@@ -44,7 +44,7 @@ void CBone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else {
 		SetState(BONE_STATE_WALK);
 		autoGoX_Distance = abs(randomPositionX() - (x + BONE_BBOX_WIDTH / 2));
-		autoGoX_Distance = (autoGoX_Distance > BRICK_BBOX_WIDTH * 1.5F) ? BRICK_BBOX_WIDTH * 1.5f : autoGoX_Distance;
+		autoGoX_Distance = (autoGoX_Distance > BRICK_BBOX_WIDTH * 1.5f) ? BRICK_BBOX_WIDTH * 1.5f : autoGoX_Distance;
 		setAutoNx();
 	}
 }
@@ -154,23 +154,25 @@ void CBone::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CBone::checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	isOnCheckJump = false;
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
+	isOnChangeNX = false;
 
-	vector<LPGAMEOBJECT> listActives;
-	listActives.clear();
-
-	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách cần xét va chạm disable jump
-		if (coObjects->at(i)->getType() == gameType::BE_JUMP)
+	for (UINT i = 0; i < coObjects->size(); i++) {
+		//lọc ra danh sách cần xét va chạm 	
 			if (isCollitionObjectWithObject(coObjects->at(i))) {
-				if (!isJump) {
-					auto *beJump = dynamic_cast<CMustBeJump*>(coObjects->at(i));
-					nxWalk = beJump->getNX();
-					SetState(BONE_STATE_JUMP);
-					isOnCheckJump = true;
+				if (coObjects->at(i)->getType() == gameType::BE_JUMP) {
+					if (!isJump) {
+						auto *beJump = dynamic_cast<CMustBeJump*>(coObjects->at(i));
+						nxWalk = beJump->getNX();
+						SetState(BONE_STATE_JUMP);
+						isOnCheckJump = true;
+					}
 				}
-			}
+				else if (coObjects->at(i)->getType() == gameType::CHANGE_NX) {
+					auto *changeNX = dynamic_cast<CMustChangeNX*>(coObjects->at(i));
+					nxWalk = changeNX->getNX();
+				}
+			}	
+	}
 }
 
 void CBone::beAttack()

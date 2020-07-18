@@ -436,6 +436,10 @@
 #stair up
 #tgrid	type	x	y	ani_set_id	r	b	nx
 1	56	286	198	0	336	210	-1
+#must change nx
+#grid	type	x	y	ani	r	b	nx
+1	69	32	178	0	48	274	1
+4	69	1472	242	0	1504	338	-1
 # zone ghost fly
 #grid	type	x	y	ani	l	t	r	b	px	yDef
 4	62	1120	274	0	928	242	1536	370	1	290

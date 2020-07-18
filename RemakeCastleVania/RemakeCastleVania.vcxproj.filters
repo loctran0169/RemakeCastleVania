@@ -219,6 +219,9 @@
     <ClCompile Include="MustBeJump.cpp">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClCompile>
+    <ClCompile Include="MustChangeNX.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -369,6 +372,9 @@
       <Filter>FrameWork\GameObjects\monters\weapons</Filter>
     </ClInclude>
     <ClInclude Include="MustBeJump.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="MustChangeNX.h">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClInclude>
   </ItemGroup>

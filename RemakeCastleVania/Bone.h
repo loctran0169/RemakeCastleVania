@@ -5,6 +5,8 @@
 #include"Simon.h"
 #include"WhiteBone.h"
 #include"MustBeJump.h"
+#include"MustChangeNX.h"
+
 
 #define BONE_BBOX_WIDTH				32
 #define BONE_BBOX_HEIGHT			63
@@ -45,6 +47,7 @@ class CBone : public CMonter // quái xương
 
 	bool isJump = false; //đang nhảy
 	bool isOnCheckJump = false; // có đang đứng tại vị trí tự nhảy hay ko
+	bool isOnChangeNX = false;
 	bool isAttack = false; // trang thái tấn công
 
 	DWORD timeBeginState = 0;

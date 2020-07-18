@@ -545,6 +545,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMustBeJump(x, y, r, b, nx);
 		break;
 	}
+	case gameType::CHANGE_NX: {
+		float r = atof(tokens[5].c_str());
+		float b = atof(tokens[6].c_str());
+		int nx = atof(tokens[7].c_str());
+		obj = new CMustChangeNX(x, y, r, b, nx);
+		break;
+	}
 	case gameType::GO_UP_STAIR: {
 		float r = atof(tokens[5].c_str());
 		float b = atof(tokens[6].c_str());
