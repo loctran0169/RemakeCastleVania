@@ -26,7 +26,6 @@ void CParabol::createParabol(float _x1, float _y1, float _x2, float _y2)
 		b = -2 * a*_x2;
 		c = _y1 - a * pow(_x1, 2) - b * _x1;
 	}
-	DebugOut(L"%f %f %f \n", a, b, c);
 }
 
 float CParabol::toY(float _x)

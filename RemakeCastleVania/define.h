@@ -198,7 +198,7 @@ enum gameType
 	ZONE_BIRD = 66, // khu vuc75 tao5 trym
 	ZONE_BONE = 67, // khu khu vực xuất hiện bộ xương
 	BE_JUMP = 68, //chạm object thì phải chuyển sang trạng thái nhẩy
-
+	CHANGE_NX = 69, // THAY ĐỔI nx khi chạm
 
 	//monster 100->
 	WARRIOR = 100, // chiến binh thép

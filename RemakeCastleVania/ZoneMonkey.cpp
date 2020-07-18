@@ -12,7 +12,7 @@ void CZoneMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CZoneMonkey::Render()
 {
 	//RenderBoundingBox();
-}
+} 
 
 void CZoneMonkey::GetBoundingBox(float & _left, float & _top, float & _right, float & _bottom)
 {

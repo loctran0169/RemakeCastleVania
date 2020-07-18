@@ -213,6 +213,12 @@
     <ClCompile Include="ZoneBone.cpp">
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
     </ClCompile>
+    <ClCompile Include="WhiteBone.cpp">
+      <Filter>FrameWork\GameObjects\monters\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="MustBeJump.cpp">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -358,6 +364,12 @@
     </ClInclude>
     <ClInclude Include="ZoneBone.h">
       <Filter>FrameWork\GameObjects\monters\zones</Filter>
+    </ClInclude>
+    <ClInclude Include="WhiteBone.h">
+      <Filter>FrameWork\GameObjects\monters\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="MustBeJump.h">
+      <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@ void CBone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	game->GetCamPos(camX, camY);
 	checkCollisonWithHidenObjects(dt, coObjects);
 
-	if (y < camY || y + BONE_BBOX_HEIGHT > camY + SCREEN_HEIGHT)
+	if (y + BONE_BBOX_HEIGHT > camY + SCREEN_HEIGHT)
 		isHitted = true;
 	else if (GetTickCount() - timeWaitState <= 200)
 		return;
@@ -15,14 +15,8 @@ void CBone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CGameObject::Update(dt);
 		checkCollisonWithBricks(dt, coObjects);
 	}
-	else if (isOnCheckJump && !isJump) {
-		if (x + BONE_BBOX_WIDTH / 2 < simon->x + SIMON_BBOX_WIDTH / 2)
-			nxWalk = 1;
-		else nxWalk = -1;
-
-		if (abs(x + BONE_BBOX_WIDTH / 2 - (simon->x + SIMON_BBOX_WIDTH / 2)) <= BRICK_BBOX_WIDTH * 3.5f)
-			nxWalk = -nxWalk;
-		SetState(BONE_STATE_JUMP);
+	else if (isAttack) {
+		if (bonePerHit < 1)isAttack = false;
 	}
 	else if (isWalkAutoX) {
 		
@@ -32,7 +26,7 @@ void CBone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (abs(dx) <= abs(autoGoX_Distance))
 			{
 				x += dx * nxWalk;
-				autoGoX_Distance -= abs(dx);
+				autoGoX_Distance -= abs(dx);;;
 			}
 		}
 		else {
@@ -40,17 +34,17 @@ void CBone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isWalkAutoX = false;
 			SetState(BONE_STATE_IDLE);
 			autoGoX_Distance = 0;
+			if (GetTickCount() - lastTimeAttack >= BONE_TIME_WAIT_ATTACK && abs(x + BONE_BBOX_WIDTH / 2 - simon->x - SIMON_BBOX_WIDTH / 2) <= BRICK_BBOX_WIDTH * 3.5f) {
+				attackBone();
+				lastTimeAttack = GetTickCount();
+			}
 		}
-		if (isOnCheckJump) {
-			SetState(BONE_STATE_JUMP);
-			setAutoNx();
-		}
-		else
-			checkCollisonWithBricks(dt, coObjects);
+		checkCollisonWithBricks(dt, coObjects);
 	}
 	else {
 		SetState(BONE_STATE_WALK);
 		autoGoX_Distance = abs(randomPositionX() - (x + BONE_BBOX_WIDTH / 2));
+		autoGoX_Distance = (autoGoX_Distance > BRICK_BBOX_WIDTH * 1.5F) ? BRICK_BBOX_WIDTH * 1.5f : autoGoX_Distance;
 		setAutoNx();
 	}
 }
@@ -111,10 +105,10 @@ void CBone::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	bool isComparePosition = false;
 	for (UINT i = 0; i < listActives.size(); i++) {
-		if (checkAABB(listActives[i])) {
+		if (isCollitionObjectWithObject(listActives[i])) {
 			float l, t, r, b;
 			listActives[i]->GetBoundingBox(l, t, r, b);
-			if (y + BONE_BBOX_HEIGHT < t + BRICK_BBOX_WIDTH * 2 && (abs(x - l) <= 10.0f || abs(x - r) <= 10.0f) && abs(y - t) <= 48) {
+			if (abs(y + BONE_BBOX_HEIGHT - b) <= BRICK_BBOX_HEIGHT * 1.5f && (abs(x + BONE_BBOX_WIDTH/2 - l) <= BONE_SPACE_CLIMBTOTOP || abs(x + BONE_BBOX_WIDTH/2 - r) <= BONE_SPACE_CLIMBTOTOP)) {
 				y = t - BONE_BBOX_HEIGHT - 1;
 				isComparePosition = true;
 			}
@@ -138,10 +132,9 @@ void CBone::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdy = 0;
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
 		if (!isJump) {
-			x += min_tx * dx + nx * 0.4f;
-			if (nx != 0) vx = 0;
+			//x += min_tx * dx + nx * 0.4f;
+			//if (nx != 0) vx = 0;
 		}
 
 		if (ny == -1) {
@@ -170,13 +163,41 @@ void CBone::checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT>* coObje
 
 	for (UINT i = 0; i < coObjects->size(); i++)//lọc ra danh sách cần xét va chạm disable jump
 		if (coObjects->at(i)->getType() == gameType::BE_JUMP)
-			if (isCollitionObjectWithObject(coObjects->at(i)))
-				isOnCheckJump = true;
+			if (isCollitionObjectWithObject(coObjects->at(i))) {
+				if (!isJump) {
+					auto *beJump = dynamic_cast<CMustBeJump*>(coObjects->at(i));
+					nxWalk = beJump->getNX();
+					SetState(BONE_STATE_JUMP);
+					isOnCheckJump = true;
+				}
+			}
 }
 
 void CBone::beAttack()
 {
 	isHitted = true;
+}
+
+void CBone::attackBone()
+{
+	isAttack = true;
+	int num = rand() % (4 - 1 + 1) + 1;
+	bonePerHit = (num == 4) ? 2 : 1;
+}
+
+void CBone::attackWeapon(vector<LPGAMEOBJECT>& listWeapon)
+{
+	if (bonePerHit < 1)return;
+	else {		
+		if (GetTickCount() - lastTimeAttackPerHit >= 300) {
+			CWhiteBone * bone = new CWhiteBone();
+			bone->setPosition(x, y, nx);
+			bone->SetAttack(true);
+			listWeapon.push_back(bone);
+			lastTimeAttackPerHit = GetTickCount();
+			bonePerHit--;
+		}
+	}
 }
 
 void CBone::SetPosition(float _x, float _y)

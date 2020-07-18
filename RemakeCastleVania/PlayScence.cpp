@@ -119,6 +119,11 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							monkey->beAttack();
 							break;
 						}
+						case gameType::BONE: {
+							auto bone = dynamic_cast<CBone*>(gameObj);
+							bone->beAttack();
+							break;
+						}
 						}
 						gameObj->timeBeAttacked = GetTickCount();
 
@@ -300,6 +305,10 @@ void CPlayScene::checkCollisonWithHideObj()
 			case gameType::ZONE_BONE: {
 				CZoneBone *zone = dynamic_cast<CZoneBone *>(objects[i]);
 				zone->createBone(listEnemy);
+				break;
+			}
+			case gameType::BE_JUMP: {
+
 				break;
 			}
 			default:
@@ -532,8 +541,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case gameType::BE_JUMP: {
 		float r = atof(tokens[5].c_str());
 		float b = atof(tokens[6].c_str());
-		obj = new CHidenObject(x, y, r, b);
-		obj->setType(gameType::BE_JUMP);
+		int nx = atof(tokens[7].c_str());
+		obj = new CMustBeJump(x, y, r, b, nx);
 		break;
 	}
 	case gameType::GO_UP_STAIR: {
@@ -968,10 +977,18 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < listEnemy.size(); i++)// update quái
 	{
 		listEnemy[i]->Update(dt, &coObjects);
+		if (dynamic_cast<CBone *>(listEnemy.at(i))) {
+			auto *bone = dynamic_cast<CBone *>(listEnemy.at(i));
+			bone->attackWeapon(listEnemyWeapon);
+		}
 	}
 	for (size_t i = 0; i < listEffect.size(); i++)
 	{
 		listEffect[i]->Update(dt);
+	}
+	for (size_t i = 0; i < listEnemyWeapon.size(); i++)
+	{
+		listEnemyWeapon[i]->Update(dt, &coObjects);
 	}
 	// update enemy mà chưa làm
 	//*************************************************************************************************
@@ -1042,6 +1059,11 @@ void CPlayScene::Update(DWORD dt)
 				delete ghost;
 				listEnemy.erase(listEnemy.begin() + i);
 			}
+			else if (dynamic_cast<CBone *>(listEnemy.at(i))) {
+				auto *bone = dynamic_cast<CBone*>(listEnemy.at(i));
+				delete bone;
+				listEnemy.erase(listEnemy.begin() + i);
+			}
 			else if (dynamic_cast<CGhostWalk *>(listEnemy.at(i))) {
 				auto *ghost = dynamic_cast<CGhostWalk*>(listEnemy.at(i));
 				delete ghost;
@@ -1058,10 +1080,22 @@ void CPlayScene::Update(DWORD dt)
 	}
 	//update xóa effect
 	for (int i = 0; i < listEffect.size(); i++) {
-		auto *effect = dynamic_cast<CEffectBrickBlack *>(listEffect.at(i));
-		if (effect->isFinish) {
-			listEffect.erase(listEffect.begin() + i);
-			delete effect;
+		if (dynamic_cast<CEffectBrickBlack *>(listEffect.at(i))) {
+			auto *effect = dynamic_cast<CEffectBrickBlack *>(listEffect.at(i));
+			if (effect->isFinish) {
+				listEffect.erase(listEffect.begin() + i);
+				delete effect;
+			}
+		}
+	}
+	//update xóa weapon quái
+	for (int i = 0; i < listEnemyWeapon.size(); i++) {
+		if (dynamic_cast<CWhiteBone *>(listEnemyWeapon.at(i))) {
+			auto *bone = dynamic_cast<CWhiteBone *>(listEnemyWeapon.at(i));
+			if (bone->GetAttack() == false) {
+				listEnemyWeapon.erase(listEnemyWeapon.begin() + i);
+				delete bone;
+			}
 		}
 	}
 }
@@ -1071,12 +1105,14 @@ void CPlayScene::Render()
 	map->drawMap();
 	for (int i = 0; i < objects.size(); i++)//render objects
 		objects[i]->Render();
-	for (int i = 0; i < listEnemy.size(); i++)// render Enemy
+	for (int i = 0; i < listEnemy.size(); i++)// render quái
 		listEnemy[i]->Render();
 	for (int i = 0; i < listItems.size(); i++)// render items
 		listItems[i]->Render();
-	for (int i = 0; i < listEffect.size(); i++)// render effect
+	for (int i = 0; i < listEffect.size(); i++)// render hiệu ứng
 		listEffect[i]->Render();
+	for (int i = 0; i < listEnemyWeapon.size(); i++)// render vũ khí quái
+		listEnemyWeapon[i]->Render();
 
 	player->Render();
 }
@@ -1088,6 +1124,7 @@ void CPlayScene::Unload()
 	listItems.clear();
 	listEffect.clear();
 	listEnemy.clear();
+	listEnemyWeapon.clear();
 	objects.clear();
 	isDisableCamera = false;
 }
