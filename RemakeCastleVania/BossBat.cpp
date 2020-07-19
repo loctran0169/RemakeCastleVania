@@ -134,7 +134,8 @@ void CBossBat::SetState(int state)
 
 void CBossBat::beAttack()
 {
-
+	health--;
+	if (health < 1)isHitted = true;
 }
 
 CBossBat::~CBossBat()

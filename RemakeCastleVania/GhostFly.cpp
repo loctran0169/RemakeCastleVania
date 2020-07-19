@@ -60,7 +60,7 @@ void CGhostFly::SetPosition(float _x, float _y)
 void CGhostFly::beAttack()
 {
 	if (health > 0 && !isIdle) health--;
-	if (health == 0) isHitted = true;
+	if (health <1 ) isHitted = true;
 
 	timeBeAttack = GetTickCount();
 	timeBackUpAddressSimon = GetTickCount();

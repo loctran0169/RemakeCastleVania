@@ -6,8 +6,9 @@
 #include"Utils.h"
 
 class CMonter : public CGameObject
-{
+{	
 public:
+	int health;
 	CMonter() :CGameObject() {
 		
 	}
@@ -15,6 +16,8 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void beAttack();
+	int getHealth() { return health; }
+	void setHealth(int num) { this->health = num; }
 	~CMonter();
 };
 

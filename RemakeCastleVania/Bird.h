@@ -42,6 +42,7 @@ class CBird : public CMonter // trym đen
 public:
 	CBird() :CMonter() {
 		type = gameType::BIRD;
+		health = 1;
 		simon = Simon::GetInstance();
 		game = CGame::GetInstance();
 		deteleBeforeLoadFromGrid = false;

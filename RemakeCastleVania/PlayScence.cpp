@@ -210,6 +210,47 @@ void CPlayScene::checkCollisonWithItem()
 	}
 }
 
+void CPlayScene::checkCollisonSimonWithEnemy()
+{
+	if (GetTickCount() - player->untouchable_start > SIMON_UNTOUCHABLE_TIME)
+	{
+		player->untouchable_start = 0;
+		player->untouchable = false;
+	}
+	if (player->isUseTransparent || player->isHurt) return; // không va chạm khi ăn item bất tử
+
+	if (!player->untouchable) {
+		// xét va chạm với quái trước
+		for (UINT i = 0; i < listEnemy.size(); i++) {
+			CMonter * monster = dynamic_cast<CMonter *> (listEnemy[i]);
+			if (monster->getHealth() > 0) {
+				if (player->isCollitionObjectWithObject(monster)) {
+
+					float l, t, r, b;
+					monster->GetBoundingBox(l, t, r, b);
+
+					player->SetHurt((player->x + SIMON_BBOX_WIDTH / 2 > (r + l) / 2) ? 1 : -1);
+					if (monster->getType() == gameType::BAT) {
+						monster->beAttack();
+					}
+				}
+			}
+		}
+		// xét va chạm với vũ kh1 của quái
+		for (UINT i = 0; i < listEnemyWeapon.size(); i++) {
+			CWeapon * weapon = dynamic_cast<CWeapon *> (listEnemyWeapon[i]);
+			if (weapon->GetAttack() == true) {
+				if (player->isCollitionObjectWithObject(weapon)) {
+
+					float l, t, r, b;
+					weapon->GetBoundingBox(l, t, r, b);
+					player->SetHurt((player->x + SIMON_BBOX_WIDTH / 2 > (r + l) / 2) ? 1 : -1);
+				}
+			}
+		}
+	}
+}
+
 void CPlayScene::checkCollisonWithHideObj()
 {
 	bool isAllowJump = true;
@@ -997,12 +1038,11 @@ void CPlayScene::Update(DWORD dt)
 	{
 		listEnemyWeapon[i]->Update(dt, &coObjects);
 	}
-	// update enemy mà chưa làm
-	//*************************************************************************************************
 
 	//simon chết thì ko có va chạm
 	if (player->state != SIMON_STATE_DIE) {
 		checkCollisonWeapon(&objects,&listEnemy);// với cái objects ko phải enemy
+		checkCollisonSimonWithEnemy();
 		checkCollisonWithHideObj();
 		checkCollisonWithItem();	
 	}
@@ -1140,7 +1180,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo) return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt)return;
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -1191,7 +1231,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem ||simon->isAutoGo)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt)return;
 	if (KeyCode == DIK_DOWN) {
 		if (simon->isSit) {
 			if (!simon->isAttact) {
@@ -1211,7 +1251,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt)return;
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 

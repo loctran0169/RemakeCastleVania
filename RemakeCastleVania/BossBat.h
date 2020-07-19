@@ -57,6 +57,7 @@ private:
 public:
 	CBossBat(int _l, int _t, int _r, int _b, int _dyRepair, int _dyRepairToAttack) :CMonter() {
 		type = gameType::BOSS_BAT;
+		health = 20;
 		simon = Simon::GetInstance();
 		game = CGame::GetInstance();
 		zone = new CZone(_l, _t, _r, _b);

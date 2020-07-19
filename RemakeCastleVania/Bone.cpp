@@ -103,14 +103,12 @@ void CBone::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			(coObjects->at(i)->getType() == gameType::BRICKBLACK_2 && !coObjects->at(i)->isHitted))
 			listActives.push_back(coObjects->at(i));
 
-	bool isComparePosition = false;
 	for (UINT i = 0; i < listActives.size(); i++) {
 		if (isCollitionObjectWithObject(listActives[i])) {
 			float l, t, r, b;
 			listActives[i]->GetBoundingBox(l, t, r, b);
 			if (abs(y + BONE_BBOX_HEIGHT - b) <= BRICK_BBOX_HEIGHT * 1.5f && (abs(x + BONE_BBOX_WIDTH/2 - l) <= BONE_SPACE_CLIMBTOTOP || abs(x + BONE_BBOX_WIDTH/2 - r) <= BONE_SPACE_CLIMBTOTOP)) {
 				y = t - BONE_BBOX_HEIGHT - 1;
-				isComparePosition = true;
 			}
 		}
 	}
@@ -177,7 +175,8 @@ void CBone::checkCollisonWithHidenObjects(DWORD dt, vector<LPGAMEOBJECT>* coObje
 
 void CBone::beAttack()
 {
-	isHitted = true;
+	health--;
+	if (health < 1)isHitted = true;
 }
 
 void CBone::attackBone()

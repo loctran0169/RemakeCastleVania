@@ -4,6 +4,7 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float camX, camY;
 	game->GetCamPos(camX, camY);
+
 	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH) {
 		if (isIdle)
 			timeChangeState = GetTickCount();
@@ -89,6 +90,16 @@ void CMonkey::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			(coObjects->at(i)->getType() == gameType::BRICKBLACK_2 && !coObjects->at(i)->isHitted))
 			listActives.push_back(coObjects->at(i));
 
+	for (UINT i = 0; i < listActives.size(); i++) {
+		if (isCollitionObjectWithObject(listActives[i])) {
+			float l, t, r, b;
+			listActives[i]->GetBoundingBox(l, t, r, b);
+			if (abs(y + MONKEY_BBOX_HEIGHT - b) <= BRICK_BBOX_HEIGHT * 0.5f && (abs(x + MONKEY_BBOX_WIDTH / 2 - l) <= MONKEY_SPACE_CLIMBTOTOP || abs(x + MONKEY_BBOX_WIDTH / 2 - r) <= MONKEY_SPACE_CLIMBTOTOP)) {
+				y = t - MONKEY_BBOX_HEIGHT - 1;
+			}
+		}
+	}
+
 	// kiểm ra va chạm với Brick
 	if (state != SIMON_STATE_DIE)
 		CalcPotentialCollisions(&listActives, coEvents);
@@ -120,11 +131,6 @@ void CMonkey::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else {
 			x += dx;
 			y += dy;
-		}
-		if (nx != 0 && ny == 0) {
-			float l, t, r, b;
-			GetBoundingBox(l, t, r, b);
-			y = t - MONKEY_BBOX_HEIGHT - 1;
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -185,7 +191,8 @@ void CMonkey::SetState(int state)
 
 void CMonkey::beAttack()
 {
-	isHitted = true;
+	health--;
+	if (health < 1)isHitted = true;
 }
 
 CMonkey::~CMonkey()

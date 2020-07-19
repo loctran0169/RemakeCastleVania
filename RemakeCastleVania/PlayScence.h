@@ -63,6 +63,7 @@ public:
 	//collision
 	void checkCollisonWeapon(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *coEnemys);
 	void checkCollisonWithItem();
+	void checkCollisonSimonWithEnemy(); // kiểm tra va chạm simon với quái
 	void checkCollisonWithHideObj();
 	void checkCollisonWithEnemy(vector<LPGAMEOBJECT> *coObjects);
 

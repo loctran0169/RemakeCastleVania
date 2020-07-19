@@ -57,6 +57,7 @@ class CBone : public CMonter // quái xương
 public:
 	CBone() :CMonter() {
 		type = gameType::BONE;
+		health = 1;
 		simon = Simon::GetInstance();
 		game = CGame::GetInstance();
 		SetState(BONE_STATE_WALK);

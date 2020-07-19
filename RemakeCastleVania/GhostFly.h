@@ -26,7 +26,6 @@ private:
 	CLine *line; //phương trình đường thẳng để di chuyển con quái bay này
 	Simon *simon;
 
-	int health = 3; // máu
 	bool isIdle = false; //đang đứng im hay ko
 	DWORD timeBeAttack = 0; // thời gian cuối bị đánh
 	DWORD timeBackUpAddressSimon = 0;
@@ -34,6 +33,7 @@ public:
 	CGhostFly() :CMonter() {
 		game = CGame::GetInstance();
 		type = gameType::GHOST_FLY;
+		health = 3; // máu
 		simon = Simon::GetInstance();
 		deteleBeforeLoadFromGrid = false;
 	}

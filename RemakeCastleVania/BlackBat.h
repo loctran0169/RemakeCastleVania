@@ -28,6 +28,7 @@ private:
 public:
 	CBlackBat(int _zl, int _zt, int _zr, int _zb) :CMonter() {
 		type = gameType::BAT;
+		health = 1;
 		zone = new CZone(_zl, _zt, _zr, _zb);
 		game = CGame::GetInstance();
 	}

@@ -73,7 +73,8 @@ void CGhostWalk::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjec
 
 void CGhostWalk::beAttack()
 {
-	isHitted = true;
+	health--;
+	if (health < 1)isHitted = true;
 	timeBeAttacked = GetTickCount();
 }
 

@@ -20,6 +20,7 @@ public:
 	int untouchable;
 	int currentAni;
 	int prevAni;
+	int health = 10;
 	int heartWeapon;
 	float stateSpeed = 0.0f;
 	//thời gian hành động
@@ -40,7 +41,11 @@ public:
 	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
 	bool isJumpLeft = false;// nhảy trái thì ko đổi hướng
 	bool isRenderLopping = false; //render ani còn lại khi khi đóng băng
+
 	bool isHurt = false; //Trạng thái bị đánh
+	int nxHurt = 1;
+
+	bool isUseTransparent = false; // sử dụng bình màu vàng ko va chạm
 
 	//cầu thang
 	bool isOnCheckStairUp = false; //đang đúng bật cầu thang đi lên
@@ -84,7 +89,11 @@ public:
 	void setEatItem(bool b) { isEatItem = b; }
 	bool getEatItem() { return isEatItem; }
 	void SetState(int state);
+	void SetHurt(int _nx);
+	void SubHealth(int num) { health -= num; }
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+
+	int getHealth() { return health; }
 	Simon();
 };

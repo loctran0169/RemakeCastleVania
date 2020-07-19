@@ -62,7 +62,9 @@ void CBlackBat::GetBoundingBox(float & left, float & top, float & right, float &
 
 void CBlackBat::beAttack()
 {
-	isHitted = true;
+	health--;
+	if (health < 1)
+		isHitted = true;
 }
 
 void CBlackBat::startFly(int _nx)

@@ -15,16 +15,18 @@
 #define	MONKEY_STATE_WALK		1
 #define	MONKEY_STATE_JUMP		2
 
-#define MONKEY_JUMP_SPEED_X		0.14f
+#define MONKEY_JUMP_SPEED_X		0.12f
 #define MONKEY_JUMP_SPEED_Y		0.45f
 
-#define MONKEY_WALK_SPEED_X		0.4f
+#define MONKEY_WALK_SPEED_X		0.35f
 #define MONKEY_WALK_SPEED_Y		0.12f
 
 #define MONKEY_GRAVITY_SPEED	0.0012f
 
 #define MONKEY_TIME_WAIT_ATTACK	380
 #define MONKEY_TIME_WAIT_IDLE	1000
+
+#define MONKEY_SPACE_CLIMBTOTOP	5.0f
 
 class CMonkey : public CMonter // quái xương
 {
@@ -41,6 +43,7 @@ class CMonkey : public CMonter // quái xương
 public:
 	CMonkey() :CMonter() {
 		type = gameType::MONKEY;
+		health = 1;
 		simon = Simon::GetInstance();
 		game = CGame::GetInstance();
 		timeChangeState = GetTickCount();

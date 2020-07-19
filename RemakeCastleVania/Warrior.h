@@ -12,7 +12,6 @@
 class CWarrior : public CMonter // chiến binh thép
 {
 private:
-	int health = 3; // máu
 	bool isIdle = false; //đang đứng im hay ko
 	DWORD timeBeAttack = 0; // thời gian cuối bị đánh
 	int boundRight, boundLeft; // vùng di chuyển
@@ -20,6 +19,7 @@ private:
 public:
 	CWarrior(int _zl, int _zt, int _zr, int _zb) :CMonter() {
 		type = gameType::WARRIOR;
+		health = 3; // máu
 		zone =  new CZone(_zl, _zt, _zr, _zb);
 		nx = -1;
 	}

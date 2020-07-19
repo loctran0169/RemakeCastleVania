@@ -95,6 +95,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				vx = 0;
 			vy += SIMON_JUMP_GRAVITY * dt;
 		}
+		else if(isHurt)
+			vy += SIMON_GRAVITY_HURTING * dt;
 		else {
 			vy += SIMON_GRAVITY * dt;
 		}
@@ -144,6 +146,8 @@ void Simon::Render()
 			else ani = SIMON_ANI_IDLE_DOWN;
 		}
 	}
+	else if (isHurt)
+		ani = SIMON_ANI_HURT;
 	else if (isAttact) {
 		if (!isEatItem) {
 			if (isSit)
@@ -251,9 +255,28 @@ void Simon::SetState(int state)
 		break;
 	case SIMON_STATE_ON_SKATE:
 		break;
+	case SIMON_STATE_HURT:
+		isHurt = true;
+		vx = SIMON_WALKING_SPEED * nxHurt;
+		vy = -SIMON_VJUMP_HURTING;
+		break;
 	}
 	stateSpeed = vx;
 }
+
+void Simon::SetHurt(int _nx)
+{
+	if (isHurt)return;
+	if (!isStair && !isAutoGo) {
+		nxHurt = _nx;
+		nx = -_nx;
+		SetState(SIMON_STATE_HURT);
+	}
+	StartUntouchable();
+	
+	SubHealth(2);
+}
+
 
 void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
@@ -342,7 +365,10 @@ bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					setValueAutoGo(abs(collXFirst -10.0f - this->x), 0.0f,SIMON_STATE_WALKING_RIGHT, 1, true);
 				}
 			}
-			
+			if (isHurt) {
+				isHurt = false;
+				SetState(SIMON_STATE_IDLE);
+			}
 			float l, t, r, b;
 			GetBoundingBox(l, t, r, b);
 		}

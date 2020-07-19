@@ -100,7 +100,9 @@ void CBird::SetState(int state)
 
 void CBird::beAttack()
 {
-	isHitted = true;
+	health--;
+	if (health < 1)
+		isHitted = true;
 }
 
 CBird::~CBird()

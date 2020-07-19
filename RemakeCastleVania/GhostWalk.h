@@ -19,6 +19,7 @@ public:
 public:
 	CGhostWalk(int _id, int _nx, int _x, int _y) :CMonter() {
 		type = gameType::GHOST_WALK;
+		health = 1;
 		id = _id;
 		nx = _nx;
 		x = _x;

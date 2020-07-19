@@ -44,7 +44,7 @@ void CWarrior::GetBoundingBox(float & left, float & top, float & right, float & 
 void CWarrior::beAttack()
 {
 	if (health > 0 && !isIdle) health--;
-	if (health == 0) isHitted = true;
+	if (health < 1) isHitted = true;
 	timeBeAttack = GetTickCount();
 	animation_set->at(0)->setLopping(true);
 	isIdle = true;

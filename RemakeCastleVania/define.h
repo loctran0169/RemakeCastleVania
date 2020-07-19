@@ -12,25 +12,26 @@
 #define SIMON_ATTACT_TIME							400
 #define SIMON_EATTING_TIME							500
 //Trạng thái di chuyển cùa simon
-#define SIMON_STATE_IDLE							0
-#define SIMON_STATE_WALKING_RIGHT					1
-#define SIMON_STATE_WALKING_LEFT					2
-#define SIMON_STATE_JUMP							3
-#define SIMON_STATE_DIE								4
-#define SIMON_STATE_SIT								5
-#define SIMON_STATE_ATTACK							6
-#define SIMON_STATE_ATTACK_WITH_SUB					7
-#define SIMON_STATE_LEVEL_UP						8
-#define SIMON_STATE_AUTO_WALK						9
-#define SIMON_STATE_ATTACKED						10
-#define SIMON_STATE_SIT_AFTER_FALL					11
-#define SIMON_STATE_INVISIBLE						12
-#define SIMON_STATE_UP_STAIR						13
-#define SIMON_STATE_DOWN_STAIR						14
-#define SIMON_STATE_IDLE_STAIR						15
-#define SIMON_STATE_ATTACK_UP						16
-#define SIMON_STATE_ATTACK_DOWN						17
-#define SIMON_STATE_ON_SKATE						18
+#define SIMON_STATE_IDLE							0 //trạng thái đứng
+#define SIMON_STATE_WALKING_RIGHT					1 // trạng thái đi trái
+#define SIMON_STATE_WALKING_LEFT					2 // di phải
+#define SIMON_STATE_JUMP							3 //nhảy
+#define SIMON_STATE_DIE								4 //chết
+#define SIMON_STATE_SIT								5 //ngồi
+#define SIMON_STATE_ATTACK							6 // đánh
+#define SIMON_STATE_ATTACK_WITH_SUB					7 
+#define SIMON_STATE_LEVEL_UP						8 // lên cấp
+#define SIMON_STATE_AUTO_WALK						9 // tự đi
+#define SIMON_STATE_ATTACKED						10 // đánh
+#define SIMON_STATE_SIT_AFTER_FALL					11 // ngồi sau khi rơi
+#define SIMON_STATE_INVISIBLE						12 // ẩn hình
+#define SIMON_STATE_UP_STAIR						13 //lên cầu thang
+#define SIMON_STATE_DOWN_STAIR						14 // xuống cầu thang
+#define SIMON_STATE_IDLE_STAIR						15 // đứng trên cầu thang
+#define SIMON_STATE_ATTACK_UP						16 // đánh hki đi lên
+#define SIMON_STATE_ATTACK_DOWN						17 // đánh hki đi xuống
+#define SIMON_STATE_ON_SKATE						18 // trên ván trược
+#define SIMON_STATE_HURT							19 // bị đánh
 
 //animation của simon
 #define SIMON_ANI_IDLE								0
@@ -66,6 +67,7 @@
 #define SIMON_JUMP_GRAVITY							0.0009f
 #define SIMON_JUMP_DEFLECT_SPEED					0.02f
 #define SIMON_GRAVITY								0.005f
+#define SIMON_GRAVITY_HURTING						0.001f
 #define SIMON_DIE_DEFLECT_SPEED						0.5f
 #define SIMON_AUTO_GO_SPEED							0.4f
 #define SIMON_STAIR_SPEED							0.08f
@@ -74,9 +76,10 @@
 #define AXE_SPEED_Y									0.5f
 #define	AXE_SPEED_GRAVITY							0.0012f
 #define SKATEBOARD_SPEED_X							0.045f
+#define SIMON_VJUMP_HURTING							0.2f
 
 //Thời gian simon
-#define SIMON_UNTOUCHABLE_TIME						3000
+#define SIMON_UNTOUCHABLE_TIME						2000
 #define SIMON_TIME_JUMPPING_SIT						300
 //Whip
 #define WHIP_BBOX_WIDGHT_LV1						42
