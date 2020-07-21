@@ -5,7 +5,7 @@ void CMonkey::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float camX, camY;
 	game->GetCamPos(camX, camY);
 
-	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH) {
+	if (x < camX || x + MONKEY_BBOX_WIDTH > camX + SCREEN_WIDTH || y >= camY + SCREEN_HEIGHT) {
 		if (isIdle)
 			timeChangeState = GetTickCount();
 		else
@@ -94,7 +94,7 @@ void CMonkey::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (isCollitionObjectWithObject(listActives[i])) {
 			float l, t, r, b;
 			listActives[i]->GetBoundingBox(l, t, r, b);
-			if (abs(y + MONKEY_BBOX_HEIGHT - b) <= BRICK_BBOX_HEIGHT * 0.5f && (abs(x + MONKEY_BBOX_WIDTH / 2 - l) <= MONKEY_SPACE_CLIMBTOTOP || abs(x + MONKEY_BBOX_WIDTH / 2 - r) <= MONKEY_SPACE_CLIMBTOTOP)) {
+			if (abs(y-t)<=BRICKBLACK_1_BBOX_HEIGHT && (y + MONKEY_BBOX_HEIGHT - b) <= BRICK_BBOX_HEIGHT * 0.5f && (abs(x + MONKEY_BBOX_WIDTH / 2 - l) <= MONKEY_SPACE_CLIMBTOTOP || abs(x + MONKEY_BBOX_WIDTH / 2 - r) <= MONKEY_SPACE_CLIMBTOTOP)) {
 				y = t - MONKEY_BBOX_HEIGHT - 1;
 			}
 		}
