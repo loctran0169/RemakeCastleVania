@@ -2,6 +2,7 @@
 #include "Zone.h"
 #include"Monter.h"
 #include"Game.h"
+#include"Simon.h"
 
 #define BLACKBAT_BBOX_WIDTH			32
 #define BLACKBAT_BBOX_HEIGHT		32
@@ -23,6 +24,7 @@ class CBlackBat : public CMonter // đơi đen
 private:
 	CZone *zone; 
 	CGame *game;
+	Simon *simon;
 	float autoGoX_Distance=0.0f, autoGoY_Distance=0.0f;
 	bool isAutoGo = false;
 public:
@@ -31,6 +33,7 @@ public:
 		health = 1;
 		zone = new CZone(_zl, _zt, _zr, _zb);
 		game = CGame::GetInstance();
+		simon = Simon::GetInstance();
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();

@@ -201,6 +201,12 @@ void CPlayScene::checkCollisonWithItem()
 					DebugOut(L"Đã nhặt water fire \n");
 					break;
 				}
+				case gameType::ITEM_STOP_WATCH: {
+					player->weapons[gameType::STOP_WATCH] = new CStopWatch();
+					player->currentWeapon = gameType::STOP_WATCH;
+					DebugOut(L"Đã nhặt STOP WATCH \n");
+					break;
+				}
 				default:
 					break;
 				}
@@ -217,7 +223,7 @@ void CPlayScene::checkCollisonSimonWithEnemy()
 		player->untouchable_start = 0;
 		player->untouchable = false;
 	}
-	if (player->isUseTransparent || player->isHurt) return; // không va chạm khi ăn item bất tử
+	if (player->isUseTransparent || player->untouchable != 0) return; // không va chạm khi ăn item bất tử
 
 	if (!player->untouchable) {
 		// xét va chạm với quái trước
@@ -225,12 +231,10 @@ void CPlayScene::checkCollisonSimonWithEnemy()
 			CMonter * monster = dynamic_cast<CMonter *> (listEnemy[i]);
 			if (monster->getHealth() > 0) {
 				if (player->isCollitionObjectWithObject(monster)) {
-
 					float l, t, r, b;
 					monster->GetBoundingBox(l, t, r, b);
-
 					player->SetHurt((player->x + SIMON_BBOX_WIDTH / 2 > (r + l) / 2) ? 1 : -1);
-					if (monster->getType() == gameType::BAT) {
+					if (monster->getType() == gameType::BAT|| monster->getType() == gameType::BIRD) {
 						monster->beAttack();
 					}
 				}
@@ -810,6 +814,10 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 		item = new Item(gameType::ITEM_THREE_CROSS);
 		item->SetPosition(x, y);
 		break;
+	case gameType::ITEM_STOP_WATCH:
+		item = new Item(gameType::ITEM_STOP_WATCH);
+		item->SetPosition(x, y);
+		break;
 	default:
 		item = new Item(gameType::ITEM_WHIP);
 		item->SetPosition(x, y);
@@ -1022,14 +1030,15 @@ void CPlayScene::Update(DWORD dt)
 	{
 		listItems[i]->Update(dt, &coObjects);
 	}
-	for (size_t i = 0; i < listEnemy.size(); i++)// update quái
-	{
-		listEnemy[i]->Update(dt, &coObjects);
-		if (dynamic_cast<CBone *>(listEnemy.at(i))) {
-			auto *bone = dynamic_cast<CBone *>(listEnemy.at(i));
-			bone->attackWeapon(listEnemyWeapon);
+	if(!player->isUsingWeapon(gameType::STOP_WATCH))
+		for (size_t i = 0; i < listEnemy.size(); i++)// update quái
+		{
+			listEnemy[i]->Update(dt, &coObjects);
+			if (dynamic_cast<CBone *>(listEnemy.at(i))) {
+				auto *bone = dynamic_cast<CBone *>(listEnemy.at(i));
+				bone->attackWeapon(listEnemyWeapon);
+			}
 		}
-	}
 	for (size_t i = 0; i < listEffect.size(); i++)
 	{
 		listEffect[i]->Update(dt);
@@ -1104,6 +1113,11 @@ void CPlayScene::Update(DWORD dt)
 			else if (dynamic_cast<CGhostFly *>(listEnemy.at(i))) {
 				auto *ghost = dynamic_cast<CGhostFly*>(listEnemy.at(i));
 				delete ghost;
+				listEnemy.erase(listEnemy.begin() + i);
+			}
+			else if (dynamic_cast<CBird *>(listEnemy.at(i))) {
+				auto *bird = dynamic_cast<CBird*>(listEnemy.at(i));
+				delete bird;
 				listEnemy.erase(listEnemy.begin() + i);
 			}
 			else if (dynamic_cast<CBone *>(listEnemy.at(i))) {

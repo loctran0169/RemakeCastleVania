@@ -51,6 +51,10 @@ void CBone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBone::Render()
 {
+	if (simon->isUsingWeapon(gameType::STOP_WATCH))
+		animation_set->at((isJump) ? 1 : 0)->setLopping(true);
+	else
+		animation_set->at((isJump) ? 1 : 0)->setLopping(false);
 	animation_set->at((isJump) ? 1 : 0)->Render(x, y, -nx);
 	//RenderBoundingBox();
 }

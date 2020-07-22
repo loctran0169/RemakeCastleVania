@@ -134,6 +134,10 @@ void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 		r = x + ITEM_THREE_BBOX_WIDTH;
 		b = y + ITEM_THREE_BBOX_HEIGHT;
 	}
+	else if (type == gameType::ITEM_STOP_WATCH) {
+		r = x + ITEM_STOPWATCH_BBOX_WIDTH;
+		b = y + ITEM_STOPWATCH_BBOX_HEIGHT;
+	}
 }
 
 Item::~Item()

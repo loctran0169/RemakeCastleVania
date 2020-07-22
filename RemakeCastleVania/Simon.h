@@ -93,7 +93,7 @@ public:
 	void SubHealth(int num) { health -= num; }
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
-
+	bool isUsingWeapon(gameType _type);
 	int getHealth() { return health; }
 	Simon();
 };

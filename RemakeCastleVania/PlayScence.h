@@ -11,6 +11,7 @@
 #include "Map.h"
 #include"Whip.h"
 #include"Knife.h"
+#include"StopWatch.h"
 #include"Boomerang.h"
 #include"Axe.h"
 #include"WaterFire.h"

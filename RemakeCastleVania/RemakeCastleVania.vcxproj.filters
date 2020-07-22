@@ -222,6 +222,12 @@
     <ClCompile Include="MustChangeNX.cpp">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>FrameWork\Scence</Filter>
+    </ClCompile>
+    <ClCompile Include="StopWatch.cpp">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -376,6 +382,12 @@
     </ClInclude>
     <ClInclude Include="MustChangeNX.h">
       <Filter>FrameWork\GameObjects\standObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>FrameWork\Scence</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWatch.h">
+      <Filter>FrameWork\GameObjects\weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

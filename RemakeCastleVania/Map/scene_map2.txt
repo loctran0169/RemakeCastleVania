@@ -148,6 +148,8 @@
 60012	64	96	96	128	3
 # item 3 gạch
 60013	96	96	128	128	3
+# item stop watch
+60014	64	32	96	64	3
 ##weapon
 # axe
 70001	84	0	114	28	4
@@ -303,6 +305,8 @@
 1012	60012	100
 # item 3 gạch
 1013	60013	100
+# item stop watch
+1014	60014	100
 ## weapon
 # weapon axe
 2001	70001	100	70002	100	70003	100	70004	100
@@ -344,7 +348,7 @@
 # TORCH
 3	701	801
 # items
-5	1001	1002	1003	1004	1005	1006	1007	1008	1009	1010	1011	1012	1013
+5	1001	1002	1003	1004	1005	1006	1007	1008	1009	1010	1011	1012	1013	1014
 ## weapon
 # whip
 40	901	902	903	904	905	906
@@ -358,6 +362,8 @@
 44	2003	2004
 # bone weapon
 45	308
+# stop watch
+46	1014
 #skate board
 58	702
 # candle
@@ -389,45 +395,45 @@
 # grid type	x	y	ani_set_id	extra_settings per object type
 # Simon 
 # grid type	x	y	ani_set_id	ani_whip
-0	50	35	306	50	11
+0	50	35	351	50	11
 #50	400	100	50	11
 # BRICK 
-#grid	type	x	y	ani_set_id	number_object	isThang
-0	51	0	50	0	3	1
-0	51	32	146	0	1	0
-0	51	64	178	0	6	0
-1	51	256	178	0	2	0
-0	51	32	210	0	2	1
-0	51	0	242	0	3	1
-1	51	448	50	0	4	1
-1	51	480	178	0	2	1
-1	51	320	242	0	5	0
-1	51	448	274	0	3	1
-0	51	0	370	0	8	0
-1	51	256	370	0	8	0
+#grid	type	x	y	ani	numObj	isThang
+0	51	0	95	0	3	1
+0	51	32	196	0	1	0
+0	51	64	223	0	6	0
+1	51	256	223	0	2	0
+0	51	32	255	0	2	1
+0	51	0	287	0	3	1
+1	51	448	95	0	4	1
+1	51	480	223	0	2	1
+1	51	320	287	0	5	0
+1	51	448	319	0	3	1
+0	51	0	415	0	8	0
+1	51	256	415	0	8	0
 # candle
-#grid	type	x	y	ani_set_id	id_item
-0	59	160	242	59	6
-0	59	400	242	59	1
-1	59	280	50	59	9
+#grid	type	x	y	ani6	id_item
+0	59	160	287	59	13
+0	59	400	287	59	1
+1	59	280	95	59	9
 # brick 2
-#grid	type	x	y	ani_set_id	isDelete(0/1)(k/co)	itemid
-1	61	448	178	61	1	1
+#grid	type	x	y	ani	isDelete(0/1)(k/co)	itemid
+1	61	448	223	61	1	1
 #Disable jump
-1	55	450	178	0	480	242
+1	55	450	223	0	480	287
 #stair up
-#grid	type	x	y	ani_set_id	r	b	nx
-0	56	210	360	0	256	370	1
-0	56	146	166	0	192	178	1
+#grid	type	x	y	ani	r	b	nx
+0	56	210	405	0	256	415	1
+0	56	146	211	0	192	223	1
 # stair down
-#grid	type	x	y	ani_set_id	r	b	nx
-1	57	338	178	0	368	190	-1
+#grid	type	x	y	ani	r	b	nx
+1	57	338	223	0	368	235	-1
 # warrior
 #grid	type	x	y	ani	l	t	r	b	boundl	boundr
-1	100	208	114	100	80	114	448	170	80	320
+1	100	208	159	100	80	159	448	215	80	320
 # black bat 
 #grid	type	x	y	ani	l	t	r	b
-1	101	80	64	101	80	114	272	170
+1	101	80	109	101	80	159	272	215
 # --- SCENE PORTAL ----
-# type	l	t	ani_set_id	r	b	scene_id	onStair	x	y	nx	ny
-1	53	256	0	0	288	20	3	1	770	320	1	-1
+#grid   type	l	t	ani	r	b	sceneid	onStair	x	y	nx	ny
+1	53	256	45	0	288	65	3	1	770	365	1	-1

@@ -45,10 +45,12 @@ void CBlackBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBlackBat::Render()
 {
-	if(vx == 0)
-		animation_set->at(BLACKBAT_ANI_IDLE)->Render(x, y, nx);
+	if (simon->isUsingWeapon(gameType::STOP_WATCH))
+		animation_set->at((vx == 0) ? BLACKBAT_ANI_IDLE : BLACKBAT_ANI_FLY)->setLopping(true);
 	else
-		animation_set->at(BLACKBAT_ANI_FLY)->Render(x, y,-nx);
+		animation_set->at((vx == 0) ? BLACKBAT_ANI_IDLE : BLACKBAT_ANI_FLY)->setLopping(false);
+
+	animation_set->at((vx == 0) ? BLACKBAT_ANI_IDLE : BLACKBAT_ANI_FLY)->Render(x, y, nx);
 	//RenderBoundingBox();
 }
 

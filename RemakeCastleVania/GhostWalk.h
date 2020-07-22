@@ -2,6 +2,7 @@
 #include"Monter.h"
 #include"define.h"
 #include"Utils.h"
+#include"Simon.h"
 
 #define GHOSTWALK_BBOX_WIDTH		32
 #define GHOSTWALK_BBOX_HEIGHT		64
@@ -16,6 +17,7 @@ class CGhostWalk : public CMonter // quái xương
 public:
 	int id;
 	CGame *game;
+	Simon *simon;
 public:
 	CGhostWalk(int _id, int _nx, int _x, int _y) :CMonter() {
 		type = gameType::GHOST_WALK;
@@ -25,6 +27,7 @@ public:
 		x = _x;
 		y = _y;
 		game = CGame::GetInstance();
+		simon = Simon::GetInstance();
 		deteleBeforeLoadFromGrid = false;
 
 		CAnimationSets * animation_sets = CAnimationSets::GetInstance();

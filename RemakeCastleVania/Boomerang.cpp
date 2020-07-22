@@ -29,6 +29,9 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CGameObject::Update(dt); // cập nhật thời gian, vận tốc
 		x += dx;
 	}
+	if (isFirst && isCollitionObjectWithObject(simon)) {
+		SetAttack(false);
+	}
 }
 
 void CBoomerang::Render()

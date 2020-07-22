@@ -9,6 +9,16 @@ Simon* Simon::GetInstance()
 	return __instance;
 }
 
+bool Simon::isUsingWeapon(gameType _type)
+{
+	if (this->weapons.find(_type) != this->weapons.end()) // tìm đang sài nó ko
+	{
+		if (this->weapons[_type]->GetAttack() == true)
+			return true;
+	}
+	return false;
+}
+
 Simon::Simon() : CGameObject()
 {
 	game = CGame::GetInstance();
@@ -269,15 +279,22 @@ void Simon::SetState(int state)
 void Simon::SetHurt(int _nx)
 {
 	if (isHurt)return;
-
-	isHurt = true;
+	if (isAttact) {
+		animation_set->at(currentAni)->resetFrame();
+		if (weapons[gameType::WHIP]) {
+			auto *whip = dynamic_cast<Whip*>(weapons[gameType::WHIP]);
+			whip->animation_set->at(whip->getAniID())->resetFrame();
+		}
+	}
 	jumpTime = 0;
 
 	if (!isStair && !isAutoGo) {
 		nxHurt = _nx;
 		nx = -_nx;
 		SetState(SIMON_STATE_HURT);
+		isHurt = true;
 	}
+		
 	StartUntouchable();
 	SubHealth(2);
 }

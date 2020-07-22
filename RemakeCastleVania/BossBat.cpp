@@ -71,6 +71,10 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBossBat::Render()
 {
+	if (simon->isUsingWeapon(gameType::STOP_WATCH))
+		animation_set->at(getAniId())->setLopping(true);
+	else
+		animation_set->at(getAniId())->setLopping(false);
 	animation_set->at(getAniId())->Render(x + ((isWaiting) ? 32 : 0), y);
 
 	//zone->RenderBoundingBox();

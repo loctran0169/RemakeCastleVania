@@ -37,6 +37,10 @@ void CGhostFly::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGhostFly::Render()
 {
+	if (simon->isUsingWeapon(gameType::STOP_WATCH))
+		animation_set->at(0)->setLopping(true);
+	else
+		animation_set->at(0)->setLopping(false);
 	animation_set->at(0)->Render(x, y, -nx);
 	//RenderBoundingBox(xRender,yRender);
 }

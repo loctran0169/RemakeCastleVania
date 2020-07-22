@@ -3,7 +3,7 @@
 //Screen
 #define SCREEN_WIDTH								512
 #define SCREEN_HEIGHT								480
-#define HEIGHTBOARD									50
+#define HEIGHTBOARD									95
 
 //map
 #define TILE_MAP_SIZE								32
@@ -133,6 +133,9 @@
 #define ITEM_WATERFIRE_BBOX_WIDTH					32
 #define ITEM_WATERFIRE_BBOX_HEIGHT					32
 
+#define ITEM_STOPWATCH_BBOX_WIDTH					32
+#define ITEM_STOPWATCH_BBOX_HEIGHT					32
+
 #define KNIFE_BBOX_WIDTH							32
 #define KNIFE_BBOX_HEIGHT							18
 
@@ -172,6 +175,7 @@ enum gameType
 	ITEM_YELLOW = 10,
 	ITEM_TWO_CROSS = 11, // item 2 gạch
 	ITEM_THREE_CROSS = 12, // item 3 gạch
+	ITEM_STOP_WATCH = 13,
 
 	//weapon 40->
 	WHIP = 40,
@@ -180,6 +184,9 @@ enum gameType
 	BOOMERANG = 43,
 	WATER_FIRE = 44,
 	BONE_WEAPON = 45,
+	STOP_WATCH = 46,
+	DOUBLE_SHOT = 47,
+	TRIPBLE_SHOT = 48,
 
 	//objects 50->
 	SIMON = 50, // player

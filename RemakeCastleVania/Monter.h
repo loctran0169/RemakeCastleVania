@@ -15,7 +15,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	void beAttack();
+	virtual void beAttack();
 	int getHealth() { return health; }
 	void setHealth(int num) { this->health = num; }
 	~CMonter();
