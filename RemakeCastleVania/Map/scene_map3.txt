@@ -419,14 +419,14 @@
 #grid	type	x	y	ani_	r	l
 0	58	110	223	58	64	192
 # candle
-#grid	type	x	y	ani	id_item
+#grid	type	x	y	ani	id_item 3
 0	59	152	95	59	3
 1	59	280	95	59	4
 1	59	408	95	59	9
 2	59	536	95	59	3
 2	59	664	95	59	9
 3	59	792	95	59	9
-3	59	920	95	59	3
+3	59	920	95	59	6
 # brick 1
 #grid	type	x	y	ani	isDelete(0/1)(k/co)	itemId
 2	60	704	223	60	0	12
@@ -435,7 +435,7 @@
 3	57	920	225	0	944	235	-1
 #warrior
 #grid	type	x	y	ani	l	t	r	b	boundl	boundr
-2	100	640	288	100	640	301	704	351	640	704
+2	100	640	290	100	640	301	704	351	640	704
 1	100	192	159	100	192	165	320	223	192	320
 # black bat 
 #grid	type	x	y	ani	l	t	r	b

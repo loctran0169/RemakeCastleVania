@@ -27,6 +27,12 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 {
 	for (auto& weapon : player->weapons) {
 		if (weapon.second->GetAttack()) {
+			if (weapon.second->getType() == gameType::BOOMERANG) {
+				auto *boomerang = dynamic_cast<CBoomerang*>(weapon.second);
+				if (boomerang->isFirst && boomerang->isCollitionObjectWithObject(player))
+					weapon.second->SetAttack(false);
+			}
+				
 			for (UINT i = 0; i < coObjects->size(); i++) // xét chạm với obejcts nền
 			{
 				if (weapon.second->GetLastTimeAttack() > coObjects->at(i)->timeBeAttacked) {
@@ -125,6 +131,9 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							break;
 						}
 						}
+						if (weapon.second->getType() == gameType::DAGGER) {
+							player->weapons[gameType::DAGGER]->SetAttack(false);
+						}
 						gameObj->timeBeAttacked = GetTickCount();
 
 					}
@@ -207,6 +216,23 @@ void CPlayScene::checkCollisonWithItem()
 					DebugOut(L"Đã nhặt STOP WATCH \n");
 					break;
 				}
+				case gameType::ITEM_INVISIBLE: {
+					player->StartUntouchable(SIMON_UNTOUCHABLE_TIME_ITEM);
+					DebugOut(L"Đã nhặtinvisible \n");
+					break;
+				}
+				case gameType::ITEM_DOUBLE_SHOT: {
+					player->isUseDoubleShot = true;
+					player->isUseTripleShot = false;
+					DebugOut(L"Đã nhặt double shot \n");
+					break;
+				}
+				case gameType::ITEM_TRIPLE_SHOT: {
+					player->isUseDoubleShot = false;
+					player->isUseTripleShot = true;
+					DebugOut(L"Đã nhặt triple shot \n");
+					break;
+				}
 				default:
 					break;
 				}
@@ -218,11 +244,6 @@ void CPlayScene::checkCollisonWithItem()
 
 void CPlayScene::checkCollisonSimonWithEnemy()
 {
-	if (GetTickCount() - player->untouchable_start > SIMON_UNTOUCHABLE_TIME)
-	{
-		player->untouchable_start = 0;
-		player->untouchable = false;
-	}
 	if (player->isUseTransparent || player->untouchable != 0) return; // không va chạm khi ăn item bất tử
 
 	if (!player->untouchable) {
@@ -802,16 +823,16 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 		item = new Item(gameType::ITEM_AXE);
 		item->SetPosition(x, y);
 		break;
-	case gameType::ITEM_YELLOW:
-		item = new Item(gameType::ITEM_YELLOW);
+	case gameType::ITEM_INVISIBLE:
+		item = new Item(gameType::ITEM_INVISIBLE);
 		item->SetPosition(x, y);
 		break;
-	case gameType::ITEM_TWO_CROSS:
-		item = new Item(gameType::ITEM_TWO_CROSS);
+	case gameType::ITEM_DOUBLE_SHOT:
+		item = new Item(gameType::ITEM_DOUBLE_SHOT);
 		item->SetPosition(x, y);
 		break;
-	case gameType::ITEM_THREE_CROSS:
-		item = new Item(gameType::ITEM_THREE_CROSS);
+	case gameType::ITEM_TRIPLE_SHOT:
+		item = new Item(gameType::ITEM_TRIPLE_SHOT);
 		item->SetPosition(x, y);
 		break;
 	case gameType::ITEM_STOP_WATCH:
@@ -1219,7 +1240,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_A:
 		if (!simon->isAttact && !simon->isEatItem)
-			if(game->IsKeyDown(DIK_UP)&&simon->currentWeapon!=0)
+			if (game->IsKeyDown(DIK_UP) && simon->currentWeapon != 0)
 				simon->attackWeapon(simon->currentWeapon);
 			simon->attackWeapon(gameType::WHIP);
 		break;

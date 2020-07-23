@@ -1,6 +1,5 @@
 #pragma once
 #include"Game.h"
-#include"Simon.h"
 #include"GameObject.h"
 #include"Sprites.h"
 #include"define.h"
@@ -11,19 +10,19 @@
 #define BOOMERANG_BBOX_WIDTH						28.0f
 #define BOOMERANG_HEIGHT							28.0f
 
-#define BOOMERANG_SPEED								0.45f
+#define BOOMERANG_SPEED								0.25f
 
-#define BOOMERANG_PADDING_HIDE						10.0f
+#define BOOMERANG_PADDING_HIDE						5.0f
 
 class CBoomerang : public CWeapon
 {
+private:
+	float defaultX;
 public:
 	CGame *game;
-	Simon * simon;
 	bool isFirst = false;
 	CBoomerang() :CWeapon() {
 		game = CGame::GetInstance();
-		simon = Simon::GetInstance();
 		CGameObject::type = gameType::BOOMERANG;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);

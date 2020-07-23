@@ -9,6 +9,10 @@
 #include"Torch.h"
 #include"Portal.h"
 #include"Map.h"
+#include"Knife.h"
+#include"Boomerang.h"
+#include"Axe.h"
+#include"WaterFire.h"
 
 class Simon : public CGameObject
 {
@@ -22,6 +26,7 @@ public:
 	int prevAni;
 	int health = 10;
 	int heartWeapon;
+	int timeTouchable = SIMON_UNTOUCHABLE_TIME;
 	float stateSpeed = 0.0f;
 	//thời gian hành động
 
@@ -58,6 +63,8 @@ public:
 	bool isGoUp = false; //đi lên cầu thang
 	bool isGoDown = false; // đi xuống cầu thang
 	bool isGoStairByUp = false;
+	bool isUseDoubleShot = false;
+	bool isUseTripleShot = false;
 
 	//autoGO
 	bool isAutoGo=false;
@@ -78,6 +85,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+
 	void attackWeapon(gameType weaponType);
 	bool checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	bool checkCollisonWithSkateBoard(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
@@ -92,7 +100,7 @@ public:
 	void SetHurt(int _nx);
 	void SubHealth(int num) { health -= num; }
 	void SetLevel(int l) { level = l; }
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartUntouchable(int _timeTouch) { untouchable = 1; untouchable_start = GetTickCount(); timeTouchable = _timeTouch; }
 	bool isUsingWeapon(gameType _type);
 	int getHealth() { return health; }
 	Simon();

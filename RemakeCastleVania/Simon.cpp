@@ -34,7 +34,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
+	if (GetTickCount() - untouchable_start > timeTouchable)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -295,7 +295,7 @@ void Simon::SetHurt(int _nx)
 		isHurt = true;
 	}
 		
-	StartUntouchable();
+	StartUntouchable(SIMON_UNTOUCHABLE_TIME);
 	SubHealth(2);
 }
 
@@ -313,11 +313,6 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 
 void Simon::attackWeapon(gameType weaponType)
 {
-	for (auto&weapon : weapons) {
-		if (weapon.second->GetAttack() && weapon.second->getType() == weaponType)
-			return;
-	}
-
 	switch (weaponType)
 	{
 	case gameType::WHIP:
@@ -339,6 +334,122 @@ void Simon::attackWeapon(gameType weaponType)
 		if (!isJump) vx = 0;
 		weapons[weaponType]->setPosition(x, y, nx);
 		weapons[weaponType]->SetAttack(true);
+	}
+	else {
+		if (isUseDoubleShot && weaponType != gameType::WHIP && weaponType != gameType::STOP_WATCH) {
+			bool isCreate = false;
+			if (weapons.find(gameType::DOUBLE_SHOT) == weapons.end())
+				isCreate = true;
+			else {
+				if (weapons[gameType::DOUBLE_SHOT]->GetAttack())return;
+				else {
+					if (weapons[gameType::DOUBLE_SHOT]->getType() != weaponType)
+						isCreate = true;
+				}
+			}
+			if (isCreate) {
+				switch (weaponType)
+				{
+				case gameType::DAGGER: {
+					weapons[gameType::DOUBLE_SHOT] = new CKnife();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::DAGGER);
+					weapons[gameType::DOUBLE_SHOT]->SetAnimationSet(ani_set);
+					break;
+				}
+				case gameType::BOOMERANG: {
+					weapons[gameType::DOUBLE_SHOT] = new CBoomerang();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::BOOMERANG);
+					weapons[gameType::DOUBLE_SHOT]->SetAnimationSet(ani_set);
+					break;
+				}
+				case gameType::AXE: {
+					weapons[gameType::DOUBLE_SHOT] = new CAxe();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::AXE);
+					weapons[gameType::DOUBLE_SHOT]->SetAnimationSet(ani_set);
+					break;
+				}
+				case gameType::WATER_FIRE: {
+					weapons[gameType::DOUBLE_SHOT] = new CWaterFire();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::WATER_FIRE);
+					weapons[gameType::DOUBLE_SHOT]->SetAnimationSet(ani_set);
+					break;
+				}
+				default:
+					break;
+				}
+			}
+			
+			isAttact = true;
+			attactTime = GetTickCount();
+			if (!isJump) vx = 0;
+			weapons[DOUBLE_SHOT]->setPosition(x, y, nx);
+			weapons[DOUBLE_SHOT]->SetAttack(true);
+		}
+		else if (isUseTripleShot && weaponType != gameType::WHIP && weaponType != gameType::STOP_WATCH) {
+			bool isCreateDouble = false;
+			bool isCreateTriple = false;
+			if (weapons.find(gameType::DOUBLE_SHOT) == weapons.end())
+				isCreateDouble = true;
+			else if (weapons.find(gameType::TRIPLE_SHOT) == weapons.end())
+				isCreateTriple = true;
+			else {
+				if (weapons[gameType::DOUBLE_SHOT]->GetAttack() && weapons[gameType::TRIPLE_SHOT]->GetAttack())
+					return;
+				else {
+					if (weapons[gameType::DOUBLE_SHOT]->getType() != weaponType)
+						isCreateDouble = true;
+					else if (weapons[gameType::TRIPLE_SHOT]->getType() != weaponType)
+						isCreateTriple = true;
+				}
+			}
+			if (isCreateDouble||isCreateTriple) {
+				gameType createType = (isCreateDouble) ? gameType::DOUBLE_SHOT : gameType::TRIPLE_SHOT;
+				switch (weaponType)
+				{
+				case gameType::DAGGER: {
+					weapons[createType] = new CKnife();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::DAGGER);
+					weapons[createType]->SetAnimationSet(ani_set);
+					break;
+				}
+				case gameType::BOOMERANG: {
+					weapons[createType] = new CBoomerang();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::BOOMERANG);
+					weapons[createType]->SetAnimationSet(ani_set);
+					break;
+				}
+				case gameType::AXE: {
+					weapons[createType] = new CAxe();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::AXE);
+					weapons[createType]->SetAnimationSet(ani_set);
+					break;
+				}
+				case gameType::WATER_FIRE: {
+					weapons[createType] = new CWaterFire();
+					CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+					LPANIMATION_SET ani_set = animation_sets->Get(gameType::WATER_FIRE);
+					weapons[createType]->SetAnimationSet(ani_set);
+					break;
+				}
+				default:
+					break;
+				}
+			}
+
+			isAttact = true;
+			attactTime = GetTickCount();
+			if (!isJump) vx = 0;
+			gameType createType = (!weapons[gameType::DOUBLE_SHOT]->GetAttack()) ? gameType::DOUBLE_SHOT : gameType::TRIPLE_SHOT;
+			weapons[createType]->setPosition(x, y, nx);
+			weapons[createType]->SetAttack(true);
+		}
 	}
 }
 

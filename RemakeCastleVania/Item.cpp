@@ -122,17 +122,17 @@ void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 		r = x + ITEM_HEART_MINI_BBOX_WIDTH;
 		b = y + ITEM_HEART_MINI_BBOX_HEIGHT;
 	}
-	else if (type == gameType::ITEM_YELLOW) {
-		r = x + ITEM_YELLOW_BBOX_WIDTH;
-		b = y + ITEM_YELLOW_BBOX_HEIGHT;
+	else if (type == gameType::ITEM_INVISIBLE) {
+		r = x + ITEM_INVISIBLE_BBOX_WIDTH;
+		b = y + ITEM_INVISIBLE_BBOX_HEIGHT;
 	}
-	else if (type == gameType::ITEM_TWO_CROSS) {
-		r = x + ITEM_TWO_BBOX_WIDTH;
-		b = y + ITEM_TWO_BBOX_HEIGHT;
+	else if (type == gameType::ITEM_DOUBLE_SHOT) {
+		r = x + ITEM_DOUBLESHOT_BBOX_WIDTH;
+		b = y + ITEM_DOUBLESHOT_BBOX_HEIGHT;
 	}
-	else if (type == gameType::ITEM_THREE_CROSS) {
-		r = x + ITEM_THREE_BBOX_WIDTH;
-		b = y + ITEM_THREE_BBOX_HEIGHT;
+	else if (type == gameType::ITEM_TRIPLE_SHOT) {
+		r = x + ITEM_TRIPLESHOT_BBOX_WIDTH;
+		b = y + ITEM_TRIPLESHOT_BBOX_HEIGHT;
 	}
 	else if (type == gameType::ITEM_STOP_WATCH) {
 		r = x + ITEM_STOPWATCH_BBOX_WIDTH;

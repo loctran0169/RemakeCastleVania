@@ -80,6 +80,7 @@
 
 //Thời gian simon
 #define SIMON_UNTOUCHABLE_TIME						2000
+#define SIMON_UNTOUCHABLE_TIME_ITEM					8000
 #define SIMON_TIME_JUMPPING_SIT						300
 //Whip
 #define WHIP_BBOX_WIDGHT_LV1						42
@@ -109,14 +110,14 @@
 #define ITEM_HEART_MINI_BBOX_WIDTH					16
 #define ITEM_HEART_MINI_BBOX_HEIGHT					24
 
-#define ITEM_YELLOW_BBOX_WIDTH						32
-#define ITEM_YELLOW_BBOX_HEIGHT						32
+#define ITEM_INVISIBLE_BBOX_WIDTH						32
+#define ITEM_INVISIBLE_BBOX_HEIGHT						32
 
-#define ITEM_TWO_BBOX_WIDTH							32
-#define ITEM_TWO_BBOX_HEIGHT						32
+#define ITEM_DOUBLESHOT_BBOX_WIDTH					32
+#define ITEM_DOUBLESHOT_BBOX_HEIGHT					32
 
-#define ITEM_THREE_BBOX_WIDTH						32
-#define ITEM_THREE_BBOX_HEIGHT						32
+#define ITEM_TRIPLESHOT_BBOX_WIDTH					32
+#define ITEM_TRIPLESHOT_BBOX_HEIGHT					32
 
 #define ITEM_WHIP_BBOX_WIDTH						32
 #define ITEM_WHIP_BBOX_HEIGHT						32
@@ -172,9 +173,9 @@ enum gameType
 	ITEM_WATER_FIRE = 7,
 	ITEM_AXE = 8,
 	ITEM_HEART_MINI = 9,
-	ITEM_YELLOW = 10,
-	ITEM_TWO_CROSS = 11, // item 2 gạch
-	ITEM_THREE_CROSS = 12, // item 3 gạch
+	ITEM_INVISIBLE = 10,
+	ITEM_DOUBLE_SHOT = 11, // item 2 gạch
+	ITEM_TRIPLE_SHOT = 12, // item 3 gạch
 	ITEM_STOP_WATCH = 13,
 
 	//weapon 40->
@@ -186,7 +187,7 @@ enum gameType
 	BONE_WEAPON = 45,
 	STOP_WATCH = 46,
 	DOUBLE_SHOT = 47,
-	TRIPBLE_SHOT = 48,
+	TRIPLE_SHOT = 48,
 
 	//objects 50->
 	SIMON = 50, // player

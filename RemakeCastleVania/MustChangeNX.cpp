@@ -4,7 +4,7 @@
 
 void CMustChangeNX::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 CMustChangeNX::~CMustChangeNX()

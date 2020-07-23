@@ -9,28 +9,20 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float xCam, yCam;
 	game->GetCamPos(xCam, yCam);
-	if (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH) {
-		if (!isFirst) {
-			isFirst = true;
-			if (x < xCam) {
-				x = xCam + BOOMERANG_PADDING_HIDE;
-				nx = 1;
-			}
-			else {
-				x = xCam + SCREEN_WIDTH - BOOMERANG_BBOX_WIDTH - BOOMERANG_PADDING_HIDE;
-				nx = -1;
-			}
-		}
-		else
-			SetAttack(false);
+	if (!isFirst && (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH || abs(x - defaultX) >= BOOMERANG_BBOX_WIDTH * 11))
+	{
+		isFirst = true;
+		if (x + BOOMERANG_BBOX_WIDTH / 2 < xCam + SCREEN_WIDTH / 2)
+			nx = 1;
+		else 
+			nx = -1;
 	}
+	else if (isFirst && (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH))
+			SetAttack(false);
 	else if (isAttack) {
 		vx = BOOMERANG_SPEED * nx;
 		CGameObject::Update(dt); // cập nhật thời gian, vận tốc
 		x += dx;
-	}
-	if (isFirst && isCollitionObjectWithObject(simon)) {
-		SetAttack(false);
 	}
 }
 
@@ -52,9 +44,7 @@ void CBoomerang::setPosition(float _x, float _y, int _nx)
 {
 	isFirst = false;
 	this->nx = _nx;
-	if (nx > 0)
-		CGameObject::SetPosition(_x - SIMON_PADDING_ANI - SIMON_PADDING_WEAPON_ATTACK, _y + SIMON_PADDING_WEAPON_ATTACK);
-	else
-		CGameObject::SetPosition(_x + SIMON_BBOX_WIDTH, _y + SIMON_PADDING_WEAPON_ATTACK);
+	defaultX = (nx > 0) ? _x - SIMON_PADDING_ANI - SIMON_PADDING_WEAPON_ATTACK : _x + SIMON_BBOX_WIDTH;
+	CGameObject::SetPosition(defaultX, _y + SIMON_PADDING_WEAPON_ATTACK);
 	timeAttact = GetTickCount();
 }
