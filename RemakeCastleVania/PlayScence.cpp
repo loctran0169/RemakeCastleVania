@@ -290,7 +290,6 @@ void CPlayScene::checkCollisonWithHideObj()
 				player->isAutoGo = false;
 				if (!player->isAutoGoWithJump) {
 					dataScreen->currentScreen->setData(p->isOnStair, p->px, p->py, p->pnx, p->pny);
-					DebugOut(L"isOnStair %d \n",p->isOnStair);
 					dataScreen->saveStartScreen();
 					DebugOut(L"[INFO] Switching to scene %d \n", p->GetSceneId());
 					CGame::GetInstance()->SwitchScene(p->GetSceneId(), false);
@@ -527,6 +526,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 	switch (object_type)
 	{
 	case gameType::SIMON: {
+		int checkPy = 0;
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] Simon object was created before! ");
@@ -539,19 +539,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			player->SetAnimationSet(ani_set);
-			if (isAutoNext)return;
+			
+			if (isAutoNext) {
+				player->isStair = false;
+				player->isAutoGo = false;
+				return;
+			}
 			else if (isRestart) {
+				DebugOut(L"vào %d \n", GetTickCount());
 				DataScreen * p = DataScreenManager::GetInstance()->currentScreenDefault;
 				player->isStair = p->isOnStair;
 				player->x = p->x;
 				player->y = p->y;
 				player->nx = p->nx;
+				player->isAutoGo = false;
+				player->vx = 0;
 				if (p->ny == 1) {
+					checkPy = 1;
 					player->SetState(SIMON_STATE_IDLE_STAIR);
 					player->isGoDown = true;
 					player->isGoStairByUp = true;
 				}
 				else if (p->ny == -1) {
+					checkPy = -1;
 					player->SetState(SIMON_STATE_IDLE_STAIR);
 					player->isGoUp = true;
 					player->isGoStairByUp = false;
@@ -563,17 +573,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 				player->x = p->x;
 				player->y = p->y;
 				player->nx = p->nx;
+				player->isAutoGo = false;
+				player->vx = 0;
 				if (p->ny == 1) {
+					checkPy = 1;
 					player->SetState(SIMON_STATE_IDLE_STAIR);
 					player->isGoDown = true;
 					player->isGoStairByUp = true;
 				}
 				else if (p->ny == -1) {
+					checkPy = -1;
 					player->SetState(SIMON_STATE_IDLE_STAIR);
 					player->isGoUp = true;
 					player->isGoStairByUp = false;
 				}
 			}
+			dataScreen->currentScreen->setData(false, player->x, player->y, player->nx, checkPy);
+			dataScreen->saveStartScreen();
 			return;
 		}
 		else {
@@ -581,27 +597,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 			obj = Simon::GetInstance();
 			player = (Simon*)obj;
 			LPANIMATION_SET ani_set_whip = animation_sets->Get(gameType::WHIP);
-			player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
-
-			DataScreen * p = DataScreenManager::GetInstance()->currentScreen;
-			if (p->isOnStair) {
-				player->isStair = true;
-				player->x = p->x;
-				player->y = p->y;
-				player->nx = p->nx;
-				if (p->ny == 1) {
-					player->SetState(SIMON_STATE_IDLE_STAIR);
-					player->isGoDown = true;
-					player->isGoStairByUp = true;
-				}
-				else {
-					player->SetState(SIMON_STATE_IDLE_STAIR);
-					player->isGoUp = true;
-					player->isGoStairByUp = false;
-				}
-				p->isOnStair = false;
-			}
-			player->isAutoGo = false;
+			dataScreen->currentScreen->setData(false, player->x, player->y, player->nx, checkPy);
+			dataScreen->saveStartScreen();
 			break;
 		}
 	}
@@ -957,9 +954,7 @@ void CPlayScene::Load(bool isRestart, bool isAutoNext)
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line, isRestart, isAutoNext); break;
 		}
 	}
-
 	f.close();
-	
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -1289,7 +1284,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		for (auto&scence : game->getScenes()) {
 			DebugOut(L"scene: %d \n",scence.second->getID());
 		}
-		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(), true);
+		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(), true, false);
 		break;
 	case DIK_M:
 		try {

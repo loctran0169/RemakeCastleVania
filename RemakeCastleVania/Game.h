@@ -59,7 +59,7 @@ public:
 	int GetCurrentSceneId() { return current_scene; }
 	unordered_map<int, LPSCENE> getScenes() { return scenes; }
 
-	void SwitchScene(int scene_id, bool isNextScreen, bool isAutoNext = false);
+	void SwitchScene(int scene_id, bool isResetScreen, bool isAutoNext = false);
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }

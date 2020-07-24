@@ -430,7 +430,7 @@
 1	57	338	223	0	368	235	-1
 # warrior
 #grid	type	x	y	ani	l	t	r	b	boundl	boundr
-1	100	208	159	100	80	159	448	215	80	320
+1	100	150	159	100	80	159	448	215	80	320
 # black bat 
 #grid	type	x	y	ani	l	t	r	b
 1	101	80	109	101	80	159	272	215
