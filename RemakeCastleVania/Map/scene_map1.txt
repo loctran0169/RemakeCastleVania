@@ -415,6 +415,6 @@
 
 # --- hiden obejects ----
 # 53 portal, 54 hiden
-# grid	type	l	t	ani	r	b	sceneiD	onStair	x	y	nx	ny
-5	53	1407	100	0	1430	383	2	0	0	0	0	0
+# grid	type	l	t	ani	r	b	sceneiD	parID	onStair	x	y	nx	ny
+5	53	1407	100	0	1430	383	2	1	0	35	351	1	0
 5	54	1375	100	0	1406	383

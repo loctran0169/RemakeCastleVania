@@ -477,7 +477,7 @@
 3	67	0	45	0	1120	525	716	318
 4	67	832	45	0	1536	525	1280	318
 # --- SCENE PORTAL ----
-# grid	type	l	t	ani	r	b	sceneid	onStair	x	y	nx	ny
-0	53	192	447	0	224	455	4	1	190	79	1	1
-5	53	1504	223	0	1536	319	6	0	0	0	0	0
+# grid	type	l	t	ani	r	b	sceneid	parID	onStair	x	y	nx	ny
+0	53	192	447	0	224	455	4	4	1	190	79	1	1
+5	53	1504	223	0	1536	319	6	4	0	190	79	1	0
 #54	0	100	0	500	338	1

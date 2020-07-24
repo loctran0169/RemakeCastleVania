@@ -148,8 +148,8 @@
     <ClCompile Include="ZoneGhostFly.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Zone.cpp" />
-    <ClCompile Include="DataNextScreen.cpp" />
     <ClCompile Include="DataScreen.cpp" />
+    <ClCompile Include="DataScreenManager.cpp" />
     <ClCompile Include="define.h" />
     <ClCompile Include="EffectBrickBlack.cpp" />
     <ClCompile Include="GhostFly.cpp" />
@@ -201,8 +201,8 @@
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="WhiteBone.h" />
     <ClInclude Include="Zone.h" />
-    <ClInclude Include="DataNextScreen.h" />
     <ClInclude Include="DataScreen.h" />
+    <ClInclude Include="DataScreenManager.h" />
     <ClInclude Include="EffectBrickBlack.h" />
     <ClInclude Include="GhostFly.h" />
     <ClInclude Include="GhostWalk.h" />

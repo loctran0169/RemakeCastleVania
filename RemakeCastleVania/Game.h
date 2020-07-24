@@ -11,7 +11,6 @@
 #include <dinput.h>
 
 #include "Scence.h"
-
 using namespace std;
 
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -60,7 +59,7 @@ public:
 	int GetCurrentSceneId() { return current_scene; }
 	unordered_map<int, LPSCENE> getScenes() { return scenes; }
 
-	void SwitchScene(int scene_id, bool isNextScreen);
+	void SwitchScene(int scene_id, bool isNextScreen, bool isAutoNext = false);
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }

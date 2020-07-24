@@ -18,8 +18,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	map = CMap::GetInstance();
 	grid = CGrid::GetInstance();
 	game = CGame::GetInstance();
-	dataNextScreen = DataNextScreen::GetInstance();
-	dataScreen = DataScreen::GetInstance();
+	dataScreen = DataScreenManager::GetInstance();
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
@@ -290,8 +289,11 @@ void CPlayScene::checkCollisonWithHideObj()
 				CPortal *p = dynamic_cast<CPortal *>(objects[i]);
 				player->isAutoGo = false;
 				if (!player->isAutoGoWithJump) {
+					dataScreen->currentScreen->setData(p->isOnStair, p->px, p->py, p->pnx, p->pny);
+					DebugOut(L"isOnStair %d \n",p->isOnStair);
+					dataScreen->saveStartScreen();
 					DebugOut(L"[INFO] Switching to scene %d \n", p->GetSceneId());
-					CGame::GetInstance()->SwitchScene(p->GetSceneId(), p->isStair);
+					CGame::GetInstance()->SwitchScene(p->GetSceneId(), false);
 					return;
 				}
 				break;
@@ -504,7 +506,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
 
-void CPlayScene::_ParseSection_OBJECTS(string line)
+void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNext)
 {
 	vector<string> tokens = split(line);
 
@@ -528,6 +530,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] Simon object was created before! ");
+
 			player->SetPosition(x, y);
 			for (auto&weapon : player->weapons) {
 				LPANIMATION_SET ani_weapon = animation_sets->Get(weapon.second->getType());
@@ -536,14 +539,71 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			player->SetAnimationSet(ani_set);
+			if (isAutoNext)return;
+			else if (isRestart) {
+				DataScreen * p = DataScreenManager::GetInstance()->currentScreenDefault;
+				player->isStair = p->isOnStair;
+				player->x = p->x;
+				player->y = p->y;
+				player->nx = p->nx;
+				if (p->ny == 1) {
+					player->SetState(SIMON_STATE_IDLE_STAIR);
+					player->isGoDown = true;
+					player->isGoStairByUp = true;
+				}
+				else if (p->ny == -1) {
+					player->SetState(SIMON_STATE_IDLE_STAIR);
+					player->isGoUp = true;
+					player->isGoStairByUp = false;
+				}
+			}
+			else {
+				DataScreen * p = DataScreenManager::GetInstance()->currentScreen;
+				player->isStair = p->isOnStair;
+				player->x = p->x;
+				player->y = p->y;
+				player->nx = p->nx;
+				if (p->ny == 1) {
+					player->SetState(SIMON_STATE_IDLE_STAIR);
+					player->isGoDown = true;
+					player->isGoStairByUp = true;
+				}
+				else if (p->ny == -1) {
+					player->SetState(SIMON_STATE_IDLE_STAIR);
+					player->isGoUp = true;
+					player->isGoStairByUp = false;
+				}
+			}
 			return;
 		}
-		DebugOut(L"[ERROR] Đã tạo simon \n");
-		obj = Simon::GetInstance();
-		player = (Simon*)obj;
-		LPANIMATION_SET ani_set_whip = animation_sets->Get(gameType::WHIP);
-		player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
-		break;
+		else {
+			DebugOut(L"[ERROR] Đã tạo simon \n");
+			obj = Simon::GetInstance();
+			player = (Simon*)obj;
+			LPANIMATION_SET ani_set_whip = animation_sets->Get(gameType::WHIP);
+			player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
+
+			DataScreen * p = DataScreenManager::GetInstance()->currentScreen;
+			if (p->isOnStair) {
+				player->isStair = true;
+				player->x = p->x;
+				player->y = p->y;
+				player->nx = p->nx;
+				if (p->ny == 1) {
+					player->SetState(SIMON_STATE_IDLE_STAIR);
+					player->isGoDown = true;
+					player->isGoStairByUp = true;
+				}
+				else {
+					player->SetState(SIMON_STATE_IDLE_STAIR);
+					player->isGoUp = true;
+					player->isGoStairByUp = false;
+				}
+				p->isOnStair = false;
+			}
+			player->isAutoGo = false;
+			break;
+		}
 	}
 	case gameType::BRICK: {
 		int numberObj = atoi(tokens[5].c_str());
@@ -565,24 +625,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case gameType::PORTAL:{
-		float r = atof(tokens[5].c_str());
+
+		float r = atof(tokens[5].c_str());	
 		float b = atof(tokens[6].c_str());
+
 		int scene_id = atoi(tokens[7].c_str());
 		nextScence = scene_id;
 		obj = new CPortal(x, y, r, b, scene_id);
+		
+		int parentScreen = atoi(tokens[8].c_str());
+		/*if (currentScence == parentScreen)
+			dataScreen->nextScreen();*/
 
-		int isOnStair = atoi(tokens[8].c_str());
-		int px = atoi(tokens[9].c_str());
-		int py = atoi(tokens[10].c_str());
-		int pnx = atoi(tokens[11].c_str());
-		int pny = atoi(tokens[12].c_str());
-		if (isOnStair == 1) {
-			nextIsStair = true;
-			dynamic_cast<CPortal*>((CPortal*)obj)->isStair = true;
-			dataNextScreen->setData(isOnStair, px, py, pnx, pny);
-		}
-		else
-			dynamic_cast<CPortal*>((CPortal*)obj)->isStair = false;
+		int isOnStair = atoi(tokens[9].c_str());
+		int px = atoi(tokens[10].c_str());
+		int py = atoi(tokens[11].c_str());
+		int pnx = atoi(tokens[12].c_str());
+		int pny = atoi(tokens[13].c_str());
+
+		auto * portal = dynamic_cast<CPortal*>((CPortal*)obj);
+		portal->setData(isOnStair, px, py, pnx, pny);
 		break;
 	}
 	case gameType::CANDLE: {
@@ -762,10 +824,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
-
 	// General object setup
 	obj->SetPosition(x, y);
-	
 	if (ani_set_id != 0) {
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
@@ -852,7 +912,7 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 	return item;
 }
 
-void CPlayScene::Load(bool isNextScreen_Stair)
+void CPlayScene::Load(bool isRestart, bool isAutoNext)
 {
 	
 	sceneFilePath = game->getScenes()[game->GetCurrentSceneId()]->getPath();
@@ -894,31 +954,12 @@ void CPlayScene::Load(bool isNextScreen_Stair)
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line, isRestart, isAutoNext); break;
 		}
 	}
 
 	f.close();
-	if (isNextScreen_Stair) {
-		DataScreen * p = DataScreen::GetInstance();
-		if (p->isOnStair) {
-			player->isStair = true;
-			player->x = p->x;
-			player->y = p->y;
-			player->nx = p->nx;
-			if (p->ny == 1) {
-				player->SetState(SIMON_STATE_IDLE_STAIR);
-				player->isGoDown = true;
-				player->isGoStairByUp = true;
-			}
-			else {
-				player->SetState(SIMON_STATE_IDLE_STAIR);
-				player->isGoUp = true;
-				player->isGoStairByUp = false;
-			}
-		}
-	}
-	player->isAutoGo = false;
+	
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -1248,12 +1289,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		for (auto&scence : game->getScenes()) {
 			DebugOut(L"scene: %d \n",scence.second->getID());
 		}
-		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(),false);
+		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(), true);
 		break;
 	case DIK_M:
 		try {
 			if (((CPlayScene*)scence)->nextScence == NULL) return;
-			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence, false);
+			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence, false, true);
 		}catch(exception ex){}
 		break;
 	case DIK_ESCAPE:

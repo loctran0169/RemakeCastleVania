@@ -1,9 +1,10 @@
 #include"DataScreen.h"
 
-DataScreen * DataScreen::__instance = NULL;
-
-DataScreen * DataScreen::GetInstance()
+void DataScreen::Update()
 {
-	if (__instance == NULL) __instance = new DataScreen();
-	return __instance;
+	player = *simon;
+	if (GetTickCount() - lastTimeSub >= 1000) {
+		maxTime--;
+		lastTimeSub = GetTickCount();
+	}
 }

@@ -17,6 +17,7 @@
 
 #include "Utils.h"
 #include "Game.h"
+#include "DataScreenManager.h"
 #include "GameObject.h"
 #include "Textures.h"
 
@@ -35,7 +36,6 @@
 #define MAX_FRAME_RATE 120
 
 CGame *game;
-
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -57,6 +57,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void Update(DWORD dt)
 {
 	CGame::GetInstance()->GetCurrentScene()->Update(dt);
+	DataScreenManager::GetInstance()->Update();
 }
 
 /*

@@ -136,6 +136,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	//DebugOut(L"x= %f y=%f \n", x, y);
 }
+
 void Simon::Render()
 {
 
@@ -298,7 +299,6 @@ void Simon::SetHurt(int _nx)
 	StartUntouchable(SIMON_UNTOUCHABLE_TIME);
 	SubHealth(2);
 }
-
 
 void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {

@@ -411,23 +411,14 @@ void CGame::Load(LPCWSTR gameFile)
 	}
 	f.close();
 
-
-	//LPSCENE scene = new CPlayScene(1, L"scene1.txt");
-	//scenes[1] = scene;
-	//scene = new CPlayScene(2, L"scene2.txt");
-	//scenes[2] = scene;
-
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
-	SwitchScene(current_scene,false);
+	SwitchScene(current_scene, false, true);
 }
 
-void CGame::SwitchScene(int scene_id, bool isNextScreen)
+void CGame::SwitchScene(int scene_id, bool isResetScreen, bool isAutoNext)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
-	if (current_scene != scene_id) {
-		DataScreen::GetInstance()->copyOf(DataNextScreen::GetInstance());
-	}
 	current_scene = scene_id;
 	LPSCENE s = scenes[current_scene];	
 	s->Unload();
@@ -437,5 +428,5 @@ void CGame::SwitchScene(int scene_id, bool isNextScreen)
 	CAnimations::GetInstance()->Clear();
 	
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
-	s->Load(isNextScreen);
+	s->Load(isResetScreen, isAutoNext);
 }

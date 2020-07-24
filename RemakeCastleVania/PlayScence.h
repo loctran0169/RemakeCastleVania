@@ -16,7 +16,7 @@
 #include"Axe.h"
 #include"WaterFire.h"
 #include"SkateBoard.h"
-#include"DataNextScreen.h"
+#include"DataScreenManager.h"
 #include"DataScreen.h"
 #include"Grid.h"
 #include"Candle.h"
@@ -48,15 +48,13 @@ protected:
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
-	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNext = false);
 public:
 	CMap *map;
 	CGrid *grid;
 	int currentScence;
-	DataNextScreen *dataNextScreen;
-	DataScreen *dataScreen;
+	DataScreenManager *dataScreen;
 	int nextScence;
-	bool nextIsStair;
 	bool isDisableCamera = false;
 	Simon* getPlayer() { return player; }
 	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
@@ -69,7 +67,7 @@ public:
 	void checkCollisonWithEnemy(vector<LPGAMEOBJECT> *coObjects);
 
 	Item * getNewItem(int id, float x, float y);
-	virtual void Load(bool isNextScreen = false);
+	virtual void Load(bool isRestart = false, bool isAutoNext = false);
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
