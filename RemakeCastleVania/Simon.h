@@ -13,6 +13,7 @@
 #include"Boomerang.h"
 #include"Axe.h"
 #include"WaterFire.h"
+#include"Sound.h"
 
 #define TIME_REVERT_HP_STEP		400
 

@@ -141,6 +141,7 @@
     <ClCompile Include="EnemyFire.cpp" />
     <ClCompile Include="MustBeJump.cpp" />
     <ClCompile Include="MustChangeNX.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="WhiteBone.cpp" />
     <ClCompile Include="ZoneBone.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="MustChangeNX.h" />
     <ClInclude Include="Parabol.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="WhiteBone.h" />
     <ClInclude Include="Zone.h" />

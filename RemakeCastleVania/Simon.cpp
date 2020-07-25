@@ -1,5 +1,4 @@
 ﻿#include "Simon.h"
-#include"Textures.h"
 
 Simon* Simon::__instance = NULL;
 
@@ -7,28 +6,6 @@ Simon* Simon::GetInstance()
 {
 	if (__instance == NULL) __instance = new Simon();
 	return __instance;
-}
-
-bool Simon::isUsingWeapon(gameType _type)
-{
-	if (this->weapons.find(_type) != this->weapons.end()) // tìm đang sài nó ko
-	{
-		if (this->weapons[_type]->GetAttack() == true)
-			return true;
-	}
-	return false;
-}
-
-void Simon::startPlusFullHP()
-{
-	isUseToFullHP = true;
-	SetState(SIMON_STATE_IDLE);
-	timeEatItem = GetTickCount();
-}
-
-void Simon::dieStart()
-{
-	numLife--;
 }
 
 Simon::Simon() : CGameObject()
@@ -228,6 +205,28 @@ void Simon::Render()
 			weapon.second->Render();
 	}
 	//RenderBoundingBox();
+}
+
+bool Simon::isUsingWeapon(gameType _type)
+{
+	if (this->weapons.find(_type) != this->weapons.end()) // tìm đang sài nó ko
+	{
+		if (this->weapons[_type]->GetAttack() == true)
+			return true;
+	}
+	return false;
+}
+
+void Simon::startPlusFullHP()
+{
+	isUseToFullHP = true;
+	SetState(SIMON_STATE_IDLE);
+	timeEatItem = GetTickCount();
+}
+
+void Simon::dieStart()
+{
+	numLife--;
 }
 
 void Simon::SetState(int state)
@@ -489,6 +488,7 @@ void Simon::attackWeapon(gameType weaponType)
 			heartWeapon -= heartMustSub;
 		}
 	}
+	CSound::GetInstance()->playMulti(weaponType);
 }
 
 bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)

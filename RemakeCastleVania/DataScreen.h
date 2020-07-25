@@ -3,7 +3,7 @@
 #include <d3dx9.h>
 #include"Simon.h"
 #include"Monter.h"
-
+#include"Sound.h"
 
 class DataScreen
 {

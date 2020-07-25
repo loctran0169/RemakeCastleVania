@@ -24,7 +24,7 @@
 #include "Brick.h"
 #include"define.h"
 #include "PlayScence.h"
-
+#include"Sound.h"
 #define WINDOW_CLASS_NAME L"Castle Vania"
 #define MAIN_WINDOW_TITLE L"Castle Vania"
 
@@ -33,6 +33,7 @@
 #define MAX_FRAME_RATE 120
 
 CGame *game;
+CSound *sound;
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -173,11 +174,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 	srand((unsigned)time(0));
 	game = CGame::GetInstance();
+	sound = CSound::GetInstance();
 	game->Init(hWnd);
 	game->InitKeyboard();
 
 	game->Load(L"Map\\castlevania.txt");
-
+	sound->readSoundTxt(L"sounds\\0soundFile.txt");
 	SetWindowPos(hWnd, 0, 200, 200, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();

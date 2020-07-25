@@ -172,13 +172,15 @@
 
 enum gameType
 {
+	TIMEOUT = -2,//HẾT THỜI GIAN
+	HIT = -1, // đánh
 	//item0 ->
 	ITEM_KNIFE = 0,
 	ITEM_HEART = 1,
 	ITEM_WHIP = 2,
-	ITEM_MONEY_1 = 3,
-	ITEM_MONEY_2 = 4,
-	ITEM_MONEY_3 = 5,
+	ITEM_MONEY_1 = 3,////////////
+	ITEM_MONEY_2 = 4,/////////////
+	ITEM_MONEY_3 = 5,/////////////
 	ITEM_BOOMERANG = 6,
 	ITEM_WATER_FIRE = 7,
 	ITEM_AXE = 8,

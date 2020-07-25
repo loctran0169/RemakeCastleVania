@@ -7,5 +7,7 @@ void DataScreen::Update()
 	if (GetTickCount() - lastTimeSub >= MILI_TO_SECOND) {
 		maxTime--;
 		lastTimeSub = GetTickCount();
+		if (maxTime <= 20)
+			CSound::GetInstance()->playFromBegin(gameType::TIMEOUT);
 	}
 }

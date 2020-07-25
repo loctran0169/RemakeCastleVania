@@ -67,6 +67,9 @@
     <Filter Include="FrameWork\GameObjects\monters\weapons">
       <UniqueIdentifier>{f0809eb7-91bb-46f8-a1c3-1651201245ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FrameWork\Sound">
+      <UniqueIdentifier>{1fa8b2b3-d78f-4c40-9fed-23b54ac2480f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -234,6 +237,9 @@
     <ClCompile Include="EffectMoney.cpp">
       <Filter>FrameWork\GameObjects\effects</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>FrameWork\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -400,6 +406,9 @@
     </ClInclude>
     <ClInclude Include="EffectMoney.h">
       <Filter>FrameWork\GameObjects\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>FrameWork\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
