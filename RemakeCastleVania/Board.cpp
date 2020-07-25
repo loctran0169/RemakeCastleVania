@@ -19,6 +19,7 @@ CBoard::CBoard()
 
 void CBoard::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
+
 }
 
 void CBoard::Render()
@@ -34,7 +35,7 @@ void CBoard::Render()
 	DrawNumber(2, xCam + 370, yCam + 48, data->currentScreen->player.getHealthWeapon()); // in tim 
 	DrawNumber(2, xCam + 370, yCam + 63, data->currentScreen->player.getLife()); // in số mạng
 	DrawHP(xCam + 113, yCam + 49, true, data->currentScreen->player.health); //máu simon
-	DrawHP(xCam + 113, yCam + 65, false, 10); // máu boss
+	DrawHP(xCam + 113, yCam + 65, false, (data->currentScreen->boss == NULL) ? MAX_HP : data->currentScreen->boss->health); // máu boss
 
 	if (data->currentScreen->player.lastItemCollect != gameType::ITEM_WHIP) // in vũ khí đang sử dụng
 		animation_set->at(data->currentScreen->player.lastItemCollect)->Render(xCam + 270, yCam + 55);

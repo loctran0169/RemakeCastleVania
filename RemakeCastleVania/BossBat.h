@@ -7,6 +7,7 @@
 #include"Line.h"
 #include"Parabol.h"
 #include"Expression.h"
+#include"EnemyFire.h"
 
 #define BOSSBAT_BBOX_WIDTH			100
 #define BOSSBAT_BBOX_HEIGHT			48
@@ -31,11 +32,12 @@
 #define BOSSBAT_TIME_WAITING_ACTIVE		500
 #define BOSSBAT_TIME_WAITING_AUTOGO		600
 #define BOSSBAT_TIME_WAITING_FLY		1500
+#define BOSSBAT_TIME_DIE				3000
 
 
 class CBossBat : public CMonter // quái xương
 {
-private:
+public:
 	Simon * simon;
 	CGame * game;
 	CZone * zone;
@@ -45,8 +47,8 @@ private:
 	int dyRepair = 0; // từ đây sẽ di chuyển xuống dyRepairToAttack
 	int dyRepairToAttack = 0; // đợi tý r bay vào simon
 
-	bool isWaiting = true; // đợi con simon đến bụp nó
-
+	bool isAttack = false;
+	bool isDie = false;
 	bool isAutoGo = false; // tự động đi theo đừng thằng
 	bool isGoUp = false; // bay xuống
 	bool isGoDown = false; // bay lên
@@ -55,15 +57,17 @@ private:
 
 	DWORD timeBeginState = 0;
 public:
+	bool isWaiting = true; // đợi con simon đến bụp nó
 	CBossBat(int _l, int _t, int _r, int _b, int _dyRepair, int _dyRepairToAttack) :CMonter() {
 		type = gameType::BOSS_BAT;
-		health = 20;
+		health = MAX_HP;
 		simon = Simon::GetInstance();
 		game = CGame::GetInstance();
 		zone = new CZone(_l, _t, _r, _b);
 		dyRepair = _dyRepair;
 		dyRepairToAttack = _dyRepairToAttack;
 	}
+
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
@@ -71,6 +75,7 @@ public:
 	float randomX();
 	float float_randomX(float min, float max);
 	void SetState(int state);
+	void attackWeapon(vector<LPGAMEOBJECT>& listWeapon); // hàm khai triển vũ khí
 	void beAttack();
 	~CBossBat();
 };

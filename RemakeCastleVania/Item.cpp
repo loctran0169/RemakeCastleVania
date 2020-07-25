@@ -28,7 +28,7 @@ void Item::setValueGravity(float _l, float _r,float _vx, float _vy)
 
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (timeExit != 0 && GetTickCount() - timeExit > ITEM_TIME_EXIT) {
+	if (timeExit != 0 && GetTickCount() - timeExit > maxTimeExit) {
 		isPicked = true;
 	}
 
@@ -137,6 +137,18 @@ void Item::GetBoundingBox(float &l, float &t, float &r, float &b) {
 	else if (type == gameType::ITEM_STOP_WATCH) {
 		r = x + ITEM_STOPWATCH_BBOX_WIDTH;
 		b = y + ITEM_STOPWATCH_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_CROSS) {
+		r = x + ITEM_CROSS_BBOX_WIDTH;
+		b = y + ITEM_CROSS_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_CROWN) {
+		r = x + ITEM_CROWN_BBOX_WIDTH;
+		b = y + ITEM_CROWN_BBOX_HEIGHT;
+	}
+	else if (type == gameType::ITEM_FULL_HP) {
+		r = x + ITEM_FULL_HP_BBOX_WIDTH;
+		b = y + ITEM_FULL_HP_BBOX_HEIGHT;
 	}
 }
 

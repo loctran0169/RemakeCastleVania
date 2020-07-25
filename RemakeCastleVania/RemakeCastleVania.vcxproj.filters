@@ -228,6 +228,9 @@
     <ClCompile Include="DataScreen.cpp">
       <Filter>FrameWork\Data</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyFire.cpp">
+      <Filter>FrameWork\GameObjects\monters\weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="DataScreen.h">
       <Filter>FrameWork\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFire.h">
+      <Filter>FrameWork\GameObjects\monters\weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

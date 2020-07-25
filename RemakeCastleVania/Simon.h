@@ -14,6 +14,8 @@
 #include"Axe.h"
 #include"WaterFire.h"
 
+#define TIME_REVERT_HP_STEP		400
+
 class Simon : public CGameObject
 {
 private:
@@ -25,7 +27,7 @@ public:
 	int currentAni;
 	int prevAni;
 	int numLife = 3;
-	int health = 16;
+	int health = MAX_HP;
 	int heartWeapon = 0;
 	int timeTouchable = SIMON_UNTOUCHABLE_TIME;
 	float stateSpeed = 0.0f;
@@ -47,7 +49,7 @@ public:
 	bool isJumpRight = false; // nhảy phải thì ko đổi hướng
 	bool isJumpLeft = false;// nhảy trái thì ko đổi hướng
 	bool isRenderLopping = false; //render ani còn lại khi khi đóng băng
-
+	bool isUseToFullHP = false;
 	bool isHurt = false; //Trạng thái bị đánh
 	int nxHurt = 1;
 
@@ -101,12 +103,14 @@ public:
 	void plusHeart(int num) { heartWeapon += num; }
 	void SetState(int state);
 	void SetHurt(int _nx);
-	void SubHealth(int num) { health -= num; }
+	void SubHealth(int num) { health -= num; if (health < 0)health = 0; }
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable(int _timeTouch) { untouchable = 1; untouchable_start = GetTickCount(); timeTouchable = _timeTouch; }
 	bool isUsingWeapon(gameType _type);
 	int getHealth() { return health; }
+	void plusHealth(int num) { health += num; }
 	int getHealthWeapon() { return heartWeapon; }
+	void startPlusFullHP();
 	int getLife() { return numLife; }
 	void dieStart();
 };

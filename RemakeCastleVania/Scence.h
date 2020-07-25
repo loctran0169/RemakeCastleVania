@@ -8,10 +8,12 @@ class CScene
 protected:
 	CKeyEventHandler * key_handler;
 	int id;
+	int stageMap;
+	int maxTime;
 	LPCWSTR sceneFilePath;
 
 public:
-	CScene(int id, LPCWSTR filePath);
+	CScene(int id, int _stageMap,int _maxTime, LPCWSTR filePath);
 
 	CKeyEventHandler * GetKeyEventHandler() { return key_handler; }
 	virtual void Load(bool isRestart = false, bool isAutoNext = false) = 0;

@@ -21,6 +21,7 @@ class CGame
 	HWND hWnd;									// Window handle
 
 	LPDIRECT3D9 d3d = NULL;						// Direct3D handle
+	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
 
 	LPDIRECT3DSURFACE9 backBuffer = NULL;
 	LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D image on the screen 
@@ -38,12 +39,10 @@ class CGame
 
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene=-1;
-
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
 public:
-	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 	void InitKeyboard();

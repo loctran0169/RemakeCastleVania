@@ -11,6 +11,7 @@
 //Simon
 #define SIMON_ATTACT_TIME							400
 #define SIMON_EATTING_TIME							500
+#define MAX_HP										16
 //Trạng thái di chuyển cùa simon
 #define SIMON_STATE_IDLE							0 //trạng thái đứng
 #define SIMON_STATE_WALKING_RIGHT					1 // trạng thái đi trái
@@ -137,6 +138,15 @@
 #define ITEM_STOPWATCH_BBOX_WIDTH					32
 #define ITEM_STOPWATCH_BBOX_HEIGHT					32
 
+#define ITEM_CROSS_BBOX_WIDTH						32
+#define ITEM_CROSS_BBOX_HEIGHT						32
+
+#define ITEM_CROWN_BBOX_WIDTH						32
+#define ITEM_CROWN_BBOX_HEIGHT						32
+
+#define ITEM_FULL_HP_BBOX_WIDTH						24
+#define ITEM_FULL_HP_BBOX_HEIGHT					28
+
 #define KNIFE_BBOX_WIDTH							32
 #define KNIFE_BBOX_HEIGHT							18
 
@@ -177,7 +187,9 @@ enum gameType
 	ITEM_DOUBLE_SHOT = 11, // item 2 gạch
 	ITEM_TRIPLE_SHOT = 12, // item 3 gạch
 	ITEM_STOP_WATCH = 13,
-
+	ITEM_CROSS = 14,
+	ITEM_CROWN = 15, // vương việng
+	ITEM_FULL_HP = 16, //use to full HP
 	//weapon 39->
 	WHIP = 40,
 	DAGGER = 41,
@@ -188,7 +200,7 @@ enum gameType
 	STOP_WATCH = 46,
 	DOUBLE_SHOT = 47,
 	TRIPLE_SHOT = 48,
-	CROSS = 49,
+	ENEMY_FIRE	= 49,
 
 	//objects 50->
 	SIMON = 50, // player

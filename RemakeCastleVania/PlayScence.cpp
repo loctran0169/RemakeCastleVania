@@ -11,11 +11,10 @@ using namespace std;
 
 Simon* CPlayScene::player = NULL;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
-	CScene(id, filePath)
+CPlayScene::CPlayScene(int id, int _stageMap, int _maxtime, LPCWSTR filePath) :
+	CScene(id, _stageMap, _maxtime, filePath)
 {
 	board = CBoard::GetInstance();
-	currentScence = id;
 	map = CMap::GetInstance();
 	grid = CGrid::GetInstance();
 	game = CGame::GetInstance();
@@ -95,6 +94,11 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						CGameObject *gameObj = coEnemys->at(i);
 
 						switch (gameObj->getType()){
+						case gameType::BOSS_BAT: {
+							auto bat = dynamic_cast<CBossBat*>(gameObj);
+							bat->beAttack();
+							break;
+						}
 						case gameType::BAT: {
 							auto bat = dynamic_cast<CBlackBat*>(gameObj);
 							bat->beAttack();
@@ -252,7 +256,20 @@ void CPlayScene::checkCollisonWithItem()
 					break;
 				}
 				case gameType::ITEM_MONEY_3: {
-					dataScreen->currentScreen->addScore(300);
+					dataScreen->currentScreen->addScore(1000);
+					break;
+				}
+				case gameType::ITEM_CROWN: {
+					dataScreen->currentScreen->addScore(2000);
+					break;
+				}
+				case gameType::ITEM_CROSS: {
+					for (UINT i = 0; i < listEnemy.size(); i++) {
+						listEnemy[i]->isHitted = true;
+					}
+				}
+				case gameType::ITEM_FULL_HP: {
+					player->startPlusFullHP();
 					break;
 				}
 				default:
@@ -288,10 +305,11 @@ void CPlayScene::checkCollisonSimonWithEnemy()
 			CWeapon * weapon = dynamic_cast<CWeapon *> (listEnemyWeapon[i]);
 			if (weapon->GetAttack() == true) {
 				if (player->isCollitionObjectWithObject(weapon)) {
-
 					float l, t, r, b;
 					weapon->GetBoundingBox(l, t, r, b);
 					player->SetHurt((player->x + SIMON_BBOX_WIDTH / 2 > (r + l) / 2) ? 1 : -1);
+					if (weapon->getType() == gameType::ENEMY_FIRE)
+						weapon->SetAttack(false);
 				}
 			}
 		}
@@ -613,6 +631,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 				}
 			}
 			dataScreen->currentScreen->setData(false, player->x, player->y, player->nx, checkPy);
+			(dataScreen->currentScreen->stage != stageMap) ? dataScreen->currentScreen->setMaxTime(maxTime) : true;
+			dataScreen->currentScreen->setStage(stageMap);
 			dataScreen->saveStartScreen();
 			return;
 		}
@@ -623,6 +643,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 			LPANIMATION_SET ani_set_whip = animation_sets->Get(gameType::WHIP);
 			player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
 			dataScreen->currentScreen->setData(false, player->x, player->y, player->nx, checkPy);
+			(dataScreen->currentScreen->stage != stageMap) ? dataScreen->currentScreen->setMaxTime(maxTime) : true;
+			dataScreen->currentScreen->setStage(stageMap);
 			dataScreen->saveStartScreen();
 			break;
 		}
@@ -656,8 +678,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 		obj = new CPortal(x, y, r, b, scene_id);
 		
 		int parentScreen = atoi(tokens[8].c_str());
-		/*if (currentScence == parentScreen)
-			dataScreen->nextScreen();*/
+		/*if (dataScreen->currentScreen->parentMapID != parentScreen)
+			dataScreen->currentScreen->setParentMapID(parentScreen);*/
 
 		int isOnStair = atoi(tokens[9].c_str());
 		int px = atoi(tokens[10].c_str());
@@ -826,8 +848,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 
 		int repair = atof(tokens[9].c_str());
 		int repairToAttack = atof(tokens[10].c_str());
+		int itemId = atof(tokens[11].c_str());
 
 		obj = new CBossBat(l, t, r, b, repair, repairToAttack);
+		obj->setItemID(itemId);
 		break;
 	}
 	case gameType::DISABLE_CAMERA: {
@@ -920,6 +944,19 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 	case gameType::ITEM_STOP_WATCH:
 		item = new Item(gameType::ITEM_STOP_WATCH);
 		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_CROSS:
+		item = new Item(gameType::ITEM_CROSS);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_CROWN:
+		item = new Item(gameType::ITEM_CROWN);
+		item->SetPosition(x, y);
+		break;
+	case gameType::ITEM_FULL_HP:
+		item = new Item(gameType::ITEM_FULL_HP);
+		item->SetPosition(x, y);
+		item->setMaxTimeExit(MAXTIME_FULLHP);
 		break;
 	default:
 		item = new Item(gameType::ITEM_WHIP);
@@ -1121,6 +1158,12 @@ void CPlayScene::Update(DWORD dt)
 				auto *bone = dynamic_cast<CBone *>(listEnemy.at(i));
 				bone->attackWeapon(listEnemyWeapon);
 			}
+			else if (dynamic_cast<CBossBat *>(listEnemy.at(i))) {
+				auto *boss = dynamic_cast<CBossBat *>(listEnemy.at(i));
+				boss->attackWeapon(listEnemyWeapon);
+				if (!boss->isWaiting)
+					dataScreen->currentScreen->setBoss(boss);
+			}
 		}
 	for (size_t i = 0; i < listEffect.size(); i++)
 	{
@@ -1220,6 +1263,11 @@ void CPlayScene::Update(DWORD dt)
 				monkey = NULL;
 				listEnemy.erase(listEnemy.begin() + i);
 			}
+			else if (dynamic_cast<CBossBat *>(listEnemy.at(i))) {
+				auto *boss = dynamic_cast<CBossBat*>(listEnemy.at(i));
+				listItems.push_back(getNewItem(boss->itemID, boss->zone->x - BOSSBAT_PADDING_X_RIGHT, boss->zone->y));
+				grid->deleteObject(boss->cellID, boss);
+			}
 		}
 	}
 	//update xóa effect
@@ -1239,6 +1287,13 @@ void CPlayScene::Update(DWORD dt)
 			if (bone->GetAttack() == false) {
 				listEnemyWeapon.erase(listEnemyWeapon.begin() + i);
 				delete bone;
+			}
+		}
+		else if (dynamic_cast<CEnemyFire *>(listEnemyWeapon.at(i))) {
+			auto *fire = dynamic_cast<CEnemyFire *>(listEnemyWeapon.at(i));
+			if (fire->GetAttack() == false) {
+				listEnemyWeapon.erase(listEnemyWeapon.begin() + i);
+				delete fire;
 			}
 		}
 	}
@@ -1280,7 +1335,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP)return;
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -1315,11 +1370,21 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(), true, false);
 		break;
-	case DIK_M:
+	case DIK_N:// tự chết
+		try {
+			if (((CPlayScene*)scence)->nextScence == NULL) return;
+			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->dataScreen->currentScreen->parentMapID, false, true);
+		}
+		catch (exception ex) {}
+		break;
+	case DIK_M:// next map nhanh
 		try {
 			if (((CPlayScene*)scence)->nextScence == NULL) return;
 			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence, false, true);
 		}catch(exception ex){}
+		break;
+	case DIK_EQUALS:
+		simon->plusHeart(2);
 		break;
 	case DIK_ESCAPE:
 		DestroyWindow(game->getHwnd());
@@ -1331,7 +1396,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP)return;
 	if (KeyCode == DIK_DOWN) {
 		if (simon->isSit) {
 			if (!simon->isAttact) {
@@ -1351,7 +1416,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP)return;
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 
@@ -1385,6 +1450,4 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			else
 				simon->nx = -1.0f;
 	}
-	/*else
-		simon->SetState(SIMON_STATE_IDLE);*/
 }

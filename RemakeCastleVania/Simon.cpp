@@ -19,6 +19,13 @@ bool Simon::isUsingWeapon(gameType _type)
 	return false;
 }
 
+void Simon::startPlusFullHP()
+{
+	isUseToFullHP = true;
+	SetState(SIMON_STATE_IDLE);
+	timeEatItem = GetTickCount();
+}
+
 void Simon::dieStart()
 {
 	numLife--;
@@ -43,7 +50,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-	if (isAutoGo&&!isJump) {
+	if (isUseToFullHP) {
+		if (GetTickCount() - timeEatItem > TIME_REVERT_HP_STEP) {
+			plusHealth(2);
+			timeEatItem = GetTickCount();
+		}
+		if (getHealth() == MAX_HP)
+			isUseToFullHP = false;
+	}
+	else if (isAutoGo&&!isJump) {
 		if ((abs(dx) <= abs(autoGoX_Distance)&& autoGoX_Distance !=0)|| (abs(dy) <= abs(autoGoY_Distance) && autoGoY_Distance != 0))
 		{
 			if (abs(dx) <= abs(autoGoX_Distance))
@@ -301,6 +316,7 @@ void Simon::SetHurt(int _nx)
 	}
 		
 	StartUntouchable(SIMON_UNTOUCHABLE_TIME);
+	if (health > 0);
 	SubHealth(2);
 }
 
@@ -325,27 +341,22 @@ void Simon::attackWeapon(gameType weaponType)
 		break;
 	case gameType::AXE:
 		if (heartWeapon < 1)return;
-		heartWeapon--;
 		heartMustSub++;
 		break;
 	case gameType::BOOMERANG:
 		if (heartWeapon < 1)return;
-		heartWeapon--;
 		heartMustSub++;
 		break;
 	case gameType::DAGGER:
 		if (heartWeapon < 1)return;
-		heartWeapon--;
 		heartMustSub++;
 		break;
 	case gameType::STOP_WATCH:
 		if (heartWeapon < 5)return;
-		heartWeapon -= 5;
 		heartMustSub += 5;
 		break;
 	case gameType::WATER_FIRE:
 		if (heartWeapon < 1)return;
-		heartWeapon--;
 		heartMustSub++;
 		break;
 	default:

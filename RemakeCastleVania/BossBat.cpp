@@ -1,4 +1,5 @@
-#include "BossBat.h"
+﻿#include "BossBat.h"
+
 
 void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -11,12 +12,15 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}	
 		else if (GetTickCount() - timeBeginState > BOSSBAT_TIME_WAITING_ACTIVE) {
 			isWaiting = false;
+			isAttack = true;
 			line = new CLine(x, y, randomX(), dyRepairToAttack);
 			SetState(BOSSBAT_STATE_AUTOGO_ATTACK);
 		}
 	}
 	else {
 		CGameObject::Update(dt);
+		if (GetTickCount() - timeBeginState > BOSSBAT_TIME_DIE && isDie)isHitted = true;
+		if (isDie)return;
 		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_AUTOGO && state == BOSSBAT_STATE_AUTOGO_REPAIR)return;
 		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_AUTOGO && state == BOSSBAT_STATE_AUTOGO_ATTACK)return;
 		if (GetTickCount() - timeBeginState < BOSSBAT_TIME_WAITING_FLY && state == BOSSBAT_STATE_FLY)return;
@@ -27,6 +31,7 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isResetPositionParabol = false;
 		}
 		if(isAutoGo){
+			if (isAttack)return;
 			float *xy = line->toXY(abs(dx), ((state == BOSSBAT_STATE_AUTOGO_ATTACK) ? dyRepairToAttack : dyRepair));
 			x = xy[0];
 			y = xy[1];
@@ -75,6 +80,7 @@ void CBossBat::Render()
 		animation_set->at(getAniId())->setLopping(true);
 	else
 		animation_set->at(getAniId())->setLopping(false);
+
 	animation_set->at(getAniId())->Render(x + ((isWaiting) ? 32 : 0), y);
 
 	//zone->RenderBoundingBox();
@@ -136,10 +142,24 @@ void CBossBat::SetState(int state)
 	}
 }
 
+void CBossBat::attackWeapon(vector<LPGAMEOBJECT>& listWeapon)
+{
+	if (!isAttack)return;
+	CEnemyFire * fire = new CEnemyFire();
+	fire->setPosition(x + (BOSSBAT_BBOX_WIDTH - ENEMY_FIRE_BBOX_WIDTH) / 2, y + BOSSBAT_BBOX_WIDTH * 2 / 3, nx);
+	fire->SetAttack(true);
+	listWeapon.push_back(fire);
+	isAttack = false;
+}
+
 void CBossBat::beAttack()
 {
-	health--;
-	if (health < 1)isHitted = true;
+	health -= 2;
+	if (health < 1) {
+		isDie = true;
+		health = 0;
+		timeBeginState = GetTickCount();
+	}
 }
 
 CBossBat::~CBossBat()

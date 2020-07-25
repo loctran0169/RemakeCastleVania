@@ -54,11 +54,10 @@ public:
 	CMap *map;
 	CGrid *grid;
 	DataScreenManager *dataScreen;
-	int currentScence;
 	int nextScence;
 	bool isDisableCamera = false;
 	Simon* getPlayer() { return player; }
-	CPlayScene(int id = 0, LPCWSTR filePath = NULL);
+	CPlayScene(int id = 0,int _stageMap = 1,int _maxTime = 0, LPCWSTR filePath = NULL);
 
 	//collision
 	void checkCollisonWeapon(vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *coEnemys);

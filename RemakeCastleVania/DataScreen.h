@@ -2,17 +2,21 @@
 #include <unordered_map>
 #include <d3dx9.h>
 #include"Simon.h"
+#include"Monter.h"
+
 
 class DataScreen
 {
-	Simon*simon;	
+	Simon*simon;		
 public:
+	CMonter *boss;
 	Simon player;
-	int mapID;
 	DWORD maxTime = 400;
 	DWORD lastTimeSub;
+	int parentMapID;
+	int mapID;
 	int score = 0;
-	int stage;
+	int stage = 0;
 	bool isOnStair;
 	int x;
 	int y;
@@ -49,6 +53,7 @@ public:
 	void setStage(int _stage) { stage = _stage; }
 	void setMaxTime(DWORD _time) { maxTime = _time; }
 	void setMapID(int _id) { mapID = _id; }
+	void setParentMapID(int a) { parentMapID = a; }
 	void copyOf(DataScreen * dataX) {
 		isOnStair = dataX->isOnStair;
 		x = dataX->x;
@@ -56,6 +61,7 @@ public:
 		nx = dataX->nx;
 		ny = dataX->ny;
 	}
+	void setBoss(CMonter *_boss) { boss = _boss; }
 	Simon init(Simon * simon) {
 		return *simon;
 	}
