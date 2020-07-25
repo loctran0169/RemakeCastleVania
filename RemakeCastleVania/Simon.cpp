@@ -19,12 +19,16 @@ bool Simon::isUsingWeapon(gameType _type)
 	return false;
 }
 
+void Simon::dieStart()
+{
+	numLife--;
+}
+
 Simon::Simon() : CGameObject()
 {
 	game = CGame::GetInstance();
 	untouchable = 0;
 	prevAni = -1;
-	heartWeapon = 0;
 	SetState(SIMON_STATE_IDLE);
 	weapons[gameType::WHIP] = new Whip();
 }
@@ -313,16 +317,36 @@ void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 
 void Simon::attackWeapon(gameType weaponType)
 {
+	int heartMustSub = 0;
 	switch (weaponType)
 	{
 	case gameType::WHIP:
 		if (isAttact)return;// roi đánh đánh thì ko đánh nữa
 		break;
-	case gameType::DAGGER:
+	case gameType::AXE:
+		if (heartWeapon < 1)return;
 		heartWeapon--;
+		heartMustSub++;
 		break;
 	case gameType::BOOMERANG:
+		if (heartWeapon < 1)return;
 		heartWeapon--;
+		heartMustSub++;
+		break;
+	case gameType::DAGGER:
+		if (heartWeapon < 1)return;
+		heartWeapon--;
+		heartMustSub++;
+		break;
+	case gameType::STOP_WATCH:
+		if (heartWeapon < 5)return;
+		heartWeapon -= 5;
+		heartMustSub += 5;
+		break;
+	case gameType::WATER_FIRE:
+		if (heartWeapon < 1)return;
+		heartWeapon--;
+		heartMustSub++;
 		break;
 	default:
 		break;
@@ -334,6 +358,7 @@ void Simon::attackWeapon(gameType weaponType)
 		if (!isJump) vx = 0;
 		weapons[weaponType]->setPosition(x, y, nx);
 		weapons[weaponType]->SetAttack(true);
+		heartWeapon -= heartMustSub;
 	}
 	else {
 		if (isUseDoubleShot && weaponType != gameType::WHIP && weaponType != gameType::STOP_WATCH) {
@@ -388,6 +413,7 @@ void Simon::attackWeapon(gameType weaponType)
 			if (!isJump) vx = 0;
 			weapons[DOUBLE_SHOT]->setPosition(x, y, nx);
 			weapons[DOUBLE_SHOT]->SetAttack(true);
+			heartWeapon -= heartMustSub;
 		}
 		else if (isUseTripleShot && weaponType != gameType::WHIP && weaponType != gameType::STOP_WATCH) {
 			bool isCreateDouble = false;
@@ -449,6 +475,7 @@ void Simon::attackWeapon(gameType weaponType)
 			gameType createType = (!weapons[gameType::DOUBLE_SHOT]->GetAttack()) ? gameType::DOUBLE_SHOT : gameType::TRIPLE_SHOT;
 			weapons[createType]->setPosition(x, y, nx);
 			weapons[createType]->SetAttack(true);
+			heartWeapon -= heartMustSub;
 		}
 	}
 }

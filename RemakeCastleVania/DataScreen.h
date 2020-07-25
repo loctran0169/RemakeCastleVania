@@ -5,9 +5,9 @@
 
 class DataScreen
 {
-	Simon*simon;
-	Simon player;
+	Simon*simon;	
 public:
+	Simon player;
 	int mapID;
 	DWORD maxTime = 400;
 	DWORD lastTimeSub;
@@ -55,6 +55,9 @@ public:
 		y = dataX->y;
 		nx = dataX->nx;
 		ny = dataX->ny;
+	}
+	Simon init(Simon * simon) {
+		return *simon;
 	}
 };
 

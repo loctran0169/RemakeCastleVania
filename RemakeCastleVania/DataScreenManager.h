@@ -34,5 +34,9 @@ public:
 		DataScreen temp = *currentScreen;
 		*currentScreenDefault = temp;
 	}
+	void loadStartScreen() {
+		DataScreen temp = *currentScreenDefault;
+		*currentScreen = temp;
+	}
 };
 

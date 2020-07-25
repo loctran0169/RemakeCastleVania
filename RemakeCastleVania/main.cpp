@@ -20,11 +20,8 @@
 #include "DataScreenManager.h"
 #include "GameObject.h"
 #include "Textures.h"
-
 #include "Simon.h"
 #include "Brick.h"
-//#include "Goomba.h"
-
 #include"define.h"
 #include "PlayScence.h"
 

@@ -113,11 +113,11 @@
 #define ITEM_INVISIBLE_BBOX_WIDTH						32
 #define ITEM_INVISIBLE_BBOX_HEIGHT						32
 
-#define ITEM_DOUBLESHOT_BBOX_WIDTH					32
-#define ITEM_DOUBLESHOT_BBOX_HEIGHT					32
+#define ITEM_DOUBLESHOT_BBOX_WIDTH					26
+#define ITEM_DOUBLESHOT_BBOX_HEIGHT					28
 
-#define ITEM_TRIPLESHOT_BBOX_WIDTH					32
-#define ITEM_TRIPLESHOT_BBOX_HEIGHT					32
+#define ITEM_TRIPLESHOT_BBOX_WIDTH					26
+#define ITEM_TRIPLESHOT_BBOX_HEIGHT					28
 
 #define ITEM_WHIP_BBOX_WIDTH						32
 #define ITEM_WHIP_BBOX_HEIGHT						32
@@ -178,7 +178,7 @@ enum gameType
 	ITEM_TRIPLE_SHOT = 12, // item 3 gạch
 	ITEM_STOP_WATCH = 13,
 
-	//weapon 40->
+	//weapon 39->
 	WHIP = 40,
 	DAGGER = 41,
 	AXE = 42,
@@ -188,6 +188,7 @@ enum gameType
 	STOP_WATCH = 46,
 	DOUBLE_SHOT = 47,
 	TRIPLE_SHOT = 48,
+	CROSS = 49,
 
 	//objects 50->
 	SIMON = 50, // player

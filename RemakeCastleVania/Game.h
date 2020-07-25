@@ -21,7 +21,6 @@ class CGame
 	HWND hWnd;									// Window handle
 
 	LPDIRECT3D9 d3d = NULL;						// Direct3D handle
-	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
 
 	LPDIRECT3DSURFACE9 backBuffer = NULL;
 	LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D image on the screen 
@@ -44,6 +43,7 @@ class CGame
 	void _ParseSection_SCENES(string line);
 
 public:
+	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 	void InitKeyboard();
@@ -67,6 +67,7 @@ public:
 	void setCamX(float xx) { cam_x = xx; }
 	void setCamY(float yy) { cam_y = yy; }
 	static bool checkAABB(float b1left, float b1top, float b1right, float b1bottom, float b2left, float b2top, float b2right, float b2bottom);
+
 
 	static void SweptAABB(
 		float ml,			// move left 

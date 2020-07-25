@@ -2,7 +2,7 @@
 
 void DataScreen::Update()
 {
-	player = *simon;
+	player = init(simon);
 	if (GetTickCount() - lastTimeSub >= 1000) {
 		maxTime--;
 		lastTimeSub = GetTickCount();

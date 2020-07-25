@@ -5,8 +5,8 @@
 #include"Brick.h"
 #include <algorithm>
 
-#define SMALLHEART_SPEED_X 0.03f
-#define SMALLHEART_SPEED_Y 0.04f
+#define SMALLHEART_SPEED_X 0.04f
+#define SMALLHEART_SPEED_Y 0.075f
 
 class Item : public CGameObject
 {

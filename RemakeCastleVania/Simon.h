@@ -24,8 +24,9 @@ public:
 	int untouchable;
 	int currentAni;
 	int prevAni;
-	int health = 10;
-	int heartWeapon;
+	int numLife = 3;
+	int health = 16;
+	int heartWeapon = 0;
 	int timeTouchable = SIMON_UNTOUCHABLE_TIME;
 	float stateSpeed = 0.0f;
 	//thời gian hành động
@@ -79,9 +80,10 @@ public:
 	int nx_new = 0;
 
 	DWORD timeEatItem = 0;
-	gameType currentWeapon;
+	gameType currentWeapon = gameType::WHIP;
+	gameType lastItemCollect = gameType::ITEM_WHIP;
 	unordered_map<int, CWeapon*>weapons;
-
+	Simon();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
@@ -96,6 +98,7 @@ public:
 	static Simon* GetInstance();
 	void setEatItem(bool b) { isEatItem = b; }
 	bool getEatItem() { return isEatItem; }
+	void plusHeart(int num) { heartWeapon += num; }
 	void SetState(int state);
 	void SetHurt(int _nx);
 	void SubHealth(int num) { health -= num; }
@@ -103,5 +106,7 @@ public:
 	void StartUntouchable(int _timeTouch) { untouchable = 1; untouchable_start = GetTickCount(); timeTouchable = _timeTouch; }
 	bool isUsingWeapon(gameType _type);
 	int getHealth() { return health; }
-	Simon();
+	int getHealthWeapon() { return heartWeapon; }
+	int getLife() { return numLife; }
+	void dieStart();
 };

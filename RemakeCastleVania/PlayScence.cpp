@@ -14,6 +14,7 @@ Simon* CPlayScene::player = NULL;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
+	board = CBoard::GetInstance();
 	currentScence = id;
 	map = CMap::GetInstance();
 	grid = CGrid::GetInstance();
@@ -158,7 +159,6 @@ void CPlayScene::checkCollisonWithItem()
 						player->attactTime += SIMON_EATTING_TIME;
 					}					
 					whip->whipUpgrade();
-
 					//trâng thái đừng khi ăn item
 					player->isEatItem = true;
 					player->timeEatItem = GetTickCount();
@@ -168,8 +168,14 @@ void CPlayScene::checkCollisonWithItem()
 					break;
 				}
 				case gameType::ITEM_HEART: {
-					player->heartWeapon++;
+					player->plusHeart(5);
 					DebugOut(L"Chạm item heart: %d tim\n",player->heartWeapon);
+					// cộng tim cho simon(chưa làm)
+					break;
+				}
+				case gameType::ITEM_HEART_MINI: {
+					player->plusHeart(1);
+					DebugOut(L"Chạm item heart nhỏ: %d tim\n", player->heartWeapon);
 					// cộng tim cho simon(chưa làm)
 					break;
 				}
@@ -179,6 +185,7 @@ void CPlayScene::checkCollisonWithItem()
 					LPANIMATION_SET ani_set = animation_sets->Get(gameType::DAGGER);
 					player->weapons[gameType::DAGGER]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::DAGGER;
+					player->lastItemCollect = gameType::ITEM_KNIFE;
 					DebugOut(L"Đã nhặt dao \n");
 					break;
 				}
@@ -188,6 +195,7 @@ void CPlayScene::checkCollisonWithItem()
 					LPANIMATION_SET ani_set = animation_sets->Get(gameType::BOOMERANG);
 					player->weapons[gameType::BOOMERANG]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::BOOMERANG;
+					player->lastItemCollect = gameType::ITEM_BOOMERANG;
 					DebugOut(L"Đã nhặt boomerang \n");
 					break;
 				}
@@ -197,6 +205,7 @@ void CPlayScene::checkCollisonWithItem()
 					LPANIMATION_SET ani_set = animation_sets->Get(gameType::AXE);
 					player->weapons[gameType::AXE]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::AXE;
+					player->lastItemCollect = gameType::ITEM_AXE;
 					DebugOut(L"Đã nhặt axe \n");
 					break;
 				}
@@ -206,12 +215,14 @@ void CPlayScene::checkCollisonWithItem()
 					LPANIMATION_SET ani_set = animation_sets->Get(gameType::WATER_FIRE);
 					player->weapons[gameType::WATER_FIRE]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::WATER_FIRE;
+					player->lastItemCollect = gameType::ITEM_WATER_FIRE;
 					DebugOut(L"Đã nhặt water fire \n");
 					break;
 				}
 				case gameType::ITEM_STOP_WATCH: {
 					player->weapons[gameType::STOP_WATCH] = new CStopWatch();
 					player->currentWeapon = gameType::STOP_WATCH;
+					player->lastItemCollect = gameType::ITEM_STOP_WATCH;
 					DebugOut(L"Đã nhặt STOP WATCH \n");
 					break;
 				}
@@ -230,6 +241,18 @@ void CPlayScene::checkCollisonWithItem()
 					player->isUseDoubleShot = false;
 					player->isUseTripleShot = true;
 					DebugOut(L"Đã nhặt triple shot \n");
+					break;
+				}
+				case gameType::ITEM_MONEY_1: {
+					dataScreen->currentScreen->addScore(100);
+					break;
+				}
+				case gameType::ITEM_MONEY_2: {
+					dataScreen->currentScreen->addScore(700);
+					break;
+				}
+				case gameType::ITEM_MONEY_3: {
+					dataScreen->currentScreen->addScore(300);
 					break;
 				}
 				default:
@@ -530,7 +553,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] Simon object was created before! ");
-
+			LPANIMATION_SET aniItem = animation_sets->Get(ANI_SET_ITEM);
+			board->SetAnimationSet(aniItem);
 			player->SetPosition(x, y);
 			for (auto&weapon : player->weapons) {
 				LPANIMATION_SET ani_weapon = animation_sets->Get(weapon.second->getType());
@@ -597,6 +621,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 			obj = Simon::GetInstance();
 			player = (Simon*)obj;
 			LPANIMATION_SET ani_set_whip = animation_sets->Get(gameType::WHIP);
+			player->weapons[gameType::WHIP]->SetAnimationSet(ani_set_whip);
 			dataScreen->currentScreen->setData(false, player->x, player->y, player->nx, checkPy);
 			dataScreen->saveStartScreen();
 			break;
@@ -905,7 +930,6 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(ANI_SET_ITEM);
 	item->SetAnimationSet(ani_set);
-	//item->timeExit = GetTickCount();
 	return item;
 }
 
@@ -955,6 +979,8 @@ void CPlayScene::Load(bool isRestart, bool isAutoNext)
 		}
 	}
 	f.close();
+	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+	board->SetAnimationSet(animation_sets->Get(ANI_SET_ITEM));
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -1216,6 +1242,8 @@ void CPlayScene::Update(DWORD dt)
 			}
 		}
 	}
+	dataScreen->Update();
+	board->Update(dt);
 }
 
 void CPlayScene::Render()
@@ -1233,6 +1261,7 @@ void CPlayScene::Render()
 		listEnemyWeapon[i]->Render();
 
 	player->Render();
+	board->Render();
 }
 
 void CPlayScene::Unload()
@@ -1276,7 +1305,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_A:
 		if (!simon->isAttact && !simon->isEatItem)
-			if (game->IsKeyDown(DIK_UP) && simon->currentWeapon != 0)
+			if (game->IsKeyDown(DIK_UP) && simon->currentWeapon != -1)
 				simon->attackWeapon(simon->currentWeapon);
 			simon->attackWeapon(gameType::WHIP);
 		break;

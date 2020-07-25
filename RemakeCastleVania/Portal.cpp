@@ -3,7 +3,7 @@
 
 void CPortal::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 CPortal::~CPortal()
