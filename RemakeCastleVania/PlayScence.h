@@ -29,6 +29,7 @@
 #include"ZoneBird.h"
 #include"ZoneBone.h"
 #include"Board.h"
+#include"EffectMoney.h"
 
 class Simon;
 class CPlayScene : public CScene

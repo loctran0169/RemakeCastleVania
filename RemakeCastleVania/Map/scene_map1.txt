@@ -12,6 +12,8 @@
 10	textures\\hpboss.png	255	0	255
 11	textures\\hpsimon.png	255	0	255
 12	textures\\hpempty.png	255	0	255
+13	textures\\effect\\deathbossbat.png	255	0	255
+14	textures\\effect\\effectmoney.png	255	0	255
 -100	textures\\bbox.png	255	0	255
 # map
 [MAPTXT]
@@ -127,7 +129,16 @@
 30010	256	64	288	128	3
 # broken brick
 30011	0	0	36	23	6
-#EFFECT
+#effect bossbat death
+30012	0	0	48	64	13
+30013	50	0	98	64	13
+30014	100	0	148	64	13
+#effect money
+30015	0	0	89	16	14
+30016	0	71	89	87	14
+30017	0	18	89	34	14
+30018	0	53	89	69	14
+#EFFECT death duoc, nen
 40001	224	32	256	64	3
 40002	256	32	288	64	3
 40003	288	32	320	64	3
@@ -299,7 +310,12 @@
 706	30009	100
 707	30010	100
 708	30007	100
-# TORCH - Effect
+#effect money
+797	30015	100
+798	30016	100
+799	30017	100
+800	30018	100
+# Effect torch
 801	40001	100	40002	100	40003	100
 # broken brick - effect
 802	30011	100
@@ -376,6 +392,7 @@
 # boss bat
 309	12017	100
 310	12018	100	12019	100
+3101	30012	100	30013	100	30014	100
 # ghost fly
 311	12020	10	12021	100
 # ghost walk
@@ -421,6 +438,8 @@
 61	706	707	708
 # broken brick
 200	802
+#effect money
+201	797	798	799	800
 ## enemy
 #warrior
 100	301
@@ -437,7 +456,7 @@
 # bird
 106	304	305
 # boss bat
-107	309	310
+107	309	310	3101
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # grid	type: 0 = Simon , 1 = Brick, 2 = Torch, 3 = Koopas

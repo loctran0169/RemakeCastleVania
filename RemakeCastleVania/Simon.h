@@ -28,7 +28,7 @@ public:
 	int prevAni;
 	int numLife = 3;
 	int health = MAX_HP;
-	int heartWeapon = 0;
+	int heartWeapon = 5;
 	int timeTouchable = SIMON_UNTOUCHABLE_TIME;
 	float stateSpeed = 0.0f;
 	//thời gian hành động

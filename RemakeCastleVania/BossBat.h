@@ -9,11 +9,13 @@
 #include"Expression.h"
 #include"EnemyFire.h"
 
-#define BOSSBAT_BBOX_WIDTH			100
-#define BOSSBAT_BBOX_HEIGHT			48
+#define BOSSBAT_BBOX_WIDTH				100
+#define BOSSBAT_BBOX_HEIGHT				48
+#define BOSSBAT_EFFECT_DIE				48
 
 #define BOSSBAT_ANI_IDLE				0
 #define BOSSBAT_ANI_FLY					1
+#define BOSSBAT_ANI_DIE					2
 
 #define BOSSBAT_SPEED_X					0.16f
 #define BOSSBAT_SPEED_AUTOGO_X			0.14f

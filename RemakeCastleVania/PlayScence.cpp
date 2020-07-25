@@ -90,6 +90,7 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 			for (UINT i = 0; i < coEnemys->size(); i++) // xét chạm với quái
 			{
 				if (weapon.second->GetLastTimeAttack() > coEnemys->at(i)->timeBeAttacked) {
+					if (weapon.second->getType() == gameType::WHIP&&GetTickCount() - coEnemys->at(i)->timeBeAttacked < MIN_TO_HIT_ONE_ENEMY)return;
 					if (weapon.second->isCollitionObjectWithObject(coEnemys->at(i))) {
 						CGameObject *gameObj = coEnemys->at(i);
 
@@ -97,41 +98,57 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::BOSS_BAT: {
 							auto bat = dynamic_cast<CBossBat*>(gameObj);
 							bat->beAttack();
+							if (bat->isHitted)
+								dataScreen->currentScreen->addScore(3000);
 							break;
 						}
 						case gameType::BAT: {
 							auto bat = dynamic_cast<CBlackBat*>(gameObj);
 							bat->beAttack();
+							if (bat->isHitted)
+								dataScreen->currentScreen->addScore(200);
 							break;
 						}
 						case gameType::WARRIOR: {
 							auto warrior = dynamic_cast<CWarrior*>(gameObj);
 							warrior->beAttack();
+							if (warrior->isHitted)
+								dataScreen->currentScreen->addScore(400);
 							break;
 						}
 						case gameType::GHOST_FLY: {
 							auto ghost = dynamic_cast<CGhostFly*>(gameObj);
 							ghost->beAttack();
+							if (ghost->isHitted)
+								dataScreen->currentScreen->addScore(400);
 							break;
 						}
 						case gameType::GHOST_WALK: {
 							auto ghost = dynamic_cast<CGhostWalk*>(gameObj);
 							ghost->beAttack();
+							if (ghost->isHitted)
+								dataScreen->currentScreen->addScore(100);
 							break;
 						}
 						case gameType::MONKEY: {
 							auto monkey = dynamic_cast<CMonkey*>(gameObj);
 							monkey->beAttack();
+							if (monkey->isHitted)
+								dataScreen->currentScreen->addScore(500);
 							break;
 						}
 						case gameType::BIRD: {
-							auto monkey = dynamic_cast<CBird*>(gameObj);
-							monkey->beAttack();
+							auto bird = dynamic_cast<CBird*>(gameObj);
+							bird->beAttack();
+							if (bird->isHitted)
+								dataScreen->currentScreen->addScore(200);
 							break;
 						}
 						case gameType::BONE: {
 							auto bone = dynamic_cast<CBone*>(gameObj);
 							bone->beAttack();
+							if (bone->isHitted)
+								dataScreen->currentScreen->addScore(300);
 							break;
 						}
 						}
@@ -152,6 +169,7 @@ void CPlayScene::checkCollisonWithItem()
 	for (UINT i = 0; i < listItems.size(); i++) {
 		if (!listItems[i]->isPicked) {
 			if (player->isCollitionObjectWithObject(listItems[i])) {
+				CGameObject *gameObj = listItems[i];
 				switch (listItems[i]->getType())
 				{
 				case gameType::ITEM_WHIP: {
@@ -249,18 +267,22 @@ void CPlayScene::checkCollisonWithItem()
 				}
 				case gameType::ITEM_MONEY_1: {
 					dataScreen->currentScreen->addScore(100);
+					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_MONEY_1));
 					break;
 				}
 				case gameType::ITEM_MONEY_2: {
 					dataScreen->currentScreen->addScore(700);
+					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_MONEY_2));
 					break;
 				}
 				case gameType::ITEM_MONEY_3: {
 					dataScreen->currentScreen->addScore(1000);
+					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_MONEY_3));
 					break;
 				}
 				case gameType::ITEM_CROWN: {
 					dataScreen->currentScreen->addScore(2000);
+					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_CROWN));
 					break;
 				}
 				case gameType::ITEM_CROSS: {
@@ -296,6 +318,7 @@ void CPlayScene::checkCollisonSimonWithEnemy()
 					player->SetHurt((player->x + SIMON_BBOX_WIDTH / 2 > (r + l) / 2) ? 1 : -1);
 					if (monster->getType() == gameType::BAT|| monster->getType() == gameType::BIRD) {
 						monster->beAttack();
+						dataScreen->currentScreen->addScore(200);
 					}
 				}
 			}
@@ -1265,7 +1288,7 @@ void CPlayScene::Update(DWORD dt)
 			}
 			else if (dynamic_cast<CBossBat *>(listEnemy.at(i))) {
 				auto *boss = dynamic_cast<CBossBat*>(listEnemy.at(i));
-				listItems.push_back(getNewItem(boss->itemID, boss->zone->x - BOSSBAT_PADDING_X_RIGHT, boss->zone->y));
+				listItems.push_back(getNewItem(boss->itemID, boss->zone->x - BOSSBAT_PADDING_X_LEFT, boss->zone->y));
 				grid->deleteObject(boss->cellID, boss);
 			}
 		}
@@ -1275,6 +1298,13 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CEffectBrickBlack *>(listEffect.at(i))) {
 			auto *effect = dynamic_cast<CEffectBrickBlack *>(listEffect.at(i));
 			if (effect->isFinish) {
+				listEffect.erase(listEffect.begin() + i);
+				delete effect;
+			}
+		}
+		else if (dynamic_cast<CEffectMoney *>(listEffect.at(i))) {
+			auto *effect = dynamic_cast<CEffectMoney *>(listEffect.at(i));
+			if (effect->isFinish) {;
 				listEffect.erase(listEffect.begin() + i);
 				delete effect;
 			}

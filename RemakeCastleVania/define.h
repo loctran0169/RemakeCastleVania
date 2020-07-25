@@ -235,8 +235,8 @@ enum gameType
 	BOSS_BAT = 107, //BOSS bat
 
 	//effect 200->
-	EFFECT_BRICKBLACK = 200 //mảnh vỡ
-
+	EFFECT_BRICKBLACK = 200, //mảnh vỡ
+	EFFECT_MONEY = 201
 };
 
 //effect

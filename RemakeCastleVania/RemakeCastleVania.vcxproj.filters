@@ -231,6 +231,9 @@
     <ClCompile Include="EnemyFire.cpp">
       <Filter>FrameWork\GameObjects\monters\weapons</Filter>
     </ClCompile>
+    <ClCompile Include="EffectMoney.cpp">
+      <Filter>FrameWork\GameObjects\effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -394,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="EnemyFire.h">
       <Filter>FrameWork\GameObjects\monters\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectMoney.h">
+      <Filter>FrameWork\GameObjects\effects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include"Torch.h"
 #include"Utils.h"
 #include"Weapon.h"
+#define MIN_TO_HIT_ONE_ENEMY	300
 class Whip : public CWeapon
 {
 public:

@@ -137,6 +137,7 @@
     <ClCompile Include="BrickBlack.cpp" />
     <ClCompile Include="Candle.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="EffectMoney.cpp" />
     <ClCompile Include="EnemyFire.cpp" />
     <ClCompile Include="MustBeJump.cpp" />
     <ClCompile Include="MustChangeNX.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="BrickBlack.h" />
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="EffectMoney.h" />
     <ClInclude Include="EnemyFire.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="Line.h" />

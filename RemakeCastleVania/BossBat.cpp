@@ -82,7 +82,7 @@ void CBossBat::Render()
 	else
 		animation_set->at(getAniId())->setLopping(false);
 
-	animation_set->at(getAniId())->Render(x + ((isWaiting) ? 32 : 0), y);
+	animation_set->at(getAniId())->Render(x + ((isWaiting) ? BRICK_BBOX_WIDTH : ((isDie) ? (BOSSBAT_BBOX_WIDTH - BOSSBAT_EFFECT_DIE) / 2 : 0)), y);
 
 	//zone->RenderBoundingBox();
 	//RenderBoundingBox();
@@ -98,7 +98,7 @@ void CBossBat::GetBoundingBox(float & left, float & top, float & right, float & 
 
 int CBossBat::getAniId()
 {
-	return ((isWaiting) ? BOSSBAT_ANI_IDLE : BOSSBAT_ANI_FLY);
+	return ((isWaiting) ? BOSSBAT_ANI_IDLE : ((isDie) ? BOSSBAT_ANI_DIE : BOSSBAT_ANI_FLY));
 }
 
 float CBossBat::randomX()
