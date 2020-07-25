@@ -12,7 +12,6 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}	
 		else if (GetTickCount() - timeBeginState > BOSSBAT_TIME_WAITING_ACTIVE) {
 			isWaiting = false;
-			isAttack = true;
 			line = new CLine(x, y, randomX(), dyRepairToAttack);
 			SetState(BOSSBAT_STATE_AUTOGO_ATTACK);
 		}
@@ -27,7 +26,7 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (isResetPositionParabol) {
 			parabol = new CParabol(x, y, simon->x - SIMON_BBOX_WIDTH, simon->y + BOSSBAT_PADDING_ATTACK);
-			vx = (abs(x - parabol->getX2()) > 64) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / 64;
+			vx = (abs(x - parabol->getX2()) > BRICK_BBOX_WIDTH * 2) ? BOSSBAT_SPEED_X : abs(x - parabol->getX2())*BOSSBAT_SPEED_X / BRICK_BBOX_WIDTH * 2;
 			isResetPositionParabol = false;
 		}
 		if(isAutoGo){
@@ -46,6 +45,7 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				line = new CLine(x, y, randomX(), dyRepairToAttack);
 				SetState(BOSSBAT_STATE_AUTOGO_ATTACK);
 				timeBeginState = GetTickCount();
+				checkAttack();
 				return;
 			}
 			else if (isGoDown) {
@@ -63,6 +63,7 @@ void CBossBat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					line = new CLine(x, y, randomX(), dyRepairToAttack);
 					SetState(BOSSBAT_STATE_AUTOGO_ATTACK);
 					timeBeginState = GetTickCount();
+					checkAttack();
 					return;
 				}
 				if (x <= game->cam_x || x + BOSSBAT_BBOX_WIDTH >= game->cam_x + SCREEN_WIDTH) {
@@ -142,11 +143,17 @@ void CBossBat::SetState(int state)
 	}
 }
 
+void CBossBat::checkAttack()
+{
+	if (abs(x + BOSSBAT_BBOX_WIDTH / 2 - simon->x - SIMON_BBOX_WIDTH / 2) >= BRICK_BBOX_WIDTH * 8)
+		isAttack = true;
+}
+
 void CBossBat::attackWeapon(vector<LPGAMEOBJECT>& listWeapon)
 {
 	if (!isAttack)return;
 	CEnemyFire * fire = new CEnemyFire();
-	fire->setPosition(x + (BOSSBAT_BBOX_WIDTH - ENEMY_FIRE_BBOX_WIDTH) / 2, y + BOSSBAT_BBOX_WIDTH * 2 / 3, nx);
+	fire->setPosition(x + (BOSSBAT_BBOX_WIDTH - ENEMY_FIRE_BBOX_WIDTH) / 2, y + BOSSBAT_BBOX_WIDTH / 3);
 	fire->SetAttack(true);
 	listWeapon.push_back(fire);
 	isAttack = false;

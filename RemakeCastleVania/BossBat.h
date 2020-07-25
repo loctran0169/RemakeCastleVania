@@ -15,7 +15,7 @@
 #define BOSSBAT_ANI_IDLE				0
 #define BOSSBAT_ANI_FLY					1
 
-#define BOSSBAT_SPEED_X					0.15f
+#define BOSSBAT_SPEED_X					0.16f
 #define BOSSBAT_SPEED_AUTOGO_X			0.14f
 
 #define BOSSBAT_PADDING_ATTACK			15.0f
@@ -75,6 +75,7 @@ public:
 	float randomX();
 	float float_randomX(float min, float max);
 	void SetState(int state);
+	void checkAttack();
 	void attackWeapon(vector<LPGAMEOBJECT>& listWeapon); // hàm khai triển vũ khí
 	void beAttack();
 	~CBossBat();

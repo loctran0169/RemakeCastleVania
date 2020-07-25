@@ -14,8 +14,8 @@ void CEnemyFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isAttack) {
 		vx = ENEMY_FIRE_SPEED_X;
 		CGameObject::Update(dt);
-		y += dx * nx;
-		//y = line->toY(x);
+		x += dx * nx;
+		y = line->toY(x);
 	}
 }
 
@@ -33,11 +33,13 @@ void CEnemyFire::GetBoundingBox(float & left, float & top, float & right, float 
 	bottom = y + ENEMY_FIRE_BBOX_HEIGHT;
 }
 
-void CEnemyFire::setPosition(float _x, float _y, int _nx)
+void CEnemyFire::setPosition(float _x, float _y)
 {
-	this->nx = _nx;
-	vx = ENEMY_FIRE_SPEED_X;
 	CGameObject::SetPosition(_x, _y);
+	if (x + ENEMY_FIRE_BBOX_WIDTH / 2 < simon->x + SIMON_BBOX_WIDTH / 2)
+		nx = 1;
+	else
+		nx = -1;
 	line = new CLine(x, y, simon->x + SIMON_BBOX_WIDTH / 2, simon->y + SIMON_BBOX_HEIGHT / 2);
 	timeAttact = GetTickCount();
 }
