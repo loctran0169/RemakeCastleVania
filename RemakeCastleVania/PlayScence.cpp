@@ -15,7 +15,6 @@ CPlayScene::CPlayScene(int id, int _stageMap, int _maxtime, LPCWSTR filePath) :
 	CScene(id, _stageMap, _maxtime, filePath)
 {
 	board = CBoard::GetInstance();
-	sound = CSound::GetInstance();
 	map = CMap::GetInstance();
 	grid = CGrid::GetInstance();
 	game = CGame::GetInstance();
@@ -29,20 +28,22 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 		if (weapon.second->GetAttack()) {
 			if (weapon.second->getType() == gameType::BOOMERANG) {
 				auto *boomerang = dynamic_cast<CBoomerang*>(weapon.second);
-				if (boomerang->isFirst && boomerang->isCollitionObjectWithObject(player))
+				if (boomerang->isFirst && boomerang->isCollitionObjectWithObject(player)) {
 					weapon.second->SetAttack(false);
+					CSound::GetInstance()->stop(BOOMERANG);
+				}
 			}
 				
 			for (UINT i = 0; i < coObjects->size(); i++) // xét chạm với obejcts nền
 			{
 				if (weapon.second->GetLastTimeAttack() > coObjects->at(i)->timeBeAttacked) {
 					if (weapon.second->isCollitionObjectWithObject(coObjects->at(i))) {
-						CGameObject *gameObj = coObjects->at(i);						
+						CGameObject *gameObj = coObjects->at(i);	
 						switch (gameObj->getType())
 						{
 						case gameType::TORCH: {
 							gameObj->isHitted = true;
-							CSound::GetInstance()->playMulti(gameType::HIT);
+							CSound::GetInstance()->play(HIT, NULL, 1);
 							if (weapon.second->getType() == gameType::DAGGER) {
 								player->weapons[gameType::DAGGER]->SetAttack(false);
 							}
@@ -50,7 +51,7 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						}
 						case gameType::CANDLE: {
 							gameObj->isHitted = true;
-							CSound::GetInstance()->playMulti(gameType::HIT);
+							CSound::GetInstance()->play(HIT, NULL, 1);
 							if (weapon.second->getType() == gameType::DAGGER) {
 								player->weapons[gameType::DAGGER]->SetAttack(false);
 							}
@@ -60,12 +61,13 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							if (weapon.second->getType() == gameType::WHIP) {
 								auto brick = dynamic_cast<CBrickBlack*>(gameObj);
 								brick->beAttack();
+								CSound::GetInstance()->play(HIT, NULL, 1);
 								if (brick->isEffect) {
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 1));
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 2));
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 3));
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 4));
-									CSound::GetInstance()->playFromBegin(gameType::BRICKBLACK_1);
+									CSound::GetInstance()->play(EFFECT_BRICKBLACK, NULL, 1);
 								}
 							}
 							break;
@@ -74,12 +76,13 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							if (weapon.second->getType() == gameType::WHIP) {
 								auto brick = dynamic_cast<CBrickBlack*>(gameObj);	
 								brick->beAttack();
+								CSound::GetInstance()->play(HIT, NULL, 1);
 								if (brick->isEffect) {
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 1));
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 2));
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 3));
 									listEffect.push_back(new CEffectBrickBlack(gameObj->x, gameObj->y, 4));
-									CSound::GetInstance()->playMulti(gameType::BRICKBLACK_1);
+									CSound::GetInstance()->play(EFFECT_BRICKBLACK, NULL, 1);
 								}												
 							}
 							break;
@@ -98,11 +101,11 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 					if (weapon.second->getType() == gameType::WHIP&&GetTickCount() - coEnemys->at(i)->timeBeAttacked < MIN_TO_HIT_ONE_ENEMY)return;
 					if (weapon.second->isCollitionObjectWithObject(coEnemys->at(i))) {
 						CGameObject *gameObj = coEnemys->at(i);
+						CSound::GetInstance()->play(gameType::HIT, NULL, 1);
 						switch (gameObj->getType()){
 						case gameType::BOSS_BAT: {
 							auto bat = dynamic_cast<CBossBat*>(gameObj);
 							bat->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (bat->isHitted)
 								dataScreen->currentScreen->addScore(3000);
 							break;
@@ -110,7 +113,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::BAT: {
 							auto bat = dynamic_cast<CBlackBat*>(gameObj);
 							bat->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (bat->isHitted)
 								dataScreen->currentScreen->addScore(200);
 							break;
@@ -118,7 +120,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::WARRIOR: {
 							auto warrior = dynamic_cast<CWarrior*>(gameObj);
 							warrior->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (warrior->isHitted)
 								dataScreen->currentScreen->addScore(400);
 							break;
@@ -126,7 +127,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::GHOST_FLY: {
 							auto ghost = dynamic_cast<CGhostFly*>(gameObj);
 							ghost->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (ghost->isHitted)
 								dataScreen->currentScreen->addScore(400);
 							break;
@@ -134,7 +134,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::GHOST_WALK: {
 							auto ghost = dynamic_cast<CGhostWalk*>(gameObj);
 							ghost->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (ghost->isHitted)
 								dataScreen->currentScreen->addScore(100);
 							break;
@@ -142,7 +141,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::MONKEY: {
 							auto monkey = dynamic_cast<CMonkey*>(gameObj);
 							monkey->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (monkey->isHitted)
 								dataScreen->currentScreen->addScore(500);
 							break;
@@ -150,7 +148,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::BIRD: {
 							auto bird = dynamic_cast<CBird*>(gameObj);
 							bird->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (bird->isHitted)
 								dataScreen->currentScreen->addScore(200);
 							break;
@@ -158,7 +155,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						case gameType::BONE: {
 							auto bone = dynamic_cast<CBone*>(gameObj);
 							bone->beAttack();
-							CSound::GetInstance()->playMulti(gameType::HIT);
 							if (bone->isHitted)
 								dataScreen->currentScreen->addScore(300);
 							break;
@@ -193,7 +189,7 @@ void CPlayScene::checkCollisonWithItem()
 						player->attactTime += SIMON_EATTING_TIME;
 					}					
 					whip->whipUpgrade();
-					CSound::GetInstance()->playFromBegin(ITEM_WHIP);
+					CSound::GetInstance()->play(ITEM_WHIP, NULL, 1);
 					//trâng thái đừng khi ăn item
 					player->isEatItem = true;
 					player->timeEatItem = GetTickCount();
@@ -204,14 +200,14 @@ void CPlayScene::checkCollisonWithItem()
 				}
 				case gameType::ITEM_HEART: {
 					player->plusHeart(5);
-					CSound::GetInstance()->playFromBegin(ITEM_HEART);
+					CSound::GetInstance()->play(ITEM_HEART, NULL, 1);
 					DebugOut(L"Chạm item heart: %d tim\n",player->heartWeapon);
 					// cộng tim cho simon(chưa làm)
 					break;
 				}
 				case gameType::ITEM_HEART_MINI: {
 					player->plusHeart(1);
-					CSound::GetInstance()->playFromBegin(ITEM_HEART_MINI);
+					CSound::GetInstance()->play(ITEM_HEART_MINI, NULL, 1);
 					DebugOut(L"Chạm item heart nhỏ: %d tim\n", player->heartWeapon);
 					// cộng tim cho simon(chưa làm)
 					break;
@@ -223,7 +219,7 @@ void CPlayScene::checkCollisonWithItem()
 					player->weapons[gameType::DAGGER]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::DAGGER;
 					player->lastItemCollect = gameType::ITEM_KNIFE;
-					CSound::GetInstance()->playFromBegin(ITEM_KNIFE);
+					CSound::GetInstance()->play(ITEM_KNIFE, NULL, 1);
 					DebugOut(L"Đã nhặt dao \n");
 					break;
 				}
@@ -234,7 +230,7 @@ void CPlayScene::checkCollisonWithItem()
 					player->weapons[gameType::BOOMERANG]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::BOOMERANG;
 					player->lastItemCollect = gameType::ITEM_BOOMERANG;
-					CSound::GetInstance()->playFromBegin(ITEM_BOOMERANG);
+					CSound::GetInstance()->play(ITEM_BOOMERANG, NULL, 1);
 					DebugOut(L"Đã nhặt boomerang \n");
 					break;
 				}
@@ -245,7 +241,7 @@ void CPlayScene::checkCollisonWithItem()
 					player->weapons[gameType::AXE]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::AXE;
 					player->lastItemCollect = gameType::ITEM_AXE;
-					CSound::GetInstance()->playFromBegin(ITEM_AXE);
+					CSound::GetInstance()->play(ITEM_AXE, NULL, 1);
 					DebugOut(L"Đã nhặt axe \n");
 					break;
 				}
@@ -256,7 +252,7 @@ void CPlayScene::checkCollisonWithItem()
 					player->weapons[gameType::WATER_FIRE]->SetAnimationSet(ani_set);
 					player->currentWeapon = gameType::WATER_FIRE;
 					player->lastItemCollect = gameType::ITEM_WATER_FIRE;
-					CSound::GetInstance()->playFromBegin(ITEM_WATER_FIRE);
+					CSound::GetInstance()->play(ITEM_WATER_FIRE, NULL, 1);
 					DebugOut(L"Đã nhặt water fire \n");
 					break;
 				}
@@ -264,59 +260,60 @@ void CPlayScene::checkCollisonWithItem()
 					player->weapons[gameType::STOP_WATCH] = new CStopWatch();
 					player->currentWeapon = gameType::STOP_WATCH;
 					player->lastItemCollect = gameType::ITEM_STOP_WATCH;
-					CSound::GetInstance()->playFromBegin(ITEM_STOP_WATCH);
+					CSound::GetInstance()->play(ITEM_STOP_WATCH, NULL, 1);
 					DebugOut(L"Đã nhặt STOP WATCH \n");
 					break;
 				}
 				case gameType::ITEM_INVISIBLE: {
 					player->StartUntouchable(SIMON_UNTOUCHABLE_TIME_ITEM);
-					CSound::GetInstance()->playFromBegin(ITEM_INVISIBLE);
+					CSound::GetInstance()->play(ITEM_INVISIBLE, NULL, 1);
 					DebugOut(L"Đã nhặtinvisible \n");
 					break;
 				}
 				case gameType::ITEM_DOUBLE_SHOT: {
 					player->isUseDoubleShot = true;
 					player->isUseTripleShot = false;
-					CSound::GetInstance()->playFromBegin(ITEM_DOUBLE_SHOT);
+					CSound::GetInstance()->play(ITEM_DOUBLE_SHOT, NULL, 1);
 					DebugOut(L"Đã nhặt double shot \n");
 					break;
 				}
 				case gameType::ITEM_TRIPLE_SHOT: {
 					player->isUseDoubleShot = false;
 					player->isUseTripleShot = true;
-					CSound::GetInstance()->playFromBegin(ITEM_TRIPLE_SHOT);
+					CSound::GetInstance()->play(ITEM_TRIPLE_SHOT, NULL, 1);
 					DebugOut(L"Đã nhặt triple shot \n");
 					break;
 				}
 				case gameType::ITEM_MONEY_1: {
 					dataScreen->currentScreen->addScore(100);
 					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_MONEY_1));
-					CSound::GetInstance()->playFromBegin(ITEM_MONEY_1);
+					CSound::GetInstance()->play(ITEM_MONEY_1, NULL, 1);
 					break;
 				}
 				case gameType::ITEM_MONEY_2: {
 					dataScreen->currentScreen->addScore(700);
 					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_MONEY_2));
-					CSound::GetInstance()->playFromBegin(ITEM_MONEY_2);
+					CSound::GetInstance()->play(ITEM_MONEY_2, NULL, 1);
 					break;
 				}
 				case gameType::ITEM_MONEY_3: {
 					dataScreen->currentScreen->addScore(1000);
 					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_MONEY_3));
-					CSound::GetInstance()->playFromBegin(ITEM_MONEY_3);
+					CSound::GetInstance()->play(ITEM_MONEY_3, NULL, 1);
 					break;
 				}
 				case gameType::ITEM_CROWN: {
 					dataScreen->currentScreen->addScore(2000);
 					listEffect.push_back(new CEffectMoney(gameObj->x, gameObj->y, gameType::ITEM_CROWN));
-					CSound::GetInstance()->playFromBegin(ITEM_CROWN);
+					CSound::GetInstance()->play(ITEM_CROWN, NULL, 1);
 					break;
 				}
 				case gameType::ITEM_CROSS: {
 					for (UINT i = 0; i < listEnemy.size(); i++) {
 						listEnemy[i]->isHitted = true;
 					}
-					CSound::GetInstance()->playFromBegin(ITEM_CROSS);
+					CSound::GetInstance()->play(ITEM_CROSS, NULL, 1);
+					break;
 				}
 				case gameType::ITEM_FULL_HP: {
 					player->startPlusFullHP();
@@ -639,7 +636,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 				return;
 			}
 			else if (isRestart) {
-				DebugOut(L"vào %d \n", GetTickCount());
 				DataScreen * p = DataScreenManager::GetInstance()->currentScreenDefault;
 				player->isStair = p->isOnStair;
 				player->x = p->x;
@@ -1023,7 +1019,6 @@ Item * CPlayScene::getNewItem(int id, float x, float y)
 
 void CPlayScene::Load(bool isRestart, bool isAutoNext)
 {
-	
 	sceneFilePath = game->getScenes()[game->GetCurrentSceneId()]->getPath();
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 	isDisableCamera = false;

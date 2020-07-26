@@ -21,8 +21,10 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			x -= BOOMERANG_PADDING_HIDE;
 		}
 	}
-	else if (isFirst && (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH))
-			SetAttack(false);
+	else if (isFirst && (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH)) {
+		SetAttack(false);
+		CSound::GetInstance()->stop(BOOMERANG);
+	}
 	else if (isAttack) {
 		vx = BOOMERANG_SPEED * nx;
 		CGameObject::Update(dt); // cập nhật thời gian, vận tốc

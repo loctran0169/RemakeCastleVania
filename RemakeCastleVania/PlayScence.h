@@ -40,7 +40,6 @@ protected:
 	static Simon* player; // A play scene has to have player, right? 
 	CGame *game;
 	CBoard *board;
-	CSound *sound;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listEffect;
 	vector<LPGAMEOBJECT> listEnemy;// load từ grid ra

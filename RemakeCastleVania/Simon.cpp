@@ -369,6 +369,10 @@ void Simon::attackWeapon(gameType weaponType)
 		weapons[weaponType]->setPosition(x, y, nx);
 		weapons[weaponType]->SetAttack(true);
 		heartWeapon -= heartMustSub;
+		if (weaponType != BOOMERANG)
+			CSound::GetInstance()->play(weaponType, NULL, 1);
+		else
+			CSound::GetInstance()->play(weaponType, true, 0);
 	}
 	else {
 		if (isUseDoubleShot && weaponType != gameType::WHIP && weaponType != gameType::STOP_WATCH) {
@@ -424,6 +428,10 @@ void Simon::attackWeapon(gameType weaponType)
 			weapons[DOUBLE_SHOT]->setPosition(x, y, nx);
 			weapons[DOUBLE_SHOT]->SetAttack(true);
 			heartWeapon -= heartMustSub;
+			if (weaponType != BOOMERANG)
+				CSound::GetInstance()->play(weaponType, NULL, 1);
+			else
+				CSound::GetInstance()->play(weaponType, true, 0);
 		}
 		else if (isUseTripleShot && weaponType != gameType::WHIP && weaponType != gameType::STOP_WATCH) {
 			bool isCreateDouble = false;
@@ -486,9 +494,12 @@ void Simon::attackWeapon(gameType weaponType)
 			weapons[createType]->setPosition(x, y, nx);
 			weapons[createType]->SetAttack(true);
 			heartWeapon -= heartMustSub;
+			if (weaponType != BOOMERANG)
+				CSound::GetInstance()->play(weaponType, NULL, 1);
+			else
+				CSound::GetInstance()->play(weaponType, true, 0);
 		}
 	}
-	CSound::GetInstance()->playMulti(weaponType);
 }
 
 bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
