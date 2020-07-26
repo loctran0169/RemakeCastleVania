@@ -26,6 +26,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+		if (isUsePotion) {
+			isUsePotion = false;
+			CSound::GetInstance()->play(gameType::ITEM_INVISIBLE, NULL, 1);
+		}
+	}
+	else {
+		if (isUsePotion && GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME_ITEM * 4 / 5) {
+			isUsePotion = false;
+			CSound::GetInstance()->play(gameType::ITEM_INVISIBLE, NULL, 1);
+		}
 	}
 	if (isUseToFullHP) {
 		if (GetTickCount() - timeEatItem > TIME_REVERT_HP_STEP) {

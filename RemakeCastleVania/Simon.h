@@ -67,8 +67,10 @@ public:
 	bool isGoUp = false; //đi lên cầu thang
 	bool isGoDown = false; // đi xuống cầu thang
 	bool isGoStairByUp = false;
+
 	bool isUseDoubleShot = false;
 	bool isUseTripleShot = false;
+	bool isUsePotion = false;
 
 	//autoGO
 	bool isAutoGo=false;

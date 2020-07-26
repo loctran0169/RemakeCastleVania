@@ -266,6 +266,7 @@ void CPlayScene::checkCollisonWithItem()
 				}
 				case gameType::ITEM_INVISIBLE: {
 					player->StartUntouchable(SIMON_UNTOUCHABLE_TIME_ITEM);
+					player->isUsePotion = true;
 					CSound::GetInstance()->play(ITEM_INVISIBLE, NULL, 1);
 					DebugOut(L"Đã nhặtinvisible \n");
 					break;
