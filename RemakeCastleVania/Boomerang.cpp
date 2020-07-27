@@ -12,6 +12,7 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!isFirst && (x < xCam || x + BOOMERANG_BBOX_WIDTH > xCam + SCREEN_WIDTH || abs(x - defaultX) >= BOOMERANG_BBOX_WIDTH * 11))
 	{
 		isFirst = true;
+		timeAttact = GetTickCount();
 		if (x + BOOMERANG_BBOX_WIDTH / 2 < xCam + SCREEN_WIDTH / 2) {
 			nx = 1;
 			x += BOOMERANG_PADDING_HIDE;

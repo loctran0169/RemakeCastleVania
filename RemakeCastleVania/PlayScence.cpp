@@ -164,9 +164,6 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 						if (weapon.second->getType() == gameType::DAGGER) {
 							player->weapons[gameType::DAGGER]->SetAttack(false);
 						}
-						else if (weapon.second->getType() == gameType::BOOMERANG) {
-							player->weapons[gameType::BOOMERANG]->SetLastTimeAttack(GetTickCount() + 1);
-						}
 					}
 				}
 			}

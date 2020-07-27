@@ -33,7 +33,6 @@ public:
 		unsigned long dataSize;
 	};
 	float volume;
-	void setVolume(float percentage, int type = -1);
 	void loadSound(char* fileName, int type);
 	void play(int type, bool infiniteLoop, int times);
 	void stop(int type = -1);

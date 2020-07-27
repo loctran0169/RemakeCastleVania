@@ -245,28 +245,6 @@ void CSound::stop(int type)
 	}
 }
 
-void CSound::setVolume(float percentage, int type)
-{
-	volume = percentage;
-	if (type == -1)
-	{
-		long volumne = (percentage) / 100 * (-DSBVOLUME_MIN) + DSBVOLUME_MIN;
-		for (std::map< int, IDirectSoundBuffer8*> ::iterator it = soundBufferMap.begin(); it != soundBufferMap.end(); it++)
-		{
-			it->second->SetVolume(volumne);
-		}
-	}
-	else
-	{
-		std::map< int, IDirectSoundBuffer8*> ::iterator it;
-		it = soundBufferMap.find(type);
-		if (it == soundBufferMap.end())
-			return;
-		long volumne = (percentage) / 100 * (-DSBVOLUME_MIN) + DSBVOLUME_MIN;
-		it->second->SetVolume(volumne);
-	}
-}
-
 void CSound::mute()
 {
 	isMute = true;
