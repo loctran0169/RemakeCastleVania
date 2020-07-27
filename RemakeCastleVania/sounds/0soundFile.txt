@@ -25,3 +25,5 @@
 60	sounds\\broken_brick.wav
 61	sounds\\broken_brick.wav
 200	sounds\\broken_brick.wav
+300	sounds\\Game_Over.wav
+301	sounds\\Life_Lost.wav

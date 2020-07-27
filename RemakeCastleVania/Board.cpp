@@ -33,8 +33,8 @@ void CBoard::Render()
 	DrawNumber(2, xCam + 465, yCam + 30, data->currentScreen->stage); // in stage
 
 	DrawNumber(2, xCam + 370, yCam + 48, data->currentScreen->player.getHealthWeapon()); // in tim 
-	DrawNumber(2, xCam + 370, yCam + 63, data->currentScreen->player.getLife()); // in số mạng
-	DrawHP(xCam + 113, yCam + 49, true, data->currentScreen->player.health); //máu simon
+	DrawNumber(2, xCam + 370, yCam + 63, (data->currentScreen->player.getLife() >= 0) ? data->currentScreen->player.getLife() : 0); // in số mạng
+	DrawHP(xCam + 113, yCam + 49, true, (data->currentScreen->player.health)); //máu simon
 	DrawHP(xCam + 113, yCam + 65, false, (data->currentScreen->boss == NULL) ? MAX_HP : data->currentScreen->boss->health); // máu boss
 
 	if (data->currentScreen->player.lastItemCollect != gameType::ITEM_WHIP) // in vũ khí đang sử dụng

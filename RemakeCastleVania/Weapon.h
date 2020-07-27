@@ -31,5 +31,6 @@ public:
 	void SetAttack(bool _isAttack) { isAttack = _isAttack; };
 
 	DWORD GetLastTimeAttack() { return timeAttact; };
+	void SetLastTimeAttack(DWORD _time) { timeAttact = _time; }
 	~CWeapon();
 };

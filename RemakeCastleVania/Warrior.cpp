@@ -7,7 +7,7 @@ void CWarrior::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		animation_set->at(0)->setLopping(false);
 		isIdle = false;
 	}
-	if (zone->isCollitionSimon) {
+	if (zone->isCollitionSimon && !simon->untouchable) {
 		if (x > zone->simon->x)
 			nx = -1;
 		else

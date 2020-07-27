@@ -160,11 +160,13 @@ void CPlayScene::checkCollisonWeapon(vector<LPGAMEOBJECT>* coObjects, vector<LPG
 							break;
 						}
 						}
+						gameObj->timeBeAttacked = GetTickCount();
 						if (weapon.second->getType() == gameType::DAGGER) {
 							player->weapons[gameType::DAGGER]->SetAttack(false);
 						}
-						gameObj->timeBeAttacked = GetTickCount();
-
+						else if (weapon.second->getType() == gameType::BOOMERANG) {
+							player->weapons[gameType::BOOMERANG]->SetLastTimeAttack(GetTickCount() + 1);
+						}
 					}
 				}
 			}
@@ -333,7 +335,7 @@ void CPlayScene::checkCollisonSimonWithEnemy()
 {
 	if (player->isUseTransparent || player->untouchable != 0) return; // không va chạm khi ăn item bất tử
 
-	if (!player->untouchable) {
+	if (!player->untouchable && !player->isDie) {
 		// xét va chạm với quái trước
 		for (UINT i = 0; i < listEnemy.size(); i++) {
 			CMonter * monster = dynamic_cast<CMonter *> (listEnemy[i]);
@@ -726,8 +728,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 		obj = new CPortal(x, y, r, b, scene_id);
 		
 		int parentScreen = atoi(tokens[8].c_str());
-		/*if (dataScreen->currentScreen->parentMapID != parentScreen)
-			dataScreen->currentScreen->setParentMapID(parentScreen);*/
+		if (dataScreen->currentScreen->parentMapID != parentScreen) {
+			dataScreen->currentScreen->setParentMapID(parentScreen);
+			player->resetDoubleTripleShot();
+		}
 
 		int isOnStair = atoi(tokens[9].c_str());
 		int px = atoi(tokens[10].c_str());
@@ -1192,6 +1196,24 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 	player->Update(dt, &coObjects);
+
+	if (player->getDie() && GetTickCount() - player->timeDieStart >= TIME_REVERT) {
+		if (player->numLife > 0) {
+			try {
+				if (nextScence == NULL) return;
+				player->numLife--;
+				player->resetState();
+				player->SetState(SIMON_STATE_IDLE);
+				CGame::GetInstance()->SwitchScene(dataScreen->currentScreen->parentMapID, false, true);
+			}
+			catch (exception ex) {}
+		}
+		else if (player->numLife == 0) {
+			player->numLife--;
+			CSound::GetInstance()->play(gameType::GAME_OVER, true, 0);
+		}
+		
+	}
 	//update items
 	for (size_t i = 0; i < listItems.size(); i++)
 	{
@@ -1386,10 +1408,13 @@ void CPlayScene::Unload()
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
-{
+{	
 	CGame *game = CGame::GetInstance();
+	if (KeyCode == DIK_ESCAPE) {
+		DestroyWindow(game->getHwnd());
+	}
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP || simon->isDie)return;
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -1450,7 +1475,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP || simon->isDie)return;
 	if (KeyCode == DIK_DOWN) {
 		if (simon->isSit) {
 			if (!simon->isAttact) {
@@ -1470,7 +1495,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	Simon *simon = ((CPlayScene*)scence)->player;
-	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP)return;
+	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP || simon->isDie)return;
+
 	// disable control key when Mario die 
 	if (simon->GetState() == SIMON_STATE_DIE) return;
 

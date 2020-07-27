@@ -417,6 +417,7 @@ void CGame::SwitchScene(int scene_id, bool isResetScreen, bool isAutoNext)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
 	current_scene = scene_id;
+	DebugOut(L"parentScreen %d \n", scene_id);
 	LPSCENE s = scenes[current_scene];	
 	s->Unload();
 

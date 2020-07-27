@@ -22,6 +22,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
 	// reset untouchable timer if untouchable time has passed
+	if (y + SIMON_BBOX_HEIGHT > game->cam_y + SCREEN_HEIGHT)dieStart();
 	if (GetTickCount() - untouchable_start > timeTouchable)
 	{
 		untouchable_start = 0;
@@ -140,14 +141,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			weapon.second->Update(dt, coObjects);
 		}
 	}
-	//DebugOut(L"x= %f y=%f \n", x, y);
 }
 
 void Simon::Render()
 {
 
 	int ani;
-	if (state == SIMON_STATE_DIE)
+	if (isDie)
 		ani = SIMON_ANI_DIE;
 	else if (isStair) {
 		if (isGoUp && vx != 0)
@@ -227,6 +227,12 @@ bool Simon::isUsingWeapon(gameType _type)
 	return false;
 }
 
+void Simon::resetDoubleTripleShot()
+{
+	isUseDoubleShot = false;
+	isUseTripleShot = false;
+}
+
 void Simon::startPlusFullHP()
 {
 	isUseToFullHP = true;
@@ -236,7 +242,44 @@ void Simon::startPlusFullHP()
 
 void Simon::dieStart()
 {
-	numLife--;
+	if (isDie)return;
+	isDie = true;
+	timeDieStart = GetTickCount();
+	isHurt = false;
+	untouchable_start = 0;
+	untouchable = 0;
+	CSound::GetInstance()->play(gameType::SIMON_DIE, NULL, 1);
+	SetState(SIMON_STATE_DIE);
+}
+
+void Simon::resetState()
+{
+	isSit = false;
+	isJump = false;
+	isAttact = false;
+	isEatItem = false;
+	isRenderLopping = false;
+	isUseToFullHP = false;
+	isHurt = false;
+	isUseTransparent = false;
+	isStair = false;
+	isGoUp = false;
+	isGoDown = false;
+	isGoStairByUp = false;
+	isUseDoubleShot = false;
+	isUseTripleShot = false;
+	isUsePotion = false;
+	isAutoGo = false;
+	nextAutoGo = false;
+	isDie = false;
+	autoGoX_Distance = 0;
+	autoGoY_Distance = 0;
+	weapons.clear();
+	currentWeapon = gameType::WHIP;
+	lastItemCollect = gameType::ITEM_WHIP;
+	weapons[gameType::WHIP] = new Whip();
+	heartWeapon = 5;
+	health = 2;
 }
 
 void Simon::SetState(int state)
@@ -291,13 +334,23 @@ void Simon::SetState(int state)
 		isGoUp = false;
 		break;
 	case SIMON_STATE_DIE:
+		vx = 0;
 		vy = -SIMON_DIE_DEFLECT_SPEED;
+		isStair = false;
+		isAutoGo = false;
+		isJump = false;
+		jumpTime = 0;
+		isAttact = false;
+		isHurt = false;
+		dieStart();
 		break;
 	case SIMON_STATE_ON_SKATE:
 		break;
 	case SIMON_STATE_HURT:
 		isHurt = true;
 		isJump = false;
+		isJumpRight = false;
+		isJumpLeft = false;
 		vx = SIMON_WALKING_SPEED * nxHurt;
 		vy = -SIMON_VJUMP_HURTING;
 		break;
@@ -312,7 +365,8 @@ void Simon::SetHurt(int _nx)
 		animation_set->at(currentAni)->resetFrame();
 		if (weapons[gameType::WHIP]) {
 			auto *whip = dynamic_cast<Whip*>(weapons[gameType::WHIP]);
-			whip->animation_set->at(whip->getAniID())->resetFrame();
+			whip->SetAttack(false);
+			whip->animation_set->at(whip->getAniID())->resetFrame();			
 		}
 	}
 	jumpTime = 0;
@@ -321,12 +375,21 @@ void Simon::SetHurt(int _nx)
 		nxHurt = _nx;
 		nx = -_nx;
 		SetState(SIMON_STATE_HURT);
-		isHurt = true;
 	}
 		
 	StartUntouchable(SIMON_UNTOUCHABLE_TIME);
-	if (health > 0);
+	isAutoGo = false;
 	SubHealth(2);
+}
+
+void Simon::SubHealth(int num)
+{
+	health -= num; 
+	if (health <= 0)
+	{
+		health = 0;
+		dieStart();
+	}
 }
 
 void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -527,9 +590,7 @@ bool Simon::checkCollisonWithBricks(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			(coObjects->at(i)->getType() == gameType::BRICKBLACK_2 && !coObjects->at(i)->isHitted))
 			listBricks.push_back(coObjects->at(i));
 
-	// kiểm ra va chạm với Brick
-	if (state != SIMON_STATE_DIE)
-		CalcPotentialCollisions(&listBricks, coEvents);
+	CalcPotentialCollisions(&listBricks, coEvents);
 	if (coEvents.size() == 0)
 	{
 		return false;
@@ -583,9 +644,7 @@ bool Simon::checkCollisonWithSkateBoard(DWORD dt, vector<LPGAMEOBJECT>* coObject
 		if (coObjects->at(i)->getType() == gameType::SKATEBOARD)
 			listSkates.push_back(coObjects->at(i));
 
-	// kiểm ra va chạm với skate board
-	if (state != SIMON_STATE_DIE)
-		CalcPotentialCollisions(&listSkates, coEvents);
+	CalcPotentialCollisions(&listSkates, coEvents);
 	if (coEvents.size() == 0)
 	{
 		return false;
@@ -614,7 +673,7 @@ bool Simon::checkCollisonWithSkateBoard(DWORD dt, vector<LPGAMEOBJECT>* coObject
 					SetState(SIMON_STATE_ON_SKATE);
 					vx = SKATEBOARD_SPEED_X * skate->nx;
 				}
-			}		
+			}
 		}		
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

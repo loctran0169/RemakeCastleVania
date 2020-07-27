@@ -4,7 +4,7 @@
 void DataScreen::Update()
 {
 	player = init(simon);
-	if (GetTickCount() - lastTimeSub >= MILI_TO_SECOND) {
+	if (GetTickCount() - lastTimeSub >= MILI_TO_SECOND && player.numLife>=0) {
 		maxTime--;
 		lastTimeSub = GetTickCount();
 		if (maxTime <= 20)

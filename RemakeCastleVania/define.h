@@ -69,7 +69,7 @@
 #define SIMON_JUMP_DEFLECT_SPEED					0.02f
 #define SIMON_GRAVITY								0.005f
 #define SIMON_GRAVITY_HURTING						0.001f
-#define SIMON_DIE_DEFLECT_SPEED						0.5f
+#define SIMON_DIE_DEFLECT_SPEED						0.34f
 #define SIMON_AUTO_GO_SPEED							0.4f
 #define SIMON_STAIR_SPEED							0.08f
 #define DAGGER_SPEED								0.3f
@@ -238,7 +238,10 @@ enum gameType
 
 	//effect 200->
 	EFFECT_BRICKBLACK = 200, //mảnh vỡ
-	EFFECT_MONEY = 201
+	EFFECT_MONEY = 201,
+
+	GAME_OVER = 300,
+	SIMON_DIE = 301
 };
 
 //effect

@@ -14,6 +14,10 @@ public:
 	Whip() :CWeapon() {
 		level = 1;
 		CGameObject::type = gameType::WHIP;
+
+		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET ani_set = animation_sets->Get(gameType::WHIP);
+		SetAnimationSet(ani_set);
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render();
