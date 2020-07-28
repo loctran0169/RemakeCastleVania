@@ -27,3 +27,8 @@
 200	sounds\\broken_brick.wav
 300	sounds\\Game_Over.wav
 301	sounds\\Life_Lost.wav
+302	sounds\\music_stage_1.wav
+303	sounds\\music_stage_2.wav
+304	sounds\\music_stage_2.wav
+305	sounds\\music_stage_1.wav
+306	sounds\\Stage_Clear.wav

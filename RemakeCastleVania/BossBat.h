@@ -8,6 +8,7 @@
 #include"Parabol.h"
 #include"Expression.h"
 #include"EnemyFire.h"
+#include"Sound.h"
 
 #define BOSSBAT_BBOX_WIDTH				100
 #define BOSSBAT_BBOX_HEIGHT				48

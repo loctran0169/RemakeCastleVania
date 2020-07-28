@@ -279,7 +279,7 @@ void Simon::resetState()
 	lastItemCollect = gameType::ITEM_WHIP;
 	weapons[gameType::WHIP] = new Whip();
 	heartWeapon = 5;
-	health = 2;
+	health = MAX_HP;
 }
 
 void Simon::SetState(int state)

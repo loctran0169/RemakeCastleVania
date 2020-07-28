@@ -26,8 +26,8 @@ public:
 	int untouchable;
 	int currentAni;
 	int prevAni;
-	int numLife = 1;//max 3
-	int health = 2;//MAX_HP;
+	int numLife = 3;//max 3
+	int health = MAX_HP;//MAX_HP;
 	int heartWeapon = 5;
 	int timeTouchable = SIMON_UNTOUCHABLE_TIME;
 	float stateSpeed = 0.0f;

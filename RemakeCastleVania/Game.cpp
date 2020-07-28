@@ -369,10 +369,12 @@ void CGame::_ParseSection_SCENES(string line)
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
 	int stage = atoi(tokens[1].c_str());
-	int maxTime = atoi(tokens[2].c_str());
-	LPCWSTR path = ToLPCWSTR(tokens[3]);
+	int parentId = atoi(tokens[2].c_str());
+	int sound = atoi(tokens[3].c_str());
+	int maxTime = atoi(tokens[4].c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[5]);
 
-	scenes[id] = new CPlayScene(id, stage, maxTime, path);
+	scenes[id] = new CPlayScene(id, stage, parentId, sound, maxTime, path);
 }
 
 /*

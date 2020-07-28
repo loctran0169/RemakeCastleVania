@@ -10,10 +10,12 @@ protected:
 	int id;
 	int stageMap;
 	int maxTime;
+	int parentMapId;
+	int soundId;
 	LPCWSTR sceneFilePath;
 
 public:
-	CScene(int id, int _stageMap,int _maxTime, LPCWSTR filePath);
+	CScene(int id, int _stageMap, int _parentMapId, int _soundId, int _maxTime, LPCWSTR filePath);
 
 	CKeyEventHandler * GetKeyEventHandler() { return key_handler; }
 	virtual void Load(bool isRestart = false, bool isAutoNext = false) = 0;

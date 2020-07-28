@@ -165,6 +165,8 @@ void CBossBat::beAttack()
 	if (health < 1) {
 		isDie = true;
 		health = 0;
+		CSound::GetInstance()->stop();
+		CSound::GetInstance()->play(gameType::SOUND_STAGE_CLEAR, true, 0);
 		timeBeginState = GetTickCount();
 	}
 }

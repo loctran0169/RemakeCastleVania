@@ -11,8 +11,8 @@ using namespace std;
 
 Simon* CPlayScene::player = NULL;
 
-CPlayScene::CPlayScene(int id, int _stageMap, int _maxtime, LPCWSTR filePath) :
-	CScene(id, _stageMap, _maxtime, filePath)
+CPlayScene::CPlayScene(int id, int _stageMap, int _parentMap, int _soundId, int _maxtime, LPCWSTR filePath) :
+	CScene(id, _stageMap, _parentMap, _soundId, _maxtime, filePath)
 {
 	board = CBoard::GetInstance();
 	map = CMap::GetInstance();
@@ -728,6 +728,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 		if (dataScreen->currentScreen->parentMapID != parentScreen) {
 			dataScreen->currentScreen->setParentMapID(parentScreen);
 			player->resetDoubleTripleShot();
+			CSound::GetInstance()->stop();
+			CSound::GetInstance()->play(soundId, true, 0);
 		}
 
 		int isOnStair = atoi(tokens[9].c_str());
