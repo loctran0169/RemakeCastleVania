@@ -74,6 +74,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
+	void clearAllEnemy();
 	friend class CPlayScenceKeyHandler;
 };
 

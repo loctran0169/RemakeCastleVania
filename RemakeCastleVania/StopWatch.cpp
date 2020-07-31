@@ -7,6 +7,7 @@ void CStopWatch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (GetTickCount() - timeAttact >= STOPWATCH_TIME) {
 		SetAttack(false);
+		CSound::GetInstance()->stop(STOP_WATCH);
 	}
 }
 

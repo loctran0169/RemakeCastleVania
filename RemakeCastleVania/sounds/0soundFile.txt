@@ -13,7 +13,7 @@
 10	sounds\\InvisibilityPotion_Begin.wav
 11	sounds\\collectWhip.wav
 12	sounds\\collectWhip.wav
-13	sounds\\StopWatch.wav
+13	sounds\\collectweapon.wav
 14	sounds\\collectCross.wav
 15	sounds\\collectMoney.wav
 40	sounds\\usingwhip.wav
@@ -21,7 +21,7 @@
 42	sounds\\Axe.wav
 43	sounds\\08-boomerang.wav
 44	sounds\\holywater.wav
-45	sounds\\StopWatch.wav
+46	sounds\\StopWatch.wav
 60	sounds\\broken_brick.wav
 61	sounds\\broken_brick.wav
 200	sounds\\broken_brick.wav

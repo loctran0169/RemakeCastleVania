@@ -442,7 +442,7 @@ void Simon::attackWeapon(gameType weaponType)
 		weapons[weaponType]->setPosition(x, y, nx);
 		weapons[weaponType]->SetAttack(true);
 		heartWeapon -= heartMustSub;
-		if (weaponType != BOOMERANG)
+		if (weaponType != BOOMERANG && weaponType != STOP_WATCH)
 			CSound::GetInstance()->play(weaponType, NULL, 1);
 		else
 			CSound::GetInstance()->play(weaponType, true, 0);

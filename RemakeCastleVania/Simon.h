@@ -16,7 +16,7 @@
 #include"Sound.h"
 
 #define TIME_REVERT_HP_STEP		400
-#define TIME_REVERT				1900
+#define TIME_REVERT				1900 // thời gian hồi hp
 class Simon : public CGameObject
 {
 private:

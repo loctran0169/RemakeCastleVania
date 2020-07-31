@@ -309,10 +309,7 @@ void CPlayScene::checkCollisonWithItem()
 					break;
 				}
 				case gameType::ITEM_CROSS: {
-					for (UINT i = 0; i < listEnemy.size(); i++) {
-						listEnemy[i]->isHitted = true;
-					}
-					CSound::GetInstance()->play(ITEM_CROSS, NULL, 1);
+					clearAllEnemy();
 					break;
 				}
 				case gameType::ITEM_FULL_HP: {
@@ -622,6 +619,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line,bool isRestart, bool isAutoNe
 			LPANIMATION_SET aniItem = animation_sets->Get(ANI_SET_ITEM);
 			board->SetAnimationSet(aniItem);
 			player->SetPosition(x, y);
+			player->isJump = false;
+			player->isJumpRight = false;
+			player->isJumpLeft = false;
 			for (auto&weapon : player->weapons) {
 				LPANIMATION_SET ani_weapon = animation_sets->Get(weapon.second->getType());
 				player->weapons[weapon.second->getType()]->SetAnimationSet(ani_weapon);
@@ -1334,6 +1334,7 @@ void CPlayScene::Update(DWORD dt)
 			else if (dynamic_cast<CBossBat *>(listEnemy.at(i))) {
 				auto *boss = dynamic_cast<CBossBat*>(listEnemy.at(i));
 				listItems.push_back(getNewItem(boss->itemID, boss->zone->x - BOSSBAT_PADDING_X_LEFT, boss->zone->y));
+				CSound::GetInstance()->play(gameType::SOUND_STAGE_CLEAR, true, 0);
 				grid->deleteObject(boss->cellID, boss);
 			}
 		}
@@ -1406,6 +1407,14 @@ void CPlayScene::Unload()
 	isDisableCamera = false;
 }
 
+void CPlayScene::clearAllEnemy()
+{
+	for (UINT i = 0; i < listEnemy.size(); i++) {
+		listEnemy[i]->isHitted = true;
+	}
+	CSound::GetInstance()->play(ITEM_CROSS, NULL, 1);
+}
+
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {	
 	CGame *game = CGame::GetInstance();
@@ -1448,6 +1457,64 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(), true, false);
 		break;
+	case DIK_1: { // chọn con dao
+		simon->weapons[gameType::DAGGER] = new CKnife();
+		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET ani_set = animation_sets->Get(gameType::DAGGER);
+		simon->weapons[gameType::DAGGER]->SetAnimationSet(ani_set);
+		simon->currentWeapon = gameType::DAGGER;
+		simon->lastItemCollect = gameType::ITEM_KNIFE;
+		CSound::GetInstance()->play(ITEM_KNIFE, NULL, 1);
+		break;
+	}
+	case DIK_2: { // chọn cây búa
+		simon->weapons[gameType::AXE] = new CAxe();
+		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET ani_set = animation_sets->Get(gameType::AXE);
+		simon->weapons[gameType::AXE]->SetAnimationSet(ani_set);
+		simon->currentWeapon = gameType::AXE;
+		simon->lastItemCollect = gameType::ITEM_AXE;
+		CSound::GetInstance()->play(ITEM_AXE, NULL, 1);
+		break;
+	}
+	case DIK_3: { // chọn boomerang
+		simon->weapons[gameType::BOOMERANG] = new CBoomerang();
+		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET ani_set = animation_sets->Get(gameType::BOOMERANG);
+		simon->weapons[gameType::BOOMERANG]->SetAnimationSet(ani_set);
+		simon->currentWeapon = gameType::BOOMERANG;
+		simon->lastItemCollect = gameType::ITEM_BOOMERANG;
+		CSound::GetInstance()->play(ITEM_BOOMERANG, NULL, 1);
+		break;
+	}
+	case DIK_4: { // chọn stop watch
+		simon->weapons[gameType::STOP_WATCH] = new CStopWatch();
+		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET ani_set = animation_sets->Get(gameType::STOP_WATCH);
+		simon->weapons[gameType::STOP_WATCH]->SetAnimationSet(ani_set);
+		simon->currentWeapon = gameType::STOP_WATCH;
+		simon->lastItemCollect = gameType::ITEM_STOP_WATCH;
+		CSound::GetInstance()->play(ITEM_STOP_WATCH, NULL, 1);
+		break;
+	}
+	case DIK_5: {
+		simon->weapons[gameType::WATER_FIRE] = new CWaterFire();
+		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET ani_set = animation_sets->Get(gameType::WATER_FIRE);
+		simon->weapons[gameType::WATER_FIRE]->SetAnimationSet(ani_set);
+		simon->currentWeapon = gameType::WATER_FIRE;
+		simon->lastItemCollect = gameType::ITEM_WATER_FIRE;
+		CSound::GetInstance()->play(ITEM_WATER_FIRE, NULL, 1);
+		break;
+	}
+	case DIK_W: { // nâng cấp whip
+		((Whip*)simon->weapons[gameType::WHIP])->whipUpgrade();
+		CSound::GetInstance()->play(gameType::ITEM_WHIP, NULL, 1);
+		break;
+	}
+	case DIK_K: // xóa hết quái
+		((CPlayScene*)scence)->clearAllEnemy();
+		break;
 	case DIK_N:// tự chết
 		try {
 			if (((CPlayScene*)scence)->nextScence == NULL) return;
@@ -1461,7 +1528,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence, false, true);
 		}catch(exception ex){}
 		break;
-	case DIK_EQUALS:
+	case DIK_EQUALS: // cộng tim
 		simon->plusHeart(2);
 		break;
 	case DIK_ESCAPE:
