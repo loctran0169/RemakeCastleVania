@@ -38,6 +38,8 @@ class CPlayScene : public CScene
 protected:			
 
 	static Simon* player; // A play scene has to have player, right? 
+	static DataScreenManager *dataScreen;
+
 	CGame *game;
 	CBoard *board;
 	vector<LPGAMEOBJECT> objects;
@@ -55,7 +57,6 @@ protected:
 public:
 	CMap *map;
 	CGrid *grid;
-	DataScreenManager *dataScreen;
 	int nextScence;
 	bool isDisableCamera = false;
 	Simon* getPlayer() { return player; }
@@ -74,6 +75,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
+	void resetGame();
 	void clearAllEnemy();
 	friend class CPlayScenceKeyHandler;
 };

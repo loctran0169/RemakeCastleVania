@@ -38,6 +38,7 @@ class CGame
 	int screen_height;
 
 	unordered_map<int, LPSCENE> scenes;
+	int firstScreen = 1;
 	int current_scene=-1;
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -91,6 +92,7 @@ public:
 	void GetCamPos(float &x, float &y) { x = cam_x; y = cam_y; }
 	static CGame * GetInstance();
 
+	int getFirstScreen() { return firstScreen; }
 	HWND getHwnd() { return hWnd; }
 	~CGame();
 };

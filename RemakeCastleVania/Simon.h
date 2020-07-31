@@ -103,17 +103,22 @@ public:
 	void goDownStair();
 
 	static Simon* GetInstance();
-
+	static void deleteInstance() { __instance = NULL; }
 	void setEatItem(bool b) { isEatItem = b; }
 	bool getEatItem() { return isEatItem; }
 
 	void plusHeart(int num) { heartWeapon += num; }
 	void SetHurt(int _nx);
+	void PlusHealth(int _health);
 
+	//máu + mạng
 	int getHealth() { return health; }
 	void plusHealth(int num) { health += num; }
 	void SubHealth(int num);
 	bool getDie() { return isDie; }
+	void plusLife(int _life = 1);
+	void subLife(int _life = 1);
+
 
 	bool isUsingWeapon(gameType _type);
 	int getHealthWeapon() { return heartWeapon; }

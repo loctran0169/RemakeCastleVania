@@ -10,6 +10,7 @@ class DataScreen
 	Simon*simon;		
 public:
 	CMonter *boss;
+	CGame *game;
 	Simon player;
 	DWORD maxTime = 400;
 	DWORD lastTimeSub;
@@ -26,6 +27,7 @@ public:
 	DataScreen(int _mapID){
 		simon = Simon::GetInstance();
 		player = Simon();
+		game = CGame::GetInstance();
 		lastTimeSub = GetTickCount();
 		isOnStair = 0;
 		mapID = _mapID;
@@ -42,28 +44,15 @@ public:
 		ny = _ny;
 	}
 	void Update();
-	void setData(int _isOnStair, int _x, int _y, int _nx, int _ny) {
-		isOnStair = _isOnStair;
-		x = _x;
-		y = _y;
-		nx = _nx;
-		ny = _ny;
-	}
+	void reset();
+	void setData(int _isOnStair, int _x, int _y, int _nx, int _ny);
 	void addScore(int _score) { score += _score; }
 	void setStage(int _stage) { stage = _stage; }
 	void setMaxTime(DWORD _time) { maxTime = _time; }
 	void setMapID(int _id) { mapID = _id; }
 	void setParentMapID(int a) { parentMapID = a; }
-	void copyOf(DataScreen * dataX) {
-		isOnStair = dataX->isOnStair;
-		x = dataX->x;
-		y = dataX->y;
-		nx = dataX->nx;
-		ny = dataX->ny;
-	}
+	void copyOf(DataScreen * dataX);
 	void setBoss(CMonter *_boss) { boss = _boss; }
-	Simon init(Simon * simon) {
-		return *simon;
-	}
+	Simon init(Simon * simon) {return *simon;}
 };
 

@@ -10,6 +10,7 @@
 using namespace std;
 
 Simon* CPlayScene::player = NULL;
+DataScreenManager * CPlayScene::dataScreen = NULL;
 
 CPlayScene::CPlayScene(int id, int _stageMap, int _parentMap, int _soundId, int _maxtime, LPCWSTR filePath) :
 	CScene(id, _stageMap, _parentMap, _soundId, _maxtime, filePath)
@@ -1407,6 +1408,15 @@ void CPlayScene::Unload()
 	isDisableCamera = false;
 }
 
+void CPlayScene::resetGame()
+{
+	player->deleteInstance();
+	player = NULL;
+	dataScreen->currentScreen->score = 0;
+	dataScreen->currentScreen->stage = 0;
+	game->Load(L"Map\\castlevania.txt");
+}
+
 void CPlayScene::clearAllEnemy()
 {
 	for (UINT i = 0; i < listEnemy.size(); i++) {
@@ -1425,10 +1435,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	if (simon->isAttact || simon->isEatItem || simon->isAutoGo || simon->isHurt || simon->isUseToFullHP || simon->isDie)return;
 	switch (KeyCode)
 	{
-	case DIK_S:
-		if (!simon->isAllowJump||simon->isStair)return;
-		if (simon->isJump == 0 && simon->isSit == false )
-			if (simon->isAttact == false) {				
+	case DIK_S:case DIK_X: { // nhẩy
+		if (!simon->isAllowJump || simon->isStair)return;
+		if (simon->isJump == 0 && simon->isSit == false)
+			if (simon->isAttact == false) {
 				if (game->IsKeyDown(DIK_RIGHT))
 				{
 					simon->isJumpRight = true;
@@ -1445,18 +1455,21 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				simon->SetState(SIMON_STATE_JUMP);
 			}
 		break;
-	case DIK_A:
+	}
+	case DIK_A:case DIK_Z: { // đánh
 		if (!simon->isAttact && !simon->isEatItem)
 			if (game->IsKeyDown(DIK_UP) && simon->currentWeapon != -1)
 				simon->attackWeapon(simon->currentWeapon);
-			simon->attackWeapon(gameType::WHIP);
+		simon->attackWeapon(gameType::WHIP);
 		break;
-	case DIK_R: // reset
+	}
+	case DIK_R: { // reset
 		for (auto&scence : game->getScenes()) {
-			DebugOut(L"scene: %d \n",scence.second->getID());
+			DebugOut(L"scene: %d \n", scence.second->getID());
 		}
 		CGame::GetInstance()->SwitchScene(game->GetCurrentSceneId(), true, false);
 		break;
+	}
 	case DIK_1: { // chọn con dao
 		simon->weapons[gameType::DAGGER] = new CKnife();
 		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
@@ -1497,7 +1510,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		CSound::GetInstance()->play(ITEM_STOP_WATCH, NULL, 1);
 		break;
 	}
-	case DIK_5: {
+	case DIK_5: { // chọn lữa
 		simon->weapons[gameType::WATER_FIRE] = new CWaterFire();
 		CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 		LPANIMATION_SET ani_set = animation_sets->Get(gameType::WATER_FIRE);
@@ -1507,35 +1520,64 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		CSound::GetInstance()->play(ITEM_WATER_FIRE, NULL, 1);
 		break;
 	}
+	case DIK_COMMA: { // trừ 2 máu
+		simon->SubHealth(2);
+		break; 
+	}
+	case DIK_PERIOD: { // cộng 2 máu
+		simon->PlusHealth(2);
+		break;
+	}
+	case DIK_DELETE: { // chết
+		simon->dieStart();
+		break;
+	}
+	case DIK_LBRACKET: {// trừ 1 mạng
+		simon->subLife();
+		break;
+	}
+	case DIK_RBRACKET: { // tăng 1 mạng
+		simon->plusLife();
+		break;
+	}
 	case DIK_W: { // nâng cấp whip
 		((Whip*)simon->weapons[gameType::WHIP])->whipUpgrade();
 		CSound::GetInstance()->play(gameType::ITEM_WHIP, NULL, 1);
 		break;
 	}
-	case DIK_K: // xóa hết quái
+	case DIK_K: { // xóa hết quái
 		((CPlayScene*)scence)->clearAllEnemy();
 		break;
-	case DIK_N:// tự chết
+	}
+	case DIK_N: {// tự chết
 		try {
 			if (((CPlayScene*)scence)->nextScence == NULL) return;
 			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->dataScreen->currentScreen->parentMapID, false, true);
 		}
 		catch (exception ex) {}
 		break;
-	case DIK_M:// next map nhanh
+	}
+	case DIK_M: {// next map nhanh
 		try {
 			if (((CPlayScene*)scence)->nextScence == NULL) return;
 			CGame::GetInstance()->SwitchScene(((CPlayScene*)scence)->nextScence, false, true);
-		}catch(exception ex){}
+		}
+		catch (exception ex) {}
 		break;
-	case DIK_EQUALS: // cộng tim
+	}
+	case DIK_F5: {
+		((CPlayScene*)scence)->resetGame();
+		break;
+	}
+	case DIK_EQUALS: { // cộng tim
 		simon->plusHeart(2);
 		break;
-	case DIK_ESCAPE:
+	}
+	case DIK_ESCAPE: { // thoát cửa sổ
 		DestroyWindow(game->getHwnd());
 		break;
 	}
-	
+	}	
 }
 
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)

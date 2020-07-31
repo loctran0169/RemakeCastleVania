@@ -38,6 +38,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			CSound::GetInstance()->play(gameType::ITEM_INVISIBLE, NULL, 1);
 		}
 	}
+
 	if (isUseToFullHP) {
 		if (GetTickCount() - timeEatItem > TIME_REVERT_HP_STEP) {
 			plusHealth(2);
@@ -145,10 +146,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void Simon::Render()
 {
-
 	int ani;
-	if (isDie)
-		ani = SIMON_ANI_DIE;
+	if (isDie)	ani = SIMON_ANI_DIE;
 	else if (isStair) {
 		if (isGoUp && vx != 0)
 			ani = SIMON_ANI_GO_UP;
@@ -163,8 +162,7 @@ void Simon::Render()
 			else ani = SIMON_ANI_IDLE_DOWN;
 		}
 	}
-	else if (isHurt)
-		ani = SIMON_ANI_HURT;
+	else if (isHurt)ani = SIMON_ANI_HURT;
 	else if (isAttact) {
 		if (!isEatItem) {
 			if (isSit)
@@ -191,8 +189,10 @@ void Simon::Render()
 				ani = SIMON_ANI_SITTING;
 		}
 		else {
-			if (state == SIMON_STATE_ON_SKATE && !game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
-				ani = SIMON_ANI_IDLE;
+			if (state == SIMON_STATE_ON_SKATE && !game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT)) {
+				if (game->IsKeyDown(DIK_DOWN))ani = SIMON_ANI_SITTING;
+				else ani = SIMON_ANI_IDLE;
+			}
 			else
 				ani = SIMON_ANI_WALKING;
 		}
@@ -382,6 +382,13 @@ void Simon::SetHurt(int _nx)
 	SubHealth(2);
 }
 
+void Simon::PlusHealth(int _health)
+{
+	health += 2;
+	if (health >= MAX_HP)
+		health = MAX_HP;
+}
+
 void Simon::SubHealth(int num)
 {
 	health -= num; 
@@ -390,6 +397,18 @@ void Simon::SubHealth(int num)
 		health = 0;
 		dieStart();
 	}
+}
+
+void Simon::plusLife(int _life)
+{
+	numLife++;
+}
+
+void Simon::subLife(int _life)
+{
+	numLife--;
+	if (numLife <= 0)
+		numLife = 0;
 }
 
 void Simon::GetBoundingBox(float &left, float &top, float &right, float &bottom)

@@ -19,6 +19,7 @@ public:
 		_instance = this;
 	}
 	static DataScreenManager * GetInstance();
+	static void deleteInstance() { _instance = NULL; }
 	void Update() {
 		currentScreen->Update();
 	}

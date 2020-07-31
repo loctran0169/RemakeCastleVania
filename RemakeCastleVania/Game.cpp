@@ -356,8 +356,10 @@ void CGame::_ParseSection_SETTINGS(string line)
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
-	if (tokens[0] == "start")
+	if (tokens[0] == "start") {
 		current_scene = atoi(tokens[1].c_str());
+		firstScreen = current_scene;
+	}
 	else
 		DebugOut(L"[ERROR] Unknown game setting %s\n", ToWSTR(tokens[0]).c_str());
 }
